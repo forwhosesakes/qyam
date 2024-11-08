@@ -15,16 +15,25 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@prisma/client": "^5.22.0",
     "@remix-run/cloudflare": "^2.13.1",
     "@remix-run/cloudflare-pages": "^2.13.1",
     "@remix-run/react": "^2.13.1",
+    "better-auth": "^0.7.3",
+    "clsx": "^2.1.1",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "remix-flat-routes": "^0.6.5",
+    "resend": "^4.0.1-alpha.0",
+    "sonner": "^1.7.0",
+    "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241022.0",
     "@remix-run/dev": "^2.13.1",
+    "@svgr/core": "^8.1.0",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
@@ -37,9 +46,12 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.38",
+    "prisma": "^5.22.0",
+    "remix-development-tools": "^4.7.5",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.1.6",
     "vite": "^5.1.0",
+    "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^4.2.1",
     "wrangler": "3.57.1"
   },
