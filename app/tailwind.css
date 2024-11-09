@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,8 +6,58 @@
 html,
 body {
   @apply bg-white dark:bg-gray-950;
+  
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
+  }
+}
+
+
+
+@layer components {
+  .loader {
+    @apply animate-[load_5s_cubic-bezier(.8,0,0.2,1)_infinite] h-10 w-[41px] absolute top-[calc(50%_-_20px)] left-[calc(50%_-_10px)];
+  }
+  .hour-top {
+    @apply animate-[top_5s_linear_infinite] h-0 w-px origin-[50%_100%] border-t-[20px] border-t-white border-x-[20px] border-x-transparent border-solid;
+  }
+  .hour-bottom {
+    @apply animate-[bottom_5s_linear_infinite] h-0 w-px origin-[50%_100%] border-b-[20px] border-b-white border-x-[20px] border-x-transparent border-solid scale-0;
+  }
+  .hour-line {
+    @apply animate-[line_5s_linear_infinite] h-0 w-0 absolute border-l-white border-l border-dotted left-5 top-5;
+  }
+  
+
+
+
+}
+
+@layer utilities{
+  @keyframes load {
+    90% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(180deg);
+    }
+  }
+
+  @keyframes top {
+    90% { transform: scale(0); }
+    100% { transform: scale(0);}
+  }
+
+
+  @keyframes bottom {
+    10% { transform: scale(0); }
+    90% { transform: scale(1); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes line {
+    10% { height: 20px; }
+    100% { height: 20px; }
   }
 }

@@ -15,7 +15,11 @@ export default {
           '"Segoe UI Symbol"',
           '"Noto Color Emoji"',
         ],
-      },
+    
+      roboto: ["Roboto"],
+"noto-sans":["Noto Sans Arabic", "sans-serif"]}
+
+
     },
   },
   plugins: [],
