@@ -9,7 +9,7 @@ export default function Index() {
 </div>
       
   
-          <h1 className="text-5xl font-noto-sans mt-56 ml-4 "> ..قريبًا</h1>
+          <h1 className="text-5xl font-noto-sans mt-56 "> ..قريبًا</h1>
        
     
     </div>
