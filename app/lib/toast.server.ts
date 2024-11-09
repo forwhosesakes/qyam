@@ -1,5 +1,5 @@
 
-import { createCookieSessionStorage, redirect } from '@remix-run/node'
+import { createCookieSessionStorage, redirect } from '@remix-run/cloudflare'
 import {combineHeaders} from "./combine-headers"
 import { createId } from '@paralleldrive/cuid2';
 import { z } from 'zod'

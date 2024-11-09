@@ -1,4 +1,4 @@
-import { redirect, type ActionFunctionArgs } from '@remix-run/node'
+import { redirect, type ActionFunctionArgs } from '@remix-run/cloudflare'
 import {auth} from "../../lib/auth.server"
 import { LoaderFunctionArgs } from '@remix-run/cloudflare';
 
