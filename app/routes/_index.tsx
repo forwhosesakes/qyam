@@ -1,9 +1,9 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
-import { auth } from "~/lib/auth.server";
+import { getAuth } from "~/lib/auth.server";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request , context}: LoaderFunctionArgs) {
 	//check if the user is logged in 
-  const session = await auth.api.getSession({
+  const session = await getAuth(context).api.getSession({
     headers:  request.headers// you need to pass the headers object.
 })
   if (session?.user && session.user.emailVerified) return null

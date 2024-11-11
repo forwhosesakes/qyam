@@ -1,7 +1,15 @@
-import { error } from 'better-auth/api';
+
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API);
+
+let resend: Resend|null = null
+
+const getResendObject = (key:string)=>{
+  console.log("key:  ", key);
+  
+  if (!resend) resend = new Resend(key)
+   return resend
+}
 
 type EmailSendBody = {
     to:string, 
@@ -10,12 +18,12 @@ type EmailSendBody = {
 }
 
 
-export const sendEmail = (body:EmailSendBody)=>{
+export const sendEmail = (body:EmailSendBody, apiKey:string, sourceEmail:string)=>{
   console.log("sending ematil to ", body.to);
   
 // TODO: the html should have a defined template customized for this application
-resend.emails.send({
-    from: process.env.MAIN_EMAIL!,
+getResendObject(apiKey).emails.send({
+    from: sourceEmail,
     to: body.to,
     subject: body.subject,
     html: '<p>Congrats on sending your <strong>first email</strong>!</p>' + body.text

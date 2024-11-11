@@ -1,5 +1,4 @@
 import { Form, Link } from "@remix-run/react"
-import React from "react"
 import { useState } from "react"
 import { authClient } from "../../lib/auth.client"
  
@@ -20,7 +19,8 @@ export default function Signup() {
           // show loading state
         },
         onSuccess: (ctx) => {
-          // redirect to home
+          sendVerificationEmail()
+     
         },
         onError: (ctx) => {
           console.log("error: ", ctx);
@@ -29,6 +29,26 @@ export default function Signup() {
         },
       },
     )
+  }
+
+
+
+
+  const sendVerificationEmail = ()=>{
+    authClient.sendVerificationEmail({
+      email ,
+      callbackURL: "/" // The redirect URL after verification
+  },{
+
+
+    onError:(ctx)=>{},
+    onSuccess:(ctx)=>{
+
+
+      console.log(("success in email sending"));
+      
+    }
+  })
   }
  
   return (
