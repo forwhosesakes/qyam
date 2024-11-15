@@ -85,8 +85,3 @@ pages_build_output_dir = "./build/client"
 # id = "<PRODUCTION_NAMESPACE_ID>"
 
 
-
-[[d1_databases]]
-binding = "DB" # i.e. available in your Worker on env.DB
-database_name = "qyam-db"
-database_id = "4fb7b218-4a91-4e47-9480-6325237756b5"

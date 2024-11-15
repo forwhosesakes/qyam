@@ -3,12 +3,10 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
 import { sendEmail } from "./send-email.server";
 import { AppLoadContext } from "@remix-run/cloudflare";
-import { PrismaClient } from "@prisma/client";
 import { client } from "~/db/db-client.server";
 
 export type Environment = {
   Bindings: {
-    DB: D1Database;
     BETTER_AUTH_SECRET: string;
     BETTER_AUTH_URL: string;
     BETTER_AUTH_TRUSTED_ORIGINS: string;
@@ -26,13 +24,16 @@ export const getAuth = (c: AppLoadContext) => {
   return initAuth(c);
 };
 export const initAuth = (c: AppLoadContext): Auth => {
+  console.log("init auth", c.cloudflare.env);
+  
   auth = betterAuth({
+    
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
       sendOnSignUp: true,
       sendResetPassword: async (user, url) => {
-        await sendEmail(
+         sendEmail(
           {
             to: user.email,
             subject: "Reset",
@@ -45,7 +46,7 @@ export const initAuth = (c: AppLoadContext): Auth => {
     },
     emailVerification: {
       sendVerificationEmail: async (user, url, token) => {
-        await sendEmail(
+         sendEmail(
           {
             to: user.email,
             subject: "Verify your email address",
