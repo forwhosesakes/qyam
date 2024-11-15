@@ -2,6 +2,10 @@ import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { getAuth } from "~/lib/auth.server";
 
 export async function loader({ request , context}: LoaderFunctionArgs) {
+
+
+  console.log("env vatiables:  ", context.cloudflare.env);
+  
 	//check if the user is logged in 
   const session = await getAuth(context).api.getSession({
     headers:  request.headers// you need to pass the headers object.
