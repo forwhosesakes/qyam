@@ -2,6 +2,7 @@
 import { User } from "better-auth/types"
 import { Icon } from "./icon"
 import { useNavigate } from "@remix-run/react"
+import Logo from "~/assets/images/logo.svg"
 
 
 type NavElement = {
@@ -57,7 +58,9 @@ const Navbar = (props:TProps)=>{
         </div>}
 
         <ul className="flex gap-x-4">
-            {navElements.map((el)=><li className="flex cursor-pointer  text-gray-700" >
+            {navElements.map((el)=><li 
+            key={el.id}
+            className="flex cursor-pointer  text-gray-700" >
                 <span>
                 {el.arabicLabel}
                 </span>
@@ -68,7 +71,7 @@ const Navbar = (props:TProps)=>{
         </ul>
 
 
-        <img src="/app/assets/images/logo.svg"/>
+        <img src={Logo}/>
 
 
 
