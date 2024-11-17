@@ -1,11 +1,9 @@
 import { redirect, type ActionFunctionArgs } from '@remix-run/cloudflare'
-import {auth} from "../../lib/auth.server"
+import {getAuth} from "../../lib/auth.server"
 import { LoaderFunctionArgs } from '@remix-run/cloudflare';
 
-export async function loader({ request }: LoaderFunctionArgs) {
-    return auth.api.signOut({headers:request.headers}).then((res)=>{
-        
-        console.log("yaho logging out ");
+export async function loader({ request, context }: LoaderFunctionArgs) {
+    return getAuth(context).api.signOut({headers:request.headers}).then((res)=>{
         
         return redirect("/")})
         return null

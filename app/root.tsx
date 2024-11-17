@@ -1,13 +1,18 @@
-import type { LinksFunction } from "@remix-run/cloudflare";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { User } from "better-auth/types";
+
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 
 import "./tailwind.css";
+import { getAuth } from "./lib/auth.server";
+import Navbar from "./components/navbar";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -22,9 +27,18 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  // check if the user is logged in
+  const session = await getAuth(context).api.getSession({
+    headers: request.headers, // you need to pass the headers object.
+  });
+  return session?.user && session.user.emailVerified
+    ? (session.user as User)
+    : null;
+}
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ar">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -41,5 +55,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const user = useLoaderData();
+
+  return (
+    <>
+      <Navbar user={user as User} />
+      <Outlet />
+    </>
+  );
 }
