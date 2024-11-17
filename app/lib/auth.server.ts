@@ -24,7 +24,6 @@ export const getAuth = (c: AppLoadContext) => {
   return initAuth(c);
 };
 export const initAuth = (c: AppLoadContext): Auth => {
-  console.log("init auth", c.cloudflare.env);
   
   auth = betterAuth({
     
@@ -66,7 +65,6 @@ export const initAuth = (c: AppLoadContext): Auth => {
     plugins: [admin()],
   });
 
-  console.log("auth db", auth.options.database);
 
   return auth;
 };

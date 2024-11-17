@@ -4,18 +4,13 @@ export default {
   content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        sans: [
-          '"Inter"',
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
-          '"Apple Color Emoji"',
-          '"Segoe UI Emoji"',
-          '"Segoe UI Symbol"',
-          '"Noto Color Emoji"',
-        ],
-      },
+      colors: {
+        primary: '#0D3151',
+        secondary: '#8BC53F',
+        tertiary: '#D9D9D9'},
+        fontFamily: {
+          primary: "Saudia-sans",
+        },
     },
   },
   plugins: [],

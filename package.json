@@ -15,7 +15,8 @@
     "env": "dotenv -e .dev.vars",
     "cf-typegen": "wrangler types",
     "db:generate": "dotenv -e .dev.vars npx prisma generate ",
-    "db:migrate": "dotenv -e .dev.vars -- npx prisma migrate dev"
+    "db:migrate": "dotenv -e .dev.vars -- npx prisma migrate dev",
+    "update-sprite": "svg-sprite -s --symbol-dest app/assets/icons --symbol-sprite sprites.svg app/assets/icons/*.svg"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.3",
@@ -57,6 +58,7 @@
     "postcss": "^8.4.38",
     "prisma": "^5.22.0",
     "remix-development-tools": "^4.7.5",
+    "svg-sprite": "^2.0.4",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.1.6",
     "vite": "^5.1.0",

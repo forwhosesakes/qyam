@@ -1,12 +1,12 @@
-import { Form, Link, redirect } from "@remix-run/react"
+import { Form, Link, redirect, useNavigate } from "@remix-run/react"
 import { useState } from "react"
 import {authClient} from '../../lib/auth.client'
 import {getErrorMessage } from "../../lib/get-error-messege"
-import React from "react"
  
 export default function Signup() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const navigate = useNavigate()
   
   // const raiseToast= useToast()
  
@@ -21,7 +21,7 @@ export default function Signup() {
           // show loading state
         },
         onSuccess: (ctx:any) => {
-          redirect("/")
+          navigate("/")
         },
         onError: (ctx:any) => {
           const msg = getErrorMessage(ctx)

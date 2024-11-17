@@ -5,8 +5,6 @@ import { LoaderFunctionArgs } from '@remix-run/cloudflare';
 export async function loader({ request, context }: LoaderFunctionArgs) {
     return getAuth(context).api.signOut({headers:request.headers}).then((res)=>{
         
-        console.log("yaho logging out ");
-        
         return redirect("/")})
         return null
 

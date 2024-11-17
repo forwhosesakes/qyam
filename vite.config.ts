@@ -17,6 +17,7 @@ declare module "@remix-run/cloudflare" {
 export default defineConfig({
   plugins: [
     remixCloudflareDevProxy(),
+    remixDevTools(),
     svgr({
       // SVGR options
       svgrOptions: {

@@ -1,12 +1,12 @@
-import { Form, Link } from "@remix-run/react"
-import { useState } from "react"
-import { authClient } from "../../lib/auth.client"
- 
+import { Form, Link } from "@remix-run/react";
+import { useState } from "react";
+import { authClient } from "../../lib/auth.client";
+
 export default function Signup() {
-  const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
-  const [password, setPassword] = useState("")
- 
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
   const signUp = async () => {
     await authClient.signUp.email(
       {
@@ -19,46 +19,36 @@ export default function Signup() {
           // show loading state
         },
         onSuccess: (ctx) => {
-          sendVerificationEmail()
-     
+          sendVerificationEmail();
         },
         onError: (ctx) => {
           console.log("error: ", ctx);
-          
+
           // alert(ctx.error)
         },
+      }
+    );
+  };
+
+  const sendVerificationEmail = () => {
+    authClient.sendVerificationEmail(
+      {
+        email,
+        callbackURL: "/", // The redirect URL after verification
       },
-    )
-  }
+      {
+        onError: (ctx) => {},
+        onSuccess: (ctx) => {
+          console.log("success in email sending");
+        },
+      }
+    );
+  };
 
-
-
-
-  const sendVerificationEmail = ()=>{
-    authClient.sendVerificationEmail({
-      email ,
-      callbackURL: "/" // The redirect URL after verification
-  },{
-
-
-    onError:(ctx)=>{},
-    onSuccess:(ctx)=>{
-
-
-      console.log(("success in email sending"));
-      
-    }
-  })
-  }
- 
   return (
-     <div>
-      <h2>
-        Sign Up
-      </h2>
-      <Form
-        onSubmit={signUp}
-      >
+    <div>
+      <h2>Sign Up</h2>
+      <Form onSubmit={signUp}>
         <input
           type="text"
           value={name}
@@ -77,14 +67,12 @@ export default function Signup() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <button
-          type="submit"
-        >
-          Sign Up
-        </button>
+        <button type="submit">Sign Up</button>
       </Form>
-      <p className="text-white"> already have an account? <Link to={"/login"}>Login </Link></p>
-
+      <p className="text-white">
+        {" "}
+        already have an account? <Link to={"/login"}>Login </Link>
+      </p>
     </div>
-  )
+  );
 }
