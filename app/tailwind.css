@@ -28,7 +28,7 @@
     src:
       url("/app/assets/fonts/PingARLT-Regular.ttf")
         format("truetype");
-    font-weight: normal;
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
   }
@@ -38,8 +38,8 @@
     src:
       url("/app/assets/fonts/PingARLT-Medium.ttf")
         format("truetype");
-    font-weight: normal;
-    font-style: 500;
+    font-weight: 500;
+    font-style: normal;
     font-display: swap;
   }
  
@@ -48,10 +48,17 @@
     src:
       url("/app/assets/fonts/PingARLT-Bold.ttf")
         format("truetype");
-    font-weight: normal;
-    font-style: 700;
+    font-weight: 700;
+    font-style: normal;
     font-display: swap;
   }
+}
+
+
+
+@layer components{
+
+  
 }
 
 :root {
@@ -71,7 +78,7 @@ text-rendering: optimizeLegibility;
 }
 html,
 body {
-  @apply bg-white;
+  @apply bg-white overflow-x-hidden;
   @media (prefers-color-scheme: light) {
     color-scheme: light;
   }
