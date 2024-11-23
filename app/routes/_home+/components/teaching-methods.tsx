@@ -25,8 +25,8 @@ const TeachingMethods = () => {
     {src:SelfEducation, text:glossary.teaching_methods.self_education}
   ]
   return (
-    <section id="teaching-methods" className="relative h-[60vh] flex flex-col mx-28">
-      <div className="blur-[180px] inset-0 absolute">
+    <section id="teaching-methods" className="relative min-h-screen flex flex-col px-12">
+      <div className="blur-[180px] left-0">
         <GradientEllipse
           bgColor={"bg-[rgb(139,197,63)]/50"}
           className={" -top-1/2 -left-96"}
@@ -34,7 +34,7 @@ const TeachingMethods = () => {
       </div>
       <TitleBlock text={glossary.teaching_methods.title} />
 
-      <div className="flex flex-wrap justify-center mx-52 mt-5">
+      <div className="flex flex-wrap justify-center w-4/5 mx-auto mt-12">
        {
         frames.map((item)=>(
             <div key={item.src} className="flex flex-col w-fit  h-fit text-center ">

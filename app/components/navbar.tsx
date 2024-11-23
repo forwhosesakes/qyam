@@ -62,31 +62,32 @@ const Navbar = (props: TProps) => {
 
   const AuthActions = () =>
     props.user ? (
-      <div className="h-full bg-white md:order-first order-2 ">
+      <div className="h-full bg-white  ">
         <button className="button text-center text-sm md:text-lg p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
           تسجيل الخروج
         </button>
       </div>
     ) : (
       <div className="visitors flex gap-x-4">
-        <button
-          onClick={() => navigate("/login")}
-          className="button text-xs lg:text-lg md:text-sm text-center p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all"
-        >
-          دخول
-        </button>
-        <button
+            <button
           onClick={() => navigate("/signup")}
           className="button text-xs lg:text-lg md:text-sm text-center p-3 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity"
         >
           {" "}
           تسجيل جديد
         </button>
+        <button
+          onClick={() => navigate("/login")}
+          className="button text-xs lg:text-lg md:text-sm text-center p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all"
+        >
+          دخول
+        </button>
+    
       </div>
     );
 
   const DisplayedNavList = () => (
-    <ul className="flex flex-col-reverse md:flex-row md:justify-normal justify-end items-end gap-x-4 gap-y-8 ">
+    <ul className="flex flex-col-reverse md:flex-row  items-end gap-x-4 gap-y-8 ">
       {navElements.map((el) => (
         <li key={el.id} className="flex cursor-pointer font-bold text-gray-700">
           <span>{el.arabicLabel}</span>
@@ -99,16 +100,16 @@ const Navbar = (props: TProps) => {
   );
 
   return (
-    <nav className="z-50 absolute w-full h-12 md:h-24 bg-white/60 mx-auto md:justify-center justify-normal flex items-center py-5 px-3 gap-x-8">
-      <div className="md:hidden">
-        <Icon
-          onClick={toggleMenu}
-          name={`${isMenuOpen ? "close" : "menu"}`}
-          size="xl3"
-          className=" p-2 hover:bg-black/5 transition-all"
-        />
-      </div>
-      <AuthActions />
+    <nav className="z-50 absolute w-full h-12 md:h-24  bg-white/60 mx-auto md:justify-center justify-normal flex items-center py-5 px-3 gap-x-8">
+    
+    <img
+        className={"h-8 w-8 md:h-auto md:w-auto  ml-auto md:ml-0"}
+        src={Logo}
+        alt="logo"
+      />
+      
+     
+   
 
       <div
         className={cn(
@@ -119,12 +120,17 @@ const Navbar = (props: TProps) => {
       >
         <DisplayedNavList />
       </div>
+      <AuthActions />
 
-      <img
-        className={"h-8 w-8 md:h-auto md:w-auto ml-auto md:ml-0"}
-        src={Logo}
-        alt="logo"
-      />
+      <div className="md:hidden ">
+        <Icon
+          onClick={toggleMenu}
+          name={`${isMenuOpen ? "close" : "menu"}`}
+          size="xl3"
+          className=" p-2 hover:bg-black/5 transition-all  "
+        />
+      </div>
+    
     </nav>
   );
 };

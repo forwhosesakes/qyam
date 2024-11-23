@@ -11,7 +11,9 @@ const sizeClassName = {
   lg: 'w-6 h-6',
   xl: 'w-7 h-7',
   xl3: 'w-9 h-9',
-  xl4: "w-10 h-10"
+  xl4: "w-10 h-10",
+  xl7: "md:w-16 md:h-16 w-6 h-6",
+  fit:"w-fit h-fit"
 } as const
 
 type Size = keyof typeof sizeClassName
@@ -24,7 +26,9 @@ const childrenSizeClassName = {
   lg: 'gap-2',
   xl: 'gap-3',
   xl3:'gap-5',
-  xl4: "gap-6"
+  xl4: "gap-6",
+  xl7: "gap-8",
+  fit:"gap-8"
 } satisfies Record<Size, string>
 
 export function Icon({

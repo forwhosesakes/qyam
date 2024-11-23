@@ -26,7 +26,24 @@ const hero={
 
 
 
-const partners={}
+const partners={
+
+
+    title:"الشركاء"
+}
+const evaluation_methods = {
+    title:"أساليب التقييم",
+    description:"يتم تقويم أداء المتدربين و مستوى تحصيلهم وتقديمهم من خلال :",
+    applied_projects:" المشاريع التطبيقية",
+    performative_tasks:"المهام الأدائية",
+    knowledge_tests:"الاختبارات المعرفــيـة",
+    education_situation:"الحــالات الدراسية"
+
+
+}
+
+
+
 
 
 
@@ -43,6 +60,14 @@ const teaching_methods={
     self_education:"التعليم الذاتي",
 }
 
+const targeted_users = {
+    title: "المستهدفون", 
+    parents:"الوالدان", 
+    youth_supervisors:"مشرفي البيئات الشبابية", 
+    programs_supervisors:"مشرفي الأنشطة والبرامج التربوية"
+
+}
+
 
 
 
@@ -50,5 +75,8 @@ export default {
     about,
     hero,
     partners,
-    teaching_methods
+    teaching_methods,
+    evaluation_methods,
+    targeted_users
+
 }
