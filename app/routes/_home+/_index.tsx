@@ -3,6 +3,8 @@ import { Icon } from "~/components/icon";
 import { getAuth } from "~/lib/auth.server";
 import Hero from "./components/hero";
 import About from "./components/about";
+import TeachingMethods from "./components/teaching-methods";
+
 
 export async function loader({ request , context}: LoaderFunctionArgs) {
   
@@ -20,7 +22,7 @@ export default function Index() {
     <div className="flex flex-col gap-y-12">
       <Hero/>
       <About/>
-      
+      <TeachingMethods/>
     </div>
   );
 }

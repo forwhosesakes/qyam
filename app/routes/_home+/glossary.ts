@@ -32,7 +32,16 @@ const partners={}
 
 
 
-
+const teaching_methods={
+    title:"أساليب التعليم في البرامج",
+    training_workshops:"الورش التدريبية",
+    enrichment_readings:"القراءات الإثرائية",
+    instructions_and_guidance:"الإرشاد والتوجيه",
+    expert_intereviews:"لقاءات الخبراء",
+    projects:"المشاريع",
+    distance_learning:"التعلم عن بعد",
+    self_education:"التعليم الذاتي",
+}
 
 
 
@@ -41,4 +50,5 @@ export default {
     about,
     hero,
     partners,
+    teaching_methods
 }
