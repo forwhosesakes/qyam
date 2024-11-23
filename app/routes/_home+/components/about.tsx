@@ -1,5 +1,6 @@
 import ColoredDrop from "~/components/ui/colored-drop";
 import CurvedTriangle from "~/components/ui/curved-triangle";
+import glossary from "../glossary";
 import { Icon } from "~/components/icon";
 
 const About = () => {
@@ -14,26 +15,20 @@ const About = () => {
 
       <div className="text-right md:w-2/3 w-full md:px-12">
         <h3 className="font-bold mb-5">
-          <span className="text-secondary">عن </span>
-          <span className="text-primary">البرنامج</span>
+          <span className="text-secondary">{glossary.about.title.part1} </span>
+          <span className="text-primary">{glossary.about.title.part2}</span>
         </h3>
 
         <p className="text-[#344054] leading-relaxed font-medium md:text-xl text-sm">
-          برنامج "هندسة القيم" خطوة رائدة في هذا الاتجاه، حيث يسعى إلى إعداد
-          مختصين وخبراء يمتلكون خلفيات نظرية واسعة حول القيم ويجيدون تطبيقها
-          بمنهجيات عملية فعالة تؤثر في البيئات الشبابية والتربوية. بالشراكة
-          العلمية مع بيت الخبرة المعتمد لدى جامعة الملك عبد العزيز (قيم)، يقدم
-          البرنامج نموذجًا متكاملاً يجمع بين الجوانب النظرية والتطبيقية
-          والتقويمية في مجال غرس القيم وتعزيزها، مما يسهم في بناء مجتمعات راسخة
-          تقوم على مبادئ أصيلة
+        {glossary.about.description}
         </p>
 
         <div className="flex justify-end mt-12 gap-x-4">
           <button className="text-center text-xs md:text-lg shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05) bg-white  text-primary border border-[#D0D5DD] px-5 py-2 rounded-lg hover:opacity-60 transition-opacity">
-            المزيد
+          {glossary.about.more}
           </button>
           <button className="text-center text-xs md:text-lg  bg-primary text-white border border-tertiary px-5 py-2  rounded-lg  hover:opacity-80 transition-opacity">
-            الانضمام للبرنامج{" "}
+          {glossary.about.join} {" "}
           </button>
         </div>
       </div>

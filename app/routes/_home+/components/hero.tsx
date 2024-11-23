@@ -5,6 +5,7 @@ import WomenHand from "~/assets/images/womans-hand.png";
 import HeroFlower from "~/assets/images/hero-flower.png";
 import ColoredDrop from "~/components/ui/colored-drop";
 import DropsGroup from "~/assets/images/drops-group.png";
+import glossary from "../glossary";
 import { Icon } from "~/components/icon";
 
 const Hero = () => {
@@ -59,15 +60,15 @@ const Hero = () => {
       </div>
       <div className="h-3/4 lg:w-2/5 w-4/5 flex flex-col items-end gap-y-8  z-10">
         <img src={Logo} width={"180px"} height={"160px"} />
-        <h1 className="text-primary">برنامج هندسة القيم</h1>
+        <h1 className="text-primary">{glossary.hero.title}</h1>
 
         <div className="flex gap-x-4">
           <button className="text-center shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05) bg-white  text-primary border border-[#D0D5DD] px-7 md:py-4 py-2 rounded-lg md:text-lg text-sm hover:opacity-60 transition-opacity">
             <Icon name="play" size="lg" className="mr-2" />
-            الملف التعريفي{" "}
+           {glossary.hero.profile}{" "}
           </button>
           <button className="text-center  bg-primary text-white border border-tertiary px-7 md:py-4 py-2 rounded-lg md:text-lg text-sm hover:opacity-80 transition-opacity">
-            انضم الآن
+           {glossary.hero.join}
           </button>
         </div>
       </div>
