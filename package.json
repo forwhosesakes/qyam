@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "npm run update-sprite&&remix vite:build",
+    "build": "npm run update-sprite && remix vite:build",
     "deploy": "npm run build && wrangler pages deploy",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
@@ -16,7 +16,7 @@
     "cf-typegen": "wrangler types",
     "db:generate": "dotenv -e .dev.vars npx prisma generate ",
     "db:migrate": "dotenv -e .dev.vars -- npx prisma migrate dev",
-    "update-sprite": "svg-sprite -s --symbol-dest app/assets/icons --symbol-sprite sprites.svg app/assets/icons/*.svg"
+    "update-sprite": "svg-sprite -s --symbol-dest app/assets/icons/sheet --symbol-sprite sprites.svg app/assets/icons/*.svg"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.3",

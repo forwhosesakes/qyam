@@ -1,5 +1,6 @@
 import { type SVGProps } from 'react'
 import { cn } from '~/lib/tw-merge'
+import spriteHref from "~/assets/icons/sheet/sprites.svg"
 
 
 const sizeClassName = {
@@ -9,6 +10,8 @@ const sizeClassName = {
   md: 'w-5 h-5',
   lg: 'w-6 h-6',
   xl: 'w-7 h-7',
+  xl3: 'w-9 h-9',
+  xl4: "w-10 h-10"
 } as const
 
 type Size = keyof typeof sizeClassName
@@ -20,6 +23,8 @@ const childrenSizeClassName = {
   md: 'gap-2',
   lg: 'gap-2',
   xl: 'gap-3',
+  xl3:'gap-5',
+  xl4: "gap-6"
 } satisfies Record<Size, string>
 
 export function Icon({
@@ -47,7 +52,7 @@ export function Icon({
       {...props}
       className={cn(sizeClassName[size], 'inline self-center', className)}
     >
-      <use href={`/app/assets/icons/sprites.svg#${name}`} />
+      <use href={`${spriteHref}#${name}`} />
     </svg>
   )
 }

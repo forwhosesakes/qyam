@@ -2,6 +2,7 @@ import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { Icon } from "~/components/icon";
 import { getAuth } from "~/lib/auth.server";
 import Hero from "./components/hero";
+import About from "./components/about";
 
 export async function loader({ request , context}: LoaderFunctionArgs) {
   
@@ -16,8 +17,9 @@ return null
 
 export default function Index() {
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex flex-col gap-y-12">
       <Hero/>
+      <About/>
       
     </div>
   );
