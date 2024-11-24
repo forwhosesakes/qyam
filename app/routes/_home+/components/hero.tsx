@@ -5,7 +5,7 @@ import WomenHand from "~/assets/images/womans-hand.png";
 import HeroFlower from "~/assets/images/hero-flower.png";
 import ColoredDrop from "~/components/ui/colored-drop";
 import DropsGroup from "~/assets/images/drops-group.png";
-import glossary from "../glossary";
+import glossary from "../../../lib/glossary";
 import { Icon } from "~/components/icon";
 
 const Hero = () => {
