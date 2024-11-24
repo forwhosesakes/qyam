@@ -1,6 +1,6 @@
 import ColoredDrop from "~/components/ui/colored-drop";
 import CurvedTriangle from "~/components/ui/curved-triangle";
-import glossary from "../glossary";
+import glossary from "~/lib/glossary";
 import { Icon } from "~/components/icon";
 
 const About = () => {

@@ -1,5 +1,5 @@
 import TitleBlock from "~/components/ui/title-block";
-import glossary from "../glossary";
+import glossary from "../../../lib/glossary";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
 // Images
 import TrainingWorkshopImg from "~/assets/images/teaching-methods/Training-workshops.png"

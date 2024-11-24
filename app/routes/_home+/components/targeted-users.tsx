@@ -1,4 +1,4 @@
-import glossary from "../glossary";
+import glossary from "../../../lib/glossary";
 import Parents from "~/assets/images/parents.png";
 import Supervisor from "~/assets/images/supervisor.png";
 import TitleBlock from "../../../components/ui/title-block";

@@ -46,7 +46,7 @@ export default function Signup() {
   };
 
   return (
-    <div>
+    <div className="mt-48">
       <h2>Sign Up</h2>
       <Form onSubmit={signUp}>
         <input

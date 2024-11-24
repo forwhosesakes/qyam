@@ -13,6 +13,7 @@ import {
 import "./tailwind.css";
 import { getAuth } from "./lib/auth.server";
 import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -61,6 +62,7 @@ export default function App() {
     <>
       <Navbar user={user as User} />
       <Outlet />
+      <Footer/>
     </>
   );
 }
