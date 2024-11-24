@@ -16,7 +16,7 @@ const Footer = () => {
         <div>
                 <img src={LogoBW} alt="logo-bw"/>
                 <p className="font-normal md:w-3/5 mt-4">{glossary.footer.description}</p>
-         <ul className="mt-4 flex gap-x-4">{NavbarElements.map((el)=><li key={el.id} className="text-white font-bold"><NavLink to={el.link}>{el.arabicLabel}</NavLink></li>)}</ul>
+         <ul className="mt-4 flex gap-x-4">{NavbarElements.map((el)=><li key={el.id} className="text-white md:text-lg text-xs font-bold"><NavLink to={el.link}>{el.arabicLabel}</NavLink></li>)}</ul>
 
             </div>
             <img src={FooterLogo} alt="logo" className="md:block hidden"/>

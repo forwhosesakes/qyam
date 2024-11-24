@@ -47,8 +47,8 @@ const Levels = () => {
 
         <p className="mt-12 w-11/12 mx-auto">{glossary.levels.description}</p>
         <div className="mt-12 ">
-          {levels.map((level: any) => (
-            <div className="flex flex-col gap-y-4">
+          {levels.map((level: any,ind:number) => (
+            <div key={ind} className="flex flex-col gap-y-4">
               <h6 className="bg-primary p-4 rounded-lg text-white">
                 {level.title}
               </h6>
@@ -57,8 +57,8 @@ const Levels = () => {
                   <h6 className="font-bold leading-loose">المنهاج :</h6>
 
                   <ul className="list-disc pr-4">
-                    {level.method.map((item: any) => (
-                      <li className="md:text-lg text-sm font-medium">{item}</li>
+                    {level.method.map((item: any,i: number) => (
+                      <li key={i} className="md:text-lg text-sm font-medium">{item}</li>
                     ))}
                   </ul>
                 </div>
