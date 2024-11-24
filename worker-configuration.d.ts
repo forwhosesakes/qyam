@@ -5,5 +5,6 @@ interface Env {
   MAIN_EMAIL: any;
   RESEND_API: string;
   DATABASE_URL: string;
-	DB: D1Database;
+  R2_AUTH_KEY_SECRET:string,
+  QYAM_BUCKET:R2Bucket
 }
