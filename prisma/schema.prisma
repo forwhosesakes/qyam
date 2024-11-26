@@ -22,7 +22,8 @@ model User {
   Account    Account[]
   Session    Session[]
   role       String?
-  accepted   String?
+  accepted   Boolean @default(false)
+  cvKey String
   banned     Boolean?
   banReason  String?
   banExpires DateTime?
@@ -66,4 +67,30 @@ model Verification {
   expiresAt  DateTime
 
   @@map("verification")
+}
+
+
+model Material {
+  id          String      @id @default(cuid())
+  storageKey  String
+  title       String
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  published   Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("material")
+}
+
+model Category {
+  id          String      @id @default(cuid())
+  title       String
+  icon        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([title])
+  @@map("category")
+  Material Material[]
 }
