@@ -99,6 +99,34 @@ export default function Signup() {
               />
             </div>
 
+            <div className="md:w-2/3 sm:w-[80%] min-w-24 w-full">
+              <p className="text-xs lg:text-base md:text-sm my-1 text-primary">
+                {glossary.signup.newSignup.password}
+              </p>
+              <input
+                className="text-xs lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                // TODO: change setName to setNumber
+                placeholder={"9661122334455"}
+              />
+            </div>
+            
+            <div className="md:w-2/3 sm:w-[80%] min-w-24 w-full">
+              <p className="text-xs lg:text-base md:text-sm my-1 text-primary">
+                {glossary.signup.newSignup.confirmPassword}
+              </p>
+              <input
+                className="text-xs lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full"
+                type="password"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                // TODO: change setName to setNumber
+                placeholder={"9661122334455"}
+              />
+            </div>
+
             {/* <input
               type="password"
               value={password}
