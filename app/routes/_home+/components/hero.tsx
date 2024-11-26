@@ -5,16 +5,16 @@ import WomenHand from "~/assets/images/womans-hand.png";
 import HeroFlower from "~/assets/images/hero-flower.png";
 import ColoredDrop from "~/components/ui/colored-drop";
 import DropsGroup from "~/assets/images/drops-group.png";
-import glossary from "../glossary";
+import glossary from "../../../lib/glossary";
 import { Icon } from "~/components/icon";
 
 const Hero = () => {
   return (
     <section
       id="hero"
-      className=" flex lg:flex-row flex-col justify-between items-center w-full h-screen pt-48"
+      className=" flex lg:flex-row flex-col justify-between items-center w-full h-screen pt-48 overflow-x-hidden"
     >
-      <img className="absolute right-1/3 top-24" src={RectBlurry} />
+      <img className="absolute md:right-1/3 top-24" src={RectBlurry} />
       <img className="absolute bottom-20 z-0" src={DropsGroup} />
       <div className="blur-[180px] inset-0 absolute">
         <div>
@@ -43,10 +43,10 @@ const Hero = () => {
         <h1 className="text-primary">{glossary.hero.title}</h1>
 
         <div className="flex gap-x-4 ">
-          <button className="text-center  bg-primary text-white border border-tertiary px-7 md:py-4 py-2 rounded-lg md:text-lg text-sm hover:opacity-80 transition-opacity">
+          <button className="text-center text-nowrap  bg-primary text-white border border-tertiary px-7 md:py-4 py-2 rounded-lg md:text-lg text-sm hover:opacity-80 transition-opacity">
             {glossary.hero.join}
           </button>
-          <button className="text-center shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05) bg-white  text-primary border border-[#D0D5DD] px-7 md:py-4 py-2 rounded-lg md:text-lg text-sm hover:opacity-60 transition-opacity">
+          <button className="text-center text-nowrap shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05) bg-white  text-primary border border-[#D0D5DD] px-7 md:py-4 py-2 rounded-lg md:text-lg text-sm hover:opacity-60 transition-opacity">
             {glossary.hero.profile}{" "}
             <Icon name="play" size="lg" className="mr-2" />
           </button>

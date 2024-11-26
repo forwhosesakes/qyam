@@ -102,6 +102,7 @@
   color-scheme: light;
   font-family: PingARLT, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   color: black;
+  background-color: #F2F4F7;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
@@ -112,7 +113,7 @@
 }
 html,
 body {
-  @apply bg-white overflow-x-hidden;
+  @apply bg-white overflow-x-hidden scroll-smooth;
   @media (prefers-color-scheme: light) {
     color-scheme: light;
   }

@@ -1,5 +1,5 @@
 import TitleBlock from "~/components/ui/title-block";
-import glossary from "../glossary";
+import glossary from "../../../lib/glossary";
 import { Icon } from "~/components/icon";
 
 const EvaluationMethods = () => {

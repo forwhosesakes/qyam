@@ -21,7 +21,11 @@ export default {
       colors: {
         primary: '#0D3151',
         secondary: '#8BC53F',
-        tertiary: '#659CCD'},
+        tertiary: '#659CCD',
+        section:"#F2F4F7"
+      
+      
+      },
         fontFamily: {
           primary: "Saudia-sans",
         },

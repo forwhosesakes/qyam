@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import partenersImg from "~/assets/images/parteners.png";
 import TitleBlock from "~/components/ui/title-block";
-import glossary from "../glossary";
+import glossary from "../../../lib/glossary";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
 import Partner1 from "~/assets/images/partners/partner1.png"
 import Partner2 from "~/assets/images/partners/partner2.png"
