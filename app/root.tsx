@@ -8,6 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
 } from "@remix-run/react";
 
 import "./tailwind.css";
@@ -55,11 +56,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const location = useLocation();
   const user = useLoaderData();
+
+  const noNavbarRoutes = [
+    '/login'
+  ]
+
+  const showNavbar = !noNavbarRoutes.includes(location.pathname)
 
   return (
     <>
-      <Navbar user={user as User} />
+    {showNavbar && <Navbar user={user as User} /> }
       <Outlet />
     </>
   );
