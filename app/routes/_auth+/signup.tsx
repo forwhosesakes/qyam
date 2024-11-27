@@ -1,4 +1,4 @@
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import glossary from "./glossary";
@@ -8,28 +8,51 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [cvKey,setCv] = useState<File|null>(null)
+  const [bio, setBio] = useState("")
+  const [acceptenceState,setAcceptenceState] = useState("not_accepted")
+  const submit = useSubmit();
+
+  const [phone,setPhone] = useState<number>()
 
   const signUp = async () => {
-    await authClient.signUp.email(
+    const formData = new FormData();
+    formData.set("intent", "upload");
+    if(cvKey)
+    formData.set("file", cvKey);
+    submit(formData, { method: "post" });
+   const result = await authClient.signUp.email(
       {
         email,
         password,
         name,
+        bio,
+        cvKey,
+        phone,
+        acceptenceState
+
       },
       {
         onRequest: (ctx) => {
+          console.log("onRequest: ", ctx);
+          
           // show loading state
         },
         onSuccess: (ctx) => {
+          console.log("onSuccess: ",ctx);
+          
           sendVerificationEmail();
         },
         onError: (ctx) => {
-          console.log("error: ", ctx);
+          console.log("onError: ", ctx);
 
           // alert(ctx.error)
         },
       }
     );
+    console.log("signup result: ",result);
+    
   };
 
   const sendVerificationEmail = () => {
@@ -79,8 +102,8 @@ export default function Signup() {
               <input
                 className="text-xs lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 // TODO: change setName to setNumber
                 placeholder={"9661122334455"}
               />
@@ -120,8 +143,8 @@ export default function Signup() {
               <input
                 className="text-xs lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full"
                 type="password"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={passwordConfirmation}
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
                 // TODO: change setName to setNumber
                 placeholder={"9661122334455"}
               />
@@ -141,8 +164,13 @@ export default function Signup() {
               <input
                 className="text-xs lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full"
                 type="file"
-                value={email} //TODO: change to CV
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if(file){
+                    setCv(file)
+                  }
+                }}
+                accept=".pdf,.doc,.docx"
               />
             </div>
 
@@ -152,17 +180,18 @@ export default function Signup() {
               </p>
               <textarea
                 className="text-xs lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full"
-                value={email} //TODO: change to slef introduction
+                value={bio} //TODO: change to slef introduction
                 placeholder={
                   glossary.signup.newSignup.selfIntrodutionPlaceholder
                 }
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setBio(e.target.value)}
               />
             </div>
 
             <button
               className="button min-w-24 text-xs lg:text-base md:text-sm text-center bg-primary hover:opacity-90 transition-opacity text-white rounded-lg mt-6  w-2/3 p-3 z-10"
               type="submit"
+              onClick={signUp}
             >
               {glossary.signup.newSignup.confirmationButton}
             </button>
