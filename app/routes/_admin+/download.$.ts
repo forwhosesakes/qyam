@@ -1,0 +1,43 @@
+import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
+
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  try {
+    const url = new URL(request.url);
+    const key = url.pathname.split("/")[2];
+    console.log("new request: ", key);
+
+    if (!key) {
+      return json({ error: "No file key provided" }, { status: 400 });
+    }
+
+    const object :R2ObjectBody| null= await (context.cloudflare as any).env.QYAM_BUCKET.get(key);
+
+    if (!object) {
+      return json({ error: "File not found" }, { status: 404 });
+    }
+
+
+    console.log("content type", object.httpMetadata?.contentType);
+    
+    // Get original filename or use the key
+    const filename = key.split("-").slice(1).join("-") || key;
+    const content = await object.blob()
+
+    return new Response(content, {
+      headers: {
+        "Content-Type": object.httpMetadata?.contentType || "application/octet-stream",
+        "Content-Disposition": `attachment; filename="${filename}"`,
+        // Prevent caching of sensitive files
+        "Cache-Control": "private, no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
+      },
+    });
+  } catch (error) {
+    console.error("Download error:", error);
+    return json(
+      { error: "Failed to download file" },
+      { status: 500 }
+    );
+  }
+}
