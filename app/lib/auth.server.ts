@@ -6,18 +6,13 @@ import { AppLoadContext } from "@remix-run/cloudflare";
 import { client } from "~/db/db-client.server";
 
 export type Environment = {
-  Bindings: {
-    BETTER_AUTH_SECRET: string;
-    BETTER_AUTH_URL: string;
-    BETTER_AUTH_TRUSTED_ORIGINS: string;
-  };
   Variables: {
     user: User | null;
     session: Session | null;
   };
 };
 
-let auth: Auth | null = null;
+let auth: Auth | null|any = null;
 
 export const getAuth = (c: AppLoadContext) => {
   if (auth) return auth;
@@ -31,7 +26,7 @@ export const initAuth = (c: AppLoadContext): Auth => {
       enabled: true,
       requireEmailVerification: true,
       sendOnSignUp: true,
-      sendResetPassword: async (user, url) => {
+      sendResetPassword: async ({ user, url, token }, request) => {
          sendEmail(
           {
             to: user.email,
@@ -44,7 +39,7 @@ export const initAuth = (c: AppLoadContext): Auth => {
       },
     },
     emailVerification: {
-      sendVerificationEmail: async (user, url, token) => {
+      sendVerificationEmail: async ({ user, url, token }, request) => {
          sendEmail(
           {
             to: user.email,
@@ -56,6 +51,12 @@ export const initAuth = (c: AppLoadContext): Auth => {
         );
       },
     },
+    user:{additionalFields:{
+      cvKey:{type:"string"},
+      bio:{type:"string"},
+      phone:{type:"number"},
+      acceptenceState:{type:"string"}
+    }},
     database: prismaAdapter(
       client(c.cloudflare.env.DATABASE_URL),
       {
@@ -68,3 +69,4 @@ export const initAuth = (c: AppLoadContext): Auth => {
 
   return auth;
 };
+
