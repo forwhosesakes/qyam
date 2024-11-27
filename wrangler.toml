@@ -86,3 +86,8 @@ compatibility_flags = [ "nodejs_compat" ]
 # id = "<PRODUCTION_NAMESPACE_ID>"
 
 
+[[r2_buckets]]
+binding = "QYAM_BUCKET"
+bucket_name = "qyam-bucket"
+
+

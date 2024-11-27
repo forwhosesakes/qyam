@@ -1,6 +1,5 @@
 import { type AppLoadContext } from '@remix-run/cloudflare'
 import { type PlatformProxy } from "wrangler";
-import { client } from '~/db/db-client.server';
 
 
 type Cloudflare = Omit<PlatformProxy<Env>, "dispose">;
@@ -8,7 +7,6 @@ type Cloudflare = Omit<PlatformProxy<Env>, "dispose">;
 declare module "@remix-run/cloudflare" {
   interface AppLoadContext {
     cloudflare: Cloudflare;
-    // db: Awaited<ReturnType<typeof client>>
   }
 }
 
