@@ -176,7 +176,7 @@ export default function Signup() {
 
                 // show loading state
               },
-              onSuccess: (ctx) => {
+              onSuccess: async(ctx) => {
                 console.log("onSuccess: ", ctx);
 
                 
