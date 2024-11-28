@@ -1,5 +1,6 @@
+import React from "react"
 
-const Materials = ()=>{
+const Messages = ()=>{
 
 
 
@@ -12,4 +13,4 @@ const Materials = ()=>{
     </section>
 }
 
-export default Materials
+export default Messages

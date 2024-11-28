@@ -21,9 +21,9 @@ export type Category {
 
 }
 
-
+export type AcceptenceState = "accepted" |"denied" |"pending" |"idle"
 export type QUser = User&  {
-    acceptenceState:"acepted" |"denied" |"pending" |"idle"
+    acceptenceState:AcceptenceState
     cvKey:string
     bio:string 
     phone:number

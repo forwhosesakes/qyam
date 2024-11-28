@@ -80,6 +80,27 @@ const status_response = {
   },
 };
 
+
+const cp = {
+  control_panel:"لوحة النظام",
+  registered:"المسجلين",
+  accepted:"المقبولين",
+  rejected:" الغير مقبولين",
+  material:"المناهج",
+  messages:"الرسائل",
+  admin:"مدير النظام",
+
+
+  user:{
+    pending:"قيد التنفيذ",
+    denied:"مرفوض",
+    accepted:"مقبول",
+    idle:"غير نشط"
+  }
+
+
+}
+
 export default {
   about,
   hero,
@@ -90,4 +111,5 @@ export default {
   levels,
   footer,
   status_response,
+  cp
 };
