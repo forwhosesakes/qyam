@@ -1,58 +1,173 @@
-import { Form, Link, useSubmit } from "@remix-run/react";
-import { useState } from "react";
+import { Form, Link, useActionData, useSubmit } from "@remix-run/react"
+import {
+  ActionFunctionArgs,
+  json,
+  LoaderFunctionArgs,
+} from "@remix-run/cloudflare";
+import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import glossary from "./glossary";
 import TitleBlock from "~/components/ui/title-block";
+import { createId } from "@paralleldrive/cuid2";
+
+
+// export async function loader({ context }: LoaderFunctionArgs) {
+//   try {
+//     const objects: R2Objects = await context.cloudflare.env.QYAM_BUCKET.list();
+
+//     return {
+//       files: objects.objects.map((obj) => ({
+//         key: obj.key,
+//         size: obj.size,
+//         uploaded: obj.uploaded,
+//         httpMetadata: obj.httpMetadata,
+//       })),
+//     };
+//   } catch (error) {
+//     console.error("Loader error:", error);
+//     return { error: "Failed to load files", files: [] };
+//   }
+// }
+
+export async function action({ request, context }: ActionFunctionArgs) {
+ 
+  
+  const formData = await request.formData();
+  try{
+  const file = formData.get("file");
+  if (!file || !(file instanceof File)) {
+    return { error: "Please select a valid file", status: 400 };
+  }
+  const key = `${Date.now()}-${createId()}.${file.name.split(".")[1]}`;
+  const buffer = await file.arrayBuffer();
+
+
+  const uploadResult = await context.cloudflare.env.QYAM_BUCKET.put(
+    key,
+    buffer,
+    {
+      httpMetadata: {
+        contentType: file.type,
+      },
+    }
+  );
+  const checkUpload = await context.cloudflare.env.QYAM_BUCKET.head(key);
+  return {
+    success: true,
+    key,
+    details: {
+      uploadResult,
+      verification: checkUpload,
+    },
+ 
+  };
+  
+  
+  
+}catch(error){
+  console.error(error)
+
+  return{
+    error:"failed to upload",
+    details: error instanceof Error ? error.message : String(error),
+    status: 500,
+  }
+
+}
+  
+
+ 
+
+}
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [cvKey,setCv] = useState<File|null>(null)
-  const [bio, setBio] = useState("")
-  const [acceptenceState,setAcceptenceState] = useState("not_accepted")
+  const [cv, setCv] = useState<File | null>(null);
+  const [bio, setBio] = useState("");
+  const [acceptenceState, setAcceptenceState] = useState("accepted");
   const submit = useSubmit();
+  const actionData = useActionData<ActionData>();
+  const [phone, setPhone] = useState<number>();
 
-  const [phone,setPhone] = useState<number>()
-
-  const signUp = async () => {
-    const formData = new FormData();
-    formData.set("intent", "upload");
-    if(cvKey)
-    formData.set("file", cvKey);
-    submit(formData, { method: "post" });
-   const result = await authClient.signUp.email(
-      {
+  interface ActionData {
+    success?: boolean;
+    key?: string;
+    error?: string;
+  }
+useEffect(()=>{
+  const handleSigneup = async () => {
+    console.log("action data : ", actionData);
+    
+    if(actionData?.success && actionData?.key){
+      console.log("Attempting signup with data:", {
         email,
         password,
         name,
         bio,
-        cvKey,
+        cvKey: actionData.key,
         phone,
-        acceptenceState
+        acceptenceState,
+      });
+      try{
+        
+        
+      await authClient.signUp.email(
+        {
+          email,
+          password,
+          name,
+          bio,
+          cvKey:actionData.key,
+          phone,
+          acceptenceState,
+        },
+        {
+          onRequest: (ctx) => {
+            console.log("onRequest: ", ctx);
+  
+            // show loading state
+          },
+          onSuccess: (ctx) => {
+            console.log("onSuccess: ", ctx);
+  
+            sendVerificationEmail();
+          },
+          onError: (ctx) => {
+            console.log("onError details: ", {
+              error: ctx.error,
+              status: ctx.status,
+              message: ctx.message,
+              data: ctx.data
+            });
+  
+          },
+        }
+      );
+    }catch(e){
+      console.error("signup error: ",e)
 
-      },
-      {
-        onRequest: (ctx) => {
-          console.log("onRequest: ", ctx);
-          
-          // show loading state
-        },
-        onSuccess: (ctx) => {
-          console.log("onSuccess: ",ctx);
-          
-          sendVerificationEmail();
-        },
-        onError: (ctx) => {
-          console.log("onError: ", ctx);
+    }
+    }
+  }
+  handleSigneup()
+},[actionData])
 
-          // alert(ctx.error)
-        },
-      }
-    );
-    console.log("signup result: ",result);
+
+  const signUp = async () => {
     
+    if(cv){
+      console.log(cv);
+      const formData = new FormData();
+    formData.set("intent", "upload");
+    formData.set("file", cv);
+    submit(formData, { method: "post" });
+
+      
+   
+    }
   };
 
   const sendVerificationEmail = () => {
@@ -75,8 +190,9 @@ export default function Signup() {
       <div className="flex sm:flex-row flex-col items-center h-full w-full">
         <div className=" sm:w-5/12 w-[80%] h-full flex flex-col justify-start sm:items-end  items-center ml-5 sm:ml-0">
           <Form
+          method="post"
+          encType="multipart/form-data"
             className="w-8/12 flex flex-col sm:items-start items-center gap-3"
-            onSubmit={signUp}
           >
             <TitleBlock
               className="my-5"
@@ -101,9 +217,14 @@ export default function Signup() {
               </p>
               <input
                 className="text-xs lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full"
-                type="text"
+                type="number"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  const phoneNubmer:number = Number(e.target.value)
+                  console.log("phone number : ", phoneNubmer);
+                  
+                  setPhone(phoneNubmer)
+                }}
                 // TODO: change setName to setNumber
                 placeholder={"9661122334455"}
               />
@@ -135,7 +256,7 @@ export default function Signup() {
                 placeholder={"9661122334455"}
               />
             </div>
-            
+
             <div className="md:w-2/3 sm:w-[80%] min-w-24 w-full">
               <p className="text-xs lg:text-base md:text-sm my-1 text-primary">
                 {glossary.signup.newSignup.confirmPassword}
@@ -164,10 +285,11 @@ export default function Signup() {
               <input
                 className="text-xs lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full"
                 type="file"
+                name="file"
                 onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if(file){
-                    setCv(file)
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setCv(file);
                   }
                 }}
                 accept=".pdf,.doc,.docx"
@@ -256,3 +378,5 @@ export default function Signup() {
     </div>
   );
 }
+
+

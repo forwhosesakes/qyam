@@ -54,8 +54,10 @@ export async function loader({ context }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
+  console.log("hi from cp");
+  
   const formData = await request.formData();
-  console.log("formdata: ", formData);
+  // console.log("formdata: ", formData);
 
   try {
     const file = formData.get("file");
