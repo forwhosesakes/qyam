@@ -18,6 +18,9 @@ import { createId } from "@paralleldrive/cuid2";
 import { toast as showToast } from "sonner";
 import { useToast } from "~/components/toaster";
 import { getToast } from "~/lib/toast.server";
+import { createAuthClient } from "better-auth/react";
+import { inferAdditionalFields } from "better-auth/client/plugins";
+
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { toast } = await getToast(request);
@@ -27,8 +30,44 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
   try {
+    const intent = formData.get("intent");
+    if (intent && intent === "verify") {
+      try {
+        const email = formData.get("email");
+        
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${context.cloudflare.env.RESEND_API}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'no-reply@qyam.org', // or your verified domain
+            to: email,
+            subject: 'Verify your email',
+            html: `<p>Please click the link below to verify your email:</p>
+                  <a href="${new URL('/', request.url).toString()}">Verify Email</a>`
+          })
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          console.error('Email sending failed:', result);
+          return {
+            error: "verification_failed",
+            message: result.message || "Failed to send verification email",
+          }
+        }
+        return {success:true}
+      } catch (e) {
+        console.log(e);
+        
+        return {
+          error: "Failed to send verification email",
+          detail: e instanceof Error ? e.message : String(e),
+        };
+      }
+    }
     const file = formData.get("file");
-    console.log(formData);
 
     if (!file || !(file instanceof File)) {
       return { error: "Please select a valid file", status: 400 };
@@ -176,14 +215,14 @@ export default function Signup() {
 
                 // show loading state
               },
-              onSuccess: async(ctx) => {
+              onSuccess: async (ctx) => {
                 console.log("onSuccess: ", ctx);
 
-                
                 showToast.success(glossary.signup.toasts.verifyEmail.title, {
                   description: glossary.signup.toasts.verifyEmail.description,
                 });
-                await sendVerificationEmail().catch(console.error)
+
+                await sendVerificationEmail();
               },
               onError: (ctx) => {
                 console.log("onError details: ", {
@@ -195,8 +234,7 @@ export default function Signup() {
 
                 if (ctx.error.code === "USER_WITH_THIS_EMAIL_ALREADY_EXISTS") {
                   showToast.error(glossary.signup.toasts.signupError.title, {
-                    description:
-                      glossary.signup.toasts.signupError.emailExist,
+                    description: glossary.signup.toasts.signupError.emailExist,
                   });
                 } else {
                   showToast.error(glossary.signup.toasts.signupError.title, {
@@ -233,42 +271,37 @@ export default function Signup() {
     }
   };
 
-  // const sendVerificationEmail = () => {
-  //   authClient.sendVerificationEmail(
-  //     {
-  //       email,
-  //       callbackURL: "/", // The redirect URL after verification
-  //     },
-  //     {
-  //       onError: (ctx) => {},
-  //       onSuccess: (ctx) => {
-  //         console.log("success in email sending");
-  //       },
-  //     }
-  //   );
-  // };
-
   const sendVerificationEmail = async () => {
+    const formData = new FormData();
+    formData.set("intent", "verify");
+    formData.set("email", email);
     try {
-      await authClient.sendVerificationEmail(
-        {
-          email,
-          callbackURL: "/", // The redirect URL after verification
-        },
-        {
-          onError: (ctx) => {
-            console.error("Failed to send verification email:", ctx);
-            showToast.error(glossary.signup.toasts.verifyEmail.error, {
-              description: glossary.signup.toasts.verifyEmail.errorDescription,
-            });
-          },
-          onSuccess: (ctx) => {
-            console.log("Verification email sent successfully");
-          },
-        }
-      );
+      submit(formData, { method: "post" });
+      
+      
+
+      // await authClient.sendVerificationEmail(
+      //   {
+      //     email,
+      //     callbackURL: "/", // The redirect URL after verification
+      //   },
+      //   {
+      //     onError: (ctx) => {
+      //       console.error("Failed to send verification email:", ctx);
+      //       showToast.error(glossary.signup.toasts.verifyEmail.error, {
+      //         description: glossary.signup.toasts.verifyEmail.errorDescription,
+      //       });
+      //     },
+      //     onSuccess: (ctx) => {
+      //       console.log("Verification email sent successfully");
+      //     },
+      //   }
+      // );
     } catch (error) {
       console.error("Verification email error:", error);
+      showToast.error(glossary.signup.toasts.verifyEmail.error, {
+        description: glossary.signup.toasts.verifyEmail.errorDescription,
+      });
     }
   };
 
