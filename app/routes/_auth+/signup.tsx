@@ -1,4 +1,10 @@
-import { Form, Link, useActionData, useLoaderData, useSubmit } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useSubmit,
+} from "@remix-run/react";
 import {
   ActionFunctionArgs,
   json,
@@ -9,16 +15,14 @@ import { authClient } from "../../lib/auth.client";
 import glossary from "./glossary";
 import TitleBlock from "~/components/ui/title-block";
 import { createId } from "@paralleldrive/cuid2";
-import {toast as showToast} from "sonner"
+import { toast as showToast } from "sonner";
 import { useToast } from "~/components/toaster";
 import { getToast } from "~/lib/toast.server";
-
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { toast } = await getToast(request);
   return { toast };
 }
-
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -175,13 +179,11 @@ export default function Signup() {
               onSuccess: (ctx) => {
                 console.log("onSuccess: ", ctx);
 
-                sendVerificationEmail();
-
+                
                 showToast.success(glossary.signup.toasts.verifyEmail.title, {
                   description: glossary.signup.toasts.verifyEmail.description,
-                  });
-
-                
+                });
+                await sendVerificationEmail().catch(console.error)
               },
               onError: (ctx) => {
                 console.log("onError details: ", {
@@ -191,10 +193,17 @@ export default function Signup() {
                   data: ctx.data,
                 });
 
-                showToast.error(glossary.signup.toasts.signupError.title, {
-                  description: ctx.message || glossary.signup.toasts.signupError.description,
+                if (ctx.error.code === "USER_WITH_THIS_EMAIL_ALREADY_EXISTS") {
+                  showToast.error(glossary.signup.toasts.signupError.title, {
+                    description:
+                      glossary.signup.toasts.signupError.emailExist,
                   });
-               
+                } else {
+                  showToast.error(glossary.signup.toasts.signupError.title, {
+                    description:
+                      glossary.signup.toasts.signupError.generalDescription,
+                  });
+                }
               },
             }
           );
@@ -203,14 +212,12 @@ export default function Signup() {
 
           showToast.error(glossary.signup.toasts.signupError.title, {
             description: e instanceof Error ? e.message : String(e),
-            });
-
+          });
         }
-      }else if (actionData?.error){
+      } else if (actionData?.error) {
         showToast.error(glossary.signup.toasts.signupError.title, {
           description: actionData.error,
-          });
-
+        });
       }
     };
     handleSigneup();
@@ -226,19 +233,43 @@ export default function Signup() {
     }
   };
 
-  const sendVerificationEmail = () => {
-    authClient.sendVerificationEmail(
-      {
-        email,
-        callbackURL: "/", // The redirect URL after verification
-      },
-      {
-        onError: (ctx) => {},
-        onSuccess: (ctx) => {
-          console.log("success in email sending");
+  // const sendVerificationEmail = () => {
+  //   authClient.sendVerificationEmail(
+  //     {
+  //       email,
+  //       callbackURL: "/", // The redirect URL after verification
+  //     },
+  //     {
+  //       onError: (ctx) => {},
+  //       onSuccess: (ctx) => {
+  //         console.log("success in email sending");
+  //       },
+  //     }
+  //   );
+  // };
+
+  const sendVerificationEmail = async () => {
+    try {
+      await authClient.sendVerificationEmail(
+        {
+          email,
+          callbackURL: "/", // The redirect URL after verification
         },
-      }
-    );
+        {
+          onError: (ctx) => {
+            console.error("Failed to send verification email:", ctx);
+            showToast.error(glossary.signup.toasts.verifyEmail.error, {
+              description: glossary.signup.toasts.verifyEmail.errorDescription,
+            });
+          },
+          onSuccess: (ctx) => {
+            console.log("Verification email sent successfully");
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Verification email error:", error);
+    }
   };
 
   return (
