@@ -31,7 +31,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="h-full min-h-screen w-full flex flex-col justify-between items-center pt-[96px]">
-      <h2 className="mt-24">{glossary.forgotPassword.title}</h2>
+      <h2 className="mt-24 text-primary">{glossary.forgotPassword.title}</h2>
       <Form className="my-auto flex flex-col" onSubmit={resetPassword}>
         <p className="text-xs lg:text-base md:text-sm my-1 text-primary">{glossary.forgotPassword.yourEmail}</p>
         <input

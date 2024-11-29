@@ -109,8 +109,18 @@ const forgotPassword={
 }
 
 
-const resetPassword={
-
+const resetPassword = {
+    title: "تغيير كلمة المرور",
+    newPassword: "كلمة المرور الجديدة",
+    enterPassword: "أدخل كلمة المرور الجديدة",
+    confirmPassword: "تأكيد كلمة المرور",
+    confirmPasswordPlaceholder: "أدخل تأكيد كلمة المرور",
+    submit: "تغيير كلمة المرور",
+    toast: {
+        success: "تم تغيير كلمة المرور بنجاح",
+        error: "حدث خطأ أثناء تغيير كلمة المرور",
+        passwordMismatch: "كلمة المرور غير متطابقة"
+    }
 }
 
 export default {
