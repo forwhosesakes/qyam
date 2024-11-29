@@ -6,6 +6,9 @@ import { useReducer } from "react";
 import { cn } from "~/lib/tw-merge";
 import { NavbarElements } from "~/lib/contstants";
 import { Link } from "@remix-run/react";
+import { authClient } from "~/lib/auth.client";
+import { toast as showToast } from "sonner";
+
 
 
 
@@ -24,10 +27,26 @@ const Navbar = (props: TProps) => {
   const expandElement = () => {};
   const scrollToSection = () => {};
 
+  const handleLogout = async() => {
+    try{
+     const result = await authClient.signOut()
+     if(result.data?.success)navigate("/")
+     console.log(result);
+     
+    }catch(e){
+      console.error(e)
+      showToast.error("حدث خطأ أثناء تسجيل الخروج");
+      
+
+    }
+  }
+
   const AuthActions = () =>
     props.user ? (
       <div className="h-full bg-white  ">
-        <button className="button  font-bold text-center text-sm md:text-lg p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
+        <button
+        onClick={handleLogout}
+         className="button  font-bold text-center text-sm md:text-lg p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
           تسجيل الخروج
         </button>
       </div>

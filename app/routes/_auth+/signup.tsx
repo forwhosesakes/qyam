@@ -21,7 +21,6 @@ import { getToast } from "~/lib/toast.server";
 import { createAuthClient } from "better-auth/react";
 import { inferAdditionalFields } from "better-auth/client/plugins";
 
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const { toast } = await getToast(request);
   return { toast };
@@ -29,38 +28,42 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
+  console.log("request: ", request, "xxxxxxxxx context :", context);
+
   try {
     const intent = formData.get("intent");
     if (intent && intent === "verify") {
       try {
         const email = formData.get("email");
-        
-        const response = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
+        const response = await fetch("https://api.resend.com/emails", {
+          method: "POST",
           headers: {
-            'Authorization': `Bearer ${context.cloudflare.env.RESEND_API}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${context.cloudflare.env.RESEND_API}`,
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: 'no-reply@qyam.org', // or your verified domain
+            from: "no-reply@qyam.org",
             to: email,
-            subject: 'Verify your email',
+            subject: "Verify your email",
             html: `<p>Please click the link below to verify your email:</p>
-                  <a href="${new URL('/', request.url).toString()}">Verify Email</a>`
-          })
+                  <a href="${new URL(
+                    "/",
+                    request.url
+                  ).toString()}">Verify Email</a>`,
+          }),
         });
         const result = await response.json();
         if (!response.ok) {
-          console.error('Email sending failed:', result);
+          console.error("Email sending failed:", result);
           return {
             error: "verification_failed",
             message: result.message || "Failed to send verification email",
-          }
+          };
         }
-        return {success:true}
+        return { success: true };
       } catch (e) {
         console.log(e);
-        
+
         return {
           error: "Failed to send verification email",
           detail: e instanceof Error ? e.message : String(e),
@@ -114,6 +117,7 @@ export default function Signup() {
   const [cv, setCv] = useState<File | null>(null);
   const [bio, setBio] = useState("");
   const [acceptenceState, setAcceptenceState] = useState("accepted");
+  const [isFormValid, setIsFormValid] = useState(false);
   const submit = useSubmit();
   const actionData = useActionData<ActionData>();
   const [phone, setPhone] = useState<string>();
@@ -261,6 +265,10 @@ export default function Signup() {
     handleSigneup();
   }, [actionData]);
 
+  useEffect(() => {
+    setIsFormValid(validateForm());
+  }, [email, password, passwordConfirmation, name, phone, cv, bio]);
+
   const signUp = async () => {
     if (!validateForm()) return;
     if (cv) {
@@ -277,8 +285,6 @@ export default function Signup() {
     formData.set("email", email);
     try {
       submit(formData, { method: "post" });
-      
-      
 
       // await authClient.sendVerificationEmail(
       //   {
@@ -306,8 +312,8 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen w-full pt-[96px]">
-      <div className="flex sm:flex-row flex-col items-center h-full w-full">
+    <div className="h-screen min-h-fit w-full pt-[96px]">
+      <div className="flex sm:flex-row flex-col items-center min-h-fit h-full w-full">
         <div className=" sm:w-5/12 w-[80%] h-full flex flex-col justify-start sm:items-end  items-center ml-5 sm:ml-0">
           <Form
             method="post"
@@ -470,8 +476,13 @@ export default function Signup() {
             </div>
 
             <button
-              className="button min-w-24 text-xs lg:text-base md:text-sm text-center bg-primary hover:opacity-90 transition-opacity text-white rounded-lg mt-6  w-2/3 p-3 z-10"
+              className={`button min-w-24 text-xs lg:text-base md:text-sm text-center bg-primary hover:opacity-90 ${
+                isFormValid
+                  ? "bg-primary hover:opacity-90"
+                  : "bg-gray-400 cursor-not-allowed"
+              } transition-opacity text-white rounded-lg mt-6  w-2/3 p-3 z-10`}
               type="submit"
+              disabled={!isFormValid}
               onClick={signUp}
             >
               {glossary.signup.newSignup.confirmationButton}

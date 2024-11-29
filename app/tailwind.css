@@ -118,3 +118,20 @@ body {
     color-scheme: light;
   }
 }
+
+/* Add this to your CSS file */
+.toast-icon-success svg {
+  color: #22c55e !important; /* green-500 */
+}
+
+.toast-icon-error svg {
+  color: #ef4444 !important; /* red-500 */
+}
+
+.toast-icon-info svg {
+  color: #3b82f6 !important; /* blue-500 */
+}
+
+.toast-icon-warning svg {
+  color: #eab308 !important; /* yellow-500 */
+}
