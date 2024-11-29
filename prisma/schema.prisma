@@ -25,7 +25,7 @@ model User {
   cvKey           String?
   bio             String?
   phone           Int?
-  acceptenceState String?
+  acceptenceState String? @default("idle")
 
   @@unique([email])
   @@map("user")

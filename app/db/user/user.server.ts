@@ -4,37 +4,22 @@ import { client } from "../db-client.server";
 
 
 
-const acceptUserRegisteration = (userId:string,dbUrl:string)=>{
+const editUserRegisteration = (userId:string,status:"accepted"|"denied",dbUrl:string)=>{
     const db = client(dbUrl)
 
     return new Promise((resolve, reject) => {
         db.user.update({
-            data: {acceptenceState:"accepted"},
+            data: {acceptenceState:status},
             where: {id:userId}
         }).then(()=>{
-            resolve({status:"success", message:glossary.status_response.success.user_accepted})
+            resolve({status:"success", message:glossary.status_response.success[status==="accepted"?"user_accepted":"user_denied"]})
         }).catch((error:any)=>{
             console.log("ERROR [toggleUserRegisterationAcceptence]: ", error);
-            reject({status:"error", message:glossary.status_response.error.user_accepted})
+            reject({status:"error", message:glossary.status_response.error[status==="accepted"?"user_accepted":"user_denied"]})
         })
       });
 }
 
-const denyUserRegisteration = (userId:string,dbUrl:string)=>{
-    const db = client(dbUrl)
-
-    return new Promise((resolve, reject) => {
-        db.user.update({
-            data: {acceptenceState:"not_accepted"},
-            where: {id:userId}
-        }).then(()=>{
-            resolve({status:"success", message:glossary.status_response.success.user_accepted})
-        }).catch((error:any)=>{
-            console.log("ERROR [toggleUserRegisterationAcceptence]: ", error);
-            reject({status:"error", message:glossary.status_response.error.user_accepted})
-        })
-      });
-}
 
 
 
@@ -43,7 +28,7 @@ const getAllUsers = (dbUrl:string)=>{
     const db = client(dbUrl)
 
     return new Promise((resolve, reject) => {
-        db.user.findMany().then((res)=>{
+        db.user.findMany({where:{emailVerified:false}}).then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
             console.log("ERROR [getAllUsers]: ", error);
@@ -69,6 +54,7 @@ const getUser = (userID:string,dbUrl:string)=>{
 
 export default ({
     getAllUsers,
-    getUser
+    getUser,
+    editUserRegisteration
 
 })
