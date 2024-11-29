@@ -1,4 +1,3 @@
-import React from "react";
 import glossary from "~/lib/glossary";
 import { NavLink, Outlet } from "@remix-run/react";
 
@@ -30,7 +29,7 @@ const ControlPanel = () => {
       <div className="bg-white border border-[#D0D5DD] rounded-xl px-5 py-12 w-4/5 mx-auto">
         <ul className="flex gap-x-4">
           {tabs.map((tab) => (
-            <li>
+            <li key={tab.link}>
               <NavLink
                 className="p-3 hover:bg-gray-200/50  aria-[current=page]:hover:opacity-90 transition-all  border border-[#D0D5DD] aria-[current=page]:text-white rounded-lg aria-[current=page]:bg-primary"
                 to={tab.link}

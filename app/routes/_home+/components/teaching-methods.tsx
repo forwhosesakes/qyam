@@ -26,10 +26,10 @@ const TeachingMethods = () => {
   ]
   return (
     <section id="teaching-methods" className="relative min-h-screen flex flex-col px-12">
-      <div className="blur-[180px] left-0">
+      <div className="blur-[150px] inset-0 absolute">
         <GradientEllipse
-          bgColor={"bg-[rgb(139,197,63)]/50"}
-          className={" -top-1/2 -left-96"}
+          bgColor={"bg-[rgb(139,197,63)]/60"}
+          className={" -top-24 -left-1/4"}
         />
       </div>
       <TitleBlock text={glossary.teaching_methods.title} />

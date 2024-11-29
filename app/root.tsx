@@ -8,12 +8,14 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
 } from "@remix-run/react";
 
 import "./tailwind.css";
 import { getAuth } from "./lib/auth.server";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
+import { Toaster } from "sonner";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -48,6 +50,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: { direction: "rtl" }, 
+            duration: 5000,
+            classNames:{
+              success:"border-2 bg-green-700 border-green-500 text-white/85",
+              error:" border-2 bg-red-700 border-red-500 text-white/85"
+            }
+            
+          }}
+        />
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -56,13 +70,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const location = useLocation();
   const user = useLoaderData();
+
+  const noNavbarRoutes = ["/login"];
+
+  const showNavbar = !noNavbarRoutes.includes(location.pathname);
 
   return (
     <>
-      <Navbar user={user as User} />
+      {showNavbar && <Navbar user={user as User} />}
       <Outlet />
-      <Footer/>
+      {showNavbar && <Footer />}
     </>
   );
 }
