@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import partenersImg from "~/assets/images/parteners.png";
 import TitleBlock from "~/components/ui/title-block";
 import glossary from "../../../lib/glossary";
 import GradientEllipse from "~/components/ui/gradient-ellipse";

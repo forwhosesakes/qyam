@@ -26,13 +26,7 @@ export const NavbarElements: NavElement[] = [
       visibility: true,
       onClick() {},
     },
-    {
-      id: "certificates",
-      arabicLabel: "شهادات البرنامج",
-      link:"certs",
-      visibility: true,
-      onClick() {},
-    },
+  
     {
       id: "knowledge-center",
       arabicLabel: "مركز المعرفة",

@@ -3,6 +3,7 @@
 
 interface Env {
   MAIN_EMAIL: any;
+  ADMIN_EMAIL: any;
   RESEND_API: string;
   DATABASE_URL: string;
   R2_AUTH_KEY_SECRET:string,

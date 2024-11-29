@@ -81,7 +81,9 @@ const signup={
       toasts: {
         verifyEmail: {
           title: "تم التسجيل بنجاح",
-          description: "تم إرسال رابط التحقق إلى بريدك الإلكتروني"
+          description: "تم إرسال رابط التحقق إلى بريدك الإلكتروني",
+           error: "خطأ في إرسال البريد",
+          errorDescription: "لم نتمكن من إرسال بريد التحقق. الرجاء المحاولة مرة أخرى"
         },
         signupError: {
           title: "فشل التسجيل",

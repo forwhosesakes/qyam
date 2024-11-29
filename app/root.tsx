@@ -2,6 +2,7 @@ import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { User } from "better-auth/types";
 
 import {
+  json,
   Links,
   Meta,
   Outlet,
@@ -16,6 +17,8 @@ import { getAuth } from "./lib/auth.server";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import { Toaster } from "sonner";
+import { getToast } from "./lib/toast.server";
+import { useToast } from "./components/toaster";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -31,15 +34,22 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  // check if the user is logged in
+
   const session = await getAuth(context).api.getSession({
     headers: request.headers, // you need to pass the headers object.
   });
-  return session?.user && session.user.emailVerified
-    ? (session.user as User)
-    : null;
+  const user= session?.user && session.user.emailVerified
+  ? (session.user as User)
+  : null;
+  const { toast, headers } = await getToast(request);
+  return Response.json({ toast,user }, { headers: headers || undefined });
+  
+ 
 }
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { toast } = useLoaderData<any>();
+  useToast(toast);
+
   return (
     <html dir="rtl" lang="ar">
       <head>
@@ -53,14 +63,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Toaster
           position="bottom-right"
           toastOptions={{
-            style: { direction: "rtl" },
+            style: { direction: "rtl", fontFamily:"PingARLT"},
             duration: 5000,
             classNames: {
               success:
-                "border bg-green-100/60 border-green-500/20 text-black/75 toast-icon-success",
-              error: " border bg-red-100/60 border-red-500/20 text-black/75 toast-icon-error",
-              info: "border bg-blue-100/60 border-blue-500/20 text-black/75 toast-icon-info",
-              warning:"border bg-yellow-100/60 border-yellow-500/20 text-black/75 toast-icon-warning",
+                "border bg-green-100/90 border-green-500/20 text-black/75 toast-icon-success",
+              error: "border bg-red-100/90 border-red-500/20 text-black/75 toast-icon-error",
+              info: "border bg-blue-100/90 border-blue-500/20 text-black/75 toast-icon-info",
+              warning:"border bg-yellow-100/90 border-yellow-500/20 text-black/75 toast-icon-warning",
               
 
             },
@@ -75,7 +85,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const location = useLocation();
-  const user = useLoaderData();
+  const {user} = useLoaderData<any>();
 
   const noNavbarRoutes = ["/login"];
 
