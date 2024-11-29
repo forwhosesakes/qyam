@@ -10,13 +10,13 @@ const EvaluationMethods = () => {
     { name: "education_situation", icon: "graduate" },
   ];
   return (
-    <section id="evaluation-methods" className=" ">
-      <div className="md:mx-24 mx-6">
+    <section id="evaluation-methods" className="flex flex-col">
+      <div className="md:mx-16 mx-6 self-start">
         <TitleBlock text={glossary.evaluation_methods.title} />
         <p className="py-4">{glossary.evaluation_methods.description}</p>
       </div>
 
-      <div className="relative md:mr-16 bg-primary  flex  flex-wrap lg:gap-x-24 gap-x-8 justify-center items-center md:w-5/6  md:h-[266px] h-[180px]  clip-path-evaluation-methods-path">
+      <div className="relative  bg-primary flex  flex-wrap 2xl:gap-x-20 lg:gap-x-24 gap-x-8 justify-center items-center 2xl:w-3/6  xl:w-4/6 w-5/6  md:h-[266px] h-[180px]  clip-path-evaluation-methods-path">
         <svg
           className="md:block hidden absolute right-0"
           xmlns="http://www.w3.org/2000/svg"
