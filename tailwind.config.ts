@@ -67,7 +67,7 @@ export default {
   			}
   		},
   		fontFamily: {
-  			primary: 'Saudia-sans'
+  			primary: 'PingARLT'
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
