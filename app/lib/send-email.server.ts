@@ -23,7 +23,7 @@ getResendObject(apiKey).emails.send({
     from: sourceEmail,
     to: body.to,
     subject: body.subject,
-    html: '<p>Congrats on sending your <strong>first email</strong>!</p>' + body.text
+    html:  body.text
   }).then((res)=>{
     //todo: handle the errors here ( i know :/)
  

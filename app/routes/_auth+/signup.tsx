@@ -1,13 +1,11 @@
 import {
   Form,
-  Link,
   useActionData,
   useLoaderData,
   useSubmit,
 } from "@remix-run/react";
 import {
   ActionFunctionArgs,
-  json,
   LoaderFunctionArgs,
 } from "@remix-run/cloudflare";
 import { useEffect, useState } from "react";
@@ -18,8 +16,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { toast as showToast } from "sonner";
 import { useToast } from "~/components/toaster";
 import { getToast } from "~/lib/toast.server";
-import { createAuthClient } from "better-auth/react";
-import { inferAdditionalFields } from "better-auth/client/plugins";
+
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { toast } = await getToast(request);

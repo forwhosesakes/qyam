@@ -27,6 +27,7 @@ export type QUser = User&  {
     cvKey:string
     bio:string 
     phone:number
+    role:"user"|"admin"
      
 }
 
