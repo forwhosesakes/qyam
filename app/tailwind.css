@@ -201,3 +201,19 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.toast-icon-success svg {
+  color: #22c55e !important; 
+}
+
+.toast-icon-error svg {
+  color: #ef4444 !important; 
+}
+
+.toast-icon-info svg {
+  color: #3b82f6 !important; 
+}
+
+.toast-icon-warning svg {
+  color: #eab308 !important; 
+}
