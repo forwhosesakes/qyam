@@ -53,13 +53,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Toaster
           position="bottom-right"
           toastOptions={{
-            style: { direction: "rtl" }, 
+            style: { direction: "rtl" },
             duration: 5000,
-            classNames:{
-              success:"border-2 bg-green-700 border-green-500 text-white/85",
-              error:" border-2 bg-red-700 border-red-500 text-white/85"
-            }
-            
+            classNames: {
+              success:
+                "border bg-green-100/60 border-green-500/20 text-black/75 toast-icon-success",
+              error: " border bg-red-100/60 border-red-500/20 text-black/75 toast-icon-error",
+              info: "border bg-blue-100/60 border-blue-500/20 text-black/75 toast-icon-info",
+              warning:"border bg-yellow-100/60 border-yellow-500/20 text-black/75 toast-icon-warning",
+              
+
+            },
           }}
         />
         <ScrollRestoration />

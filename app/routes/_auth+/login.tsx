@@ -1,40 +1,110 @@
-import { Form, Link, redirect, useNavigate } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  redirect,
+  useNavigate,
+  useActionData,
+  useNavigation,
+} from "@remix-run/react";
 import { useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import { getErrorMessage } from "../../lib/get-error-messege";
 import LoginShapeImg from "~/assets/images/login-drop-group.png";
 import Logo from "~/assets/images/logo.svg";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
-
+import { toast as showToast } from "sonner";
 import glossary from "./glossary";
 
-export default function Signup() {
+type ActionData = {
+  errors?: {
+    email?: string;
+    password?: string;
+    generic?: string;
+  };
+};
+
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const actionData = useActionData<ActionData>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
   const navigate = useNavigate();
 
   // const raiseToast= useToast()
 
-  const signIn = async () => {
-    await authClient.signIn.email(
-      {
-        email,
-        password,
-      },
-      {
-        onRequest: (ctx: any) => {
-          // show loading state
-        },
-        onSuccess: (ctx: any) => {
-          navigate("/");
-        },
-        onError: (ctx: any) => {
-          const msg = getErrorMessage(ctx);
-          console.log("msg error in login", ctx);
-        },
-      }
-    );
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError(null);
+
+    // Basic validation
+    if (!email) {
+      setLoginError(glossary.login.errors.email.required);
+
+      return;
+    }
+    if (!password) {
+      setLoginError(glossary.login.errors.password.required);
+      return;
+    }
+
+    try {
+      await authClient.signIn.email(
+        { email, password },
+        {
+          onRequest: () => {
+            // You can add loading state here
+          },
+          onSuccess: () => {
+            navigate("/");
+          },
+          onError: (ctx) => {
+            console.log(ctx);
+            if (
+              ctx.error.code ===
+              "EMAIL_IS_NOT_VERIFIED_CHECK_YOUR_EMAIL_FOR_A_VERIFICATION_LINK"
+            ) {
+              showToast.error(glossary.login.errors.unverified);
+            } else {
+              showToast.error(glossary.login.errors.invalid);
+
+            }
+
+            const errorMessage = getErrorMessage(ctx);
+            // Handle error appropriately - you might want to set this in state
+            console.error("Login error:", errorMessage);
+          },
+        }
+      );
+    } catch (error) {
+      setLoginError("An unexpected error occurred. Please try again.");
+
+      console.error("Login failed:", error);
+    }
   };
+
+  // const signIn = async () => {
+  //   await authClient.signIn.email(
+  //     {
+  //       email,
+  //       password,
+  //     },
+  //     {
+  //       onRequest: (ctx: any) => {
+  //         // show loading state
+  //       },
+  //       onSuccess: (ctx: any) => {
+  //         navigate("/");
+  //       },
+  //       onError: (ctx: any) => {
+  //         const msg = getErrorMessage(ctx);
+  //         console.log("msg error in login", ctx);
+  //       },
+  //     }
+  //   );
+  // };
 
   return (
     <div className="lg:flex lg:flex-row  justify-between items-center w-full h-screen overflow-hidden ">
@@ -64,7 +134,7 @@ export default function Signup() {
         <h2 className="my-5 z-10">{glossary.login.title}</h2>
 
         <Form
-          onSubmit={signIn}
+          onSubmit={handleSubmit}
           className="my-5 flex flex-col gap-2 w-full items-center justify-center z-10"
         >
           <div className="md:w-1/3  w-3/5">
@@ -78,6 +148,11 @@ export default function Signup() {
               placeholder="example@gmail.com"
               onChange={(e) => setEmail(e.target.value)}
             />
+            {actionData?.errors?.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {actionData.errors.email}
+              </p>
+            )}
           </div>
           <div className="md:w-1/3 w-3/5">
             <p className="text-xs lg:text-base md:text-sm my-1 text-primary z-10">
@@ -90,20 +165,35 @@ export default function Signup() {
               placeholder="1127651158"
               onChange={(e) => setPassword(e.target.value)}
             />
+            {actionData?.errors?.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {actionData.errors.password}
+              </p>
+            )}
           </div>
           <div className="flex flex-col md:w-1/3 w-3/5 z-10">
             <button
               type="submit"
+              disabled={isSubmitting}
               className="button text-xs lg:text-lg md:text-sm text-center bg-primary hover:opacity-90 transition-opacity text-white rounded-lg mt-6  w-full p-3 z-10"
             >
-              {glossary.login.login}
+             {isSubmitting ? "جاري تسجيل الدخول..." : glossary.login.login}
             </button>
+
             <Link
               className="text-black text-xs lg:text-lg md:text-sm underline my-1 z-10"
               to={"/forgot-password"}
             >
               {glossary.login.forgot_password}
             </Link>
+            {actionData?.errors?.generic && (
+              <p className="text-red-500 text-xs mt-1">
+                {actionData.errors.generic}
+              </p>
+            )}
+            {loginError && (
+          <p className="text-red-500 text-sm text-center mt-2">{loginError}</p>
+        )}
           </div>
         </Form>
       </div>

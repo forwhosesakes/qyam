@@ -3,7 +3,20 @@ const login = {
     email:"البريد الإلكتروني",
     password:"كلمة المرور",
     login:"دخول",
-    forgot_password:"نسيت كلمة السر؟"
+    forgot_password:"نسيت كلمة السر؟",
+
+    errors: {
+        email: {
+            required: "البريد الإلكتروني مطلوب",
+            invalid: "صيغة البريد الإلكتروني غير صحيحة"
+        },
+        password: {
+            required: "كلمة المرور مطلوبة"
+        },
+        unverified: "الرجاء تفعيل البريد الإلكتروني للمتابعة",
+        invalid: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+        generic: "حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى"
+    }
 }
 
 
@@ -85,7 +98,37 @@ const signup={
 
 }
 
+
+const forgotPassword={
+    title:"نسيت كلمة المرور",
+    yourEmail:"أدخل البريد الالكتروني",
+    resetPassword:"إستعد كلمة المرور",
+    toast:{
+        success:"تم إرسال بريدإلكتروني للعنوان المدرج بإرشادات الإستعادة",
+        errorNoEmail:"لايوجد حساب بهذا البريد الالكتروني",
+        error:"حدث خطأ حاول مرة اخرى"
+    }
+}
+
+
+const resetPassword = {
+    title: "تغيير كلمة المرور",
+    newPassword: "كلمة المرور الجديدة",
+    enterPassword: "أدخل كلمة المرور الجديدة",
+    confirmPassword: "تأكيد كلمة المرور",
+    confirmPasswordPlaceholder: "أدخل تأكيد كلمة المرور",
+    submit: "تغيير كلمة المرور",
+    toast: {
+        success: "تم تغيير كلمة المرور بنجاح",
+        error: "حدث خطأ أثناء تغيير كلمة المرور",
+        passwordMismatch: "كلمة المرور غير متطابقة"
+    }
+}
+
 export default {
     login,
-    signup
+    signup,
+    forgotPassword,
+    resetPassword
+
 }
