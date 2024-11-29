@@ -28,7 +28,7 @@ const getAllUsers = (dbUrl:string)=>{
     const db = client(dbUrl)
 
     return new Promise((resolve, reject) => {
-        db.user.findMany({where:{emailVerified:false}}).then((res)=>{
+        db.user.findMany({where:{emailVerified:true}}).then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
             console.log("ERROR [getAllUsers]: ", error);

@@ -25,7 +25,6 @@ export const initAuth = (c: AppLoadContext): Auth => {
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
-      sendOnSignUp: true,
       sendResetPassword: async ({ user, url, token }, request) => {
          sendEmail(
           {
@@ -39,7 +38,12 @@ export const initAuth = (c: AppLoadContext): Auth => {
       },
     },
     emailVerification: {
+      autoSignInAfterVerification: true,
+      sendOnSignUp: true,
+      
       sendVerificationEmail: async ({ user, url, token }, request) => {
+      console.log("emailVerification",user, request);
+
          sendEmail(
           {
             to: user.email,

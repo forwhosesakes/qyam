@@ -31,42 +31,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
   try {
     const intent = formData.get("intent");
-    if (intent && intent === "verify") {
-      try {
-        const email = formData.get("email");
-        
-        const response = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${context.cloudflare.env.RESEND_API}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: 'no-reply@qyam.org', // or your verified domain
-            to: email,
-            subject: 'Verify your email',
-            html: `<p>Please click the link below to verify your email:</p>
-                  <a href="${new URL('/', request.url).toString()}">Verify Email</a>`
-          })
-        });
-        const result = await response.json();
-        if (!response.ok) {
-          console.error('Email sending failed:', result);
-          return {
-            error: "verification_failed",
-            message: result.message || "Failed to send verification email",
-          }
-        }
-        return {success:true}
-      } catch (e) {
-        console.log(e);
-        
-        return {
-          error: "Failed to send verification email",
-          detail: e instanceof Error ? e.message : String(e),
-        };
-      }
-    }
     const file = formData.get("file");
 
     if (!file || !(file instanceof File)) {
@@ -222,7 +186,6 @@ export default function Signup() {
                   description: glossary.signup.toasts.verifyEmail.description,
                 });
 
-                await sendVerificationEmail();
               },
               onError: (ctx) => {
                 console.log("onError details: ", {
@@ -271,39 +234,6 @@ export default function Signup() {
     }
   };
 
-  const sendVerificationEmail = async () => {
-    const formData = new FormData();
-    formData.set("intent", "verify");
-    formData.set("email", email);
-    try {
-      submit(formData, { method: "post" });
-      
-      
-
-      // await authClient.sendVerificationEmail(
-      //   {
-      //     email,
-      //     callbackURL: "/", // The redirect URL after verification
-      //   },
-      //   {
-      //     onError: (ctx) => {
-      //       console.error("Failed to send verification email:", ctx);
-      //       showToast.error(glossary.signup.toasts.verifyEmail.error, {
-      //         description: glossary.signup.toasts.verifyEmail.errorDescription,
-      //       });
-      //     },
-      //     onSuccess: (ctx) => {
-      //       console.log("Verification email sent successfully");
-      //     },
-      //   }
-      // );
-    } catch (error) {
-      console.error("Verification email error:", error);
-      showToast.error(glossary.signup.toasts.verifyEmail.error, {
-        description: glossary.signup.toasts.verifyEmail.errorDescription,
-      });
-    }
-  };
 
   return (
     <div className="h-screen w-full pt-[96px]">
