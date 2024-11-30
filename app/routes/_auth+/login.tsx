@@ -3,10 +3,11 @@ import {
   Link,
   redirect,
   useNavigate,
+  useLoaderData,
   useActionData,
   useNavigation,
 } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import { getErrorMessage } from "../../lib/get-error-messege";
 import LoginShapeImg from "~/assets/images/login-drop-group.png";
@@ -14,6 +15,16 @@ import Logo from "~/assets/images/logo.svg";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
 import { toast as showToast } from "sonner";
 import glossary from "./glossary";
+
+import { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { requireSpecialCase } from "~/lib/get-authenticated.server";
+
+export async function loader ({request,context}:LoaderFunctionArgs){
+
+ const user = requireSpecialCase(request,context,(user)=>(user !==null))
+  // const user = await getAuthenticated({request, context})
+  return{user}
+}
 
 type ActionData = {
   errors?: {
@@ -24,6 +35,8 @@ type ActionData = {
 };
 
 export default function Login() {
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -31,8 +44,8 @@ export default function Login() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  const navigate = useNavigate();
 
+  
   // const raiseToast= useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {

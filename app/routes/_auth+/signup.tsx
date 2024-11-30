@@ -2,11 +2,13 @@ import {
   Form,
   useActionData,
   useLoaderData,
+  useNavigate,
   useSubmit,
 } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
+  redirect,
 } from "@remix-run/cloudflare";
 import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
@@ -16,10 +18,15 @@ import { createId } from "@paralleldrive/cuid2";
 import { toast as showToast } from "sonner";
 import { useToast } from "~/components/toaster";
 import { getToast } from "~/lib/toast.server";
+import { getAuthenticated } from "~/lib/get-authenticated.server";
 
 
-export async function loader({ request }: LoaderFunctionArgs) {
+
+export async function loader({ request,context }: LoaderFunctionArgs) {
   const { toast } = await getToast(request);
+  const user = await getAuthenticated({ request, context }) ?? null;
+  if(user !==null) throw redirect("/")
+  
   return { toast };
 }
 
@@ -67,7 +74,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
 }
 
 export default function Signup() {
+  
   const { toast } = useLoaderData<typeof loader>();
+ 
+  
   useToast(toast);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -91,64 +101,85 @@ export default function Signup() {
     bio?: string;
   }>({});
 
-  const validateForm = () => {
+  const [touched, setTouched] = useState<{
+    email?: boolean;
+    password?: boolean;
+    passwordConfirmation?: boolean;
+    name?: boolean;
+    phone?: boolean;
+    cv?: boolean;
+    bio?: boolean;
+  }>({});
+
+  const validateForm = (touchedFields = touched) => {
     const newErrors: typeof errors = {};
     const g = glossary.signup.validationErrors;
 
-    if (!name.trim()) {
+    if (touchedFields.name && !name.trim()) {
       newErrors.name = g.name;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) {
-      newErrors.email = g.email.required;
-    } else if (!emailRegex.test(email)) {
-      newErrors.email = g.email.invalid;
-    }
-
-    if (!password) {
-      newErrors.password = g.password.required;
-    } else if (password.length < 8) {
-      newErrors.password = g.password.length;
-    }
-
-    if (password !== passwordConfirmation) {
-      newErrors.passwordConfirmation = g.passwordConfirmation;
-    }
-
-    if (!phone || phone == "") {
-      newErrors.phone = g.phone.required;
-    } else if (phone.length === 12 && !phone.startsWith("966")) {
-      newErrors.phone = g.phone.saudi;
-    } else if (phone.length === 10 && !phone.startsWith("05")) {
-      newErrors.phone = g.phone.notValid;
-    } else if (!(phone.length === 10 || phone.length === 12)) {
-      newErrors.phone = g.phone.length;
-    }
-
-    if (!cv) {
-      newErrors.cv = g.cv.required;
-    } else {
-      const allowedTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ];
-      if (!allowedTypes.includes(cv.type)) {
-        newErrors.cv = g.cv.type;
-      } else if (cv.size > 5 * 1024 * 1024) {
-        newErrors.cv = g.cv.size;
+    if (touchedFields.email) {
+      if (!email) {
+        newErrors.email = g.email.required;
+      } else if (!emailRegex.test(email)) {
+        newErrors.email = g.email.invalid;
       }
     }
 
-    if (!bio.trim()) {
+    if (touchedFields.password) {
+      if (!password) {
+        newErrors.password = g.password.required;
+      } else if (password.length < 8) {
+        newErrors.password = g.password.length;
+      }
+    }
+
+    if (touchedFields.passwordConfirmation && password !== passwordConfirmation) {
+      newErrors.passwordConfirmation = g.passwordConfirmation;
+    }
+
+    if (touchedFields.phone) {
+      if (!phone || phone == "") {
+        newErrors.phone = g.phone.required;
+      } else if (phone.length === 12 && !phone.startsWith("966")) {
+        newErrors.phone = g.phone.saudi;
+      } else if (phone.length === 10 && !phone.startsWith("05")) {
+        newErrors.phone = g.phone.notValid;
+      } else if (!(phone.length === 10 || phone.length === 12)) {
+        newErrors.phone = g.phone.length;
+      }
+    }
+
+    if (touchedFields.cv) {
+      if (!cv) {
+        newErrors.cv = g.cv.required;
+      } else {
+        const allowedTypes = [
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ];
+        if (!allowedTypes.includes(cv.type)) {
+          newErrors.cv = g.cv.type;
+        } else if (cv.size > 5 * 1024 * 1024) {
+          newErrors.cv = g.cv.size;
+        }
+      }
+    }
+
+    if (touchedFields.bio && !bio.trim()) {
       newErrors.bio = g.bio;
     }
 
     setErrors(newErrors);
-    console.log(newErrors, Object.keys(newErrors).length === 0);
-
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleBlur = (field: keyof typeof touched) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    validateForm({ ...touched, [field]: true });
   };
 
   interface ActionData {
@@ -157,6 +188,7 @@ export default function Signup() {
     error?: string;
   }
   useEffect(() => {
+
     const handleSigneup = async () => {
       console.log("action data : ", actionData);
 
@@ -223,12 +255,49 @@ export default function Signup() {
     handleSigneup();
   }, [actionData]);
 
+  // Add function to check if all required fields are filled
+  const areAllFieldsFilled = () => {
+    return (
+      name.trim() !== '' &&
+      email.trim() !== '' &&
+      password !== '' &&
+      passwordConfirmation !== '' &&
+      phone !== undefined &&
+      phone !== '' &&
+      cv !== null &&
+      bio.trim() !== ''
+    );
+  };
+
+  // Update useEffect for form validation
   useEffect(() => {
-    setIsFormValid(validateForm());
+    if (Object.values(touched).some(Boolean)) {
+      const isValid = validateForm();
+      const areFieldsFilled = areAllFieldsFilled();
+      setIsFormValid(isValid && areFieldsFilled);
+    } else {
+      setIsFormValid(false); // Ensure button is disabled initially
+    }
   }, [email, password, passwordConfirmation, name, phone, cv, bio]);
 
+ 
+
+  // Update the signUp function to double-check
   const signUp = async () => {
-    if (!validateForm()) return;
+    // Mark all fields as touched before submission
+    const allTouched = {
+      email: true,
+      password: true,
+      passwordConfirmation: true,
+      name: true,
+      phone: true,
+      cv: true,
+      bio: true
+    };
+    setTouched(allTouched);
+    
+    if (!validateForm(allTouched) || !areAllFieldsFilled()) return;
+    
     if (cv) {
       const formData = new FormData();
       formData.set("intent", "upload");
@@ -257,11 +326,17 @@ export default function Signup() {
               </p>
               <input
                 className={`text-xs lg:text-base md:text-sm p-1 ${
-                  errors.name ? "border-red-600" : ""
-                }  bg-white text-black border rounded w-full`}
+                  errors.name && touched.name ? "border-red-600" : ""
+                } bg-white text-black border rounded w-full`}
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (touched.name) {
+                    validateForm({ ...touched, name: true });
+                  }
+                }}
+                onBlur={() => handleBlur("name")}
                 placeholder={glossary.signup.newSignup.fullNamePlaceholder}
               />
               {errors.name && (
@@ -275,7 +350,7 @@ export default function Signup() {
               </p>
               <input
                 className={`text-xs ${
-                  errors.phone ? "border-red-600" : ""
+                  errors.phone && touched.phone ? "border-red-600" : ""
                 } lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full`}
                 type="number"
                 value={phone}
@@ -285,7 +360,7 @@ export default function Signup() {
 
                   setPhone(phoneNubmer);
                 }}
-                // TODO: change setName to setNumber
+                onBlur={() => handleBlur("phone")}
                 placeholder={"رقم الجوال"}
               />
               {errors.phone && (
@@ -299,11 +374,17 @@ export default function Signup() {
               </p>
               <input
                 className={`text-xs lg:text-base ${
-                  errors.email ? "border-red-600" : ""
+                  errors.email && touched.email ? "border-red-600" : ""
                 } md:text-sm p-1 bg-white text-black border rounded w-full`}
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (touched.email) {
+                    validateForm({ ...touched, email: true });
+                  }
+                }}
+                onBlur={() => handleBlur("email")}
                 placeholder="example@gmail.com"
               />
               {errors.email && (
@@ -317,12 +398,17 @@ export default function Signup() {
               </p>
               <input
                 className={`text-xs lg:text-base  ${
-                  errors.password ? "border-red-600" : ""
+                  errors.password && touched.password ? "border-red-600" : ""
                 } md:text-sm p-1 bg-white text-black border rounded w-full`}
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                // TODO: change setName to setNumber
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (touched.password) {
+                    validateForm({ ...touched, password: true });
+                  }
+                }}
+                onBlur={() => handleBlur("password")}
                 placeholder={"9661122334455"}
               />
               {errors.password && (
@@ -336,12 +422,17 @@ export default function Signup() {
               </p>
               <input
                 className={`text-xs lg:text-base ${
-                  errors.passwordConfirmation ? "border-red-600" : ""
+                  errors.passwordConfirmation && touched.passwordConfirmation ? "border-red-600" : ""
                 } md:text-sm p-1 bg-white text-black border rounded w-full`}
                 type="password"
                 value={passwordConfirmation}
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
-                // TODO: change setName to setNumber
+                onChange={(e) => {
+                  setPasswordConfirmation(e.target.value);
+                  if (touched.passwordConfirmation) {
+                    validateForm({ ...touched, passwordConfirmation: true });
+                  }
+                }}
+                onBlur={() => handleBlur("passwordConfirmation")}
                 placeholder={"9661122334455"}
               />
               {errors.passwordConfirmation && (
@@ -351,20 +442,13 @@ export default function Signup() {
               )}
             </div>
 
-            {/* <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-            /> */}
-
             <div className="md:w-2/3 sm:w-[80%] min-w-24 w-full">
               <p className="text-xs lg:text-base md:text-sm my-1 text-primary">
                 {glossary.signup.newSignup.cv}
               </p>
               <input
                 className={`text-xs ${
-                  errors.cv ? "border-red-600" : ""
+                  errors.cv && touched.cv ? "border-red-600" : ""
                 } lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full`}
                 type="file"
                 name="file"
@@ -376,6 +460,7 @@ export default function Signup() {
                     setCv(file);
                   }
                 }}
+                onBlur={() => handleBlur("cv")}
                 accept=".pdf,.doc,.docx"
               />
               {errors.cv && (
@@ -389,13 +474,19 @@ export default function Signup() {
               </p>
               <textarea
                 className={`text-xs ${
-                  errors.bio ? "border-red-600" : ""
+                  errors.bio && touched.bio ? "border-red-600" : ""
                 } lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full`}
-                value={bio} //TODO: change to slef introduction
+                value={bio}
                 placeholder={
                   glossary.signup.newSignup.selfIntrodutionPlaceholder
                 }
-                onChange={(e) => setBio(e.target.value)}
+                onChange={(e) => {
+                  setBio(e.target.value);
+                  if (touched.bio) {
+                    validateForm({ ...touched, bio: true });
+                  }
+                }}
+                onBlur={() => handleBlur("bio")}
               />
               {errors.bio && (
                 <span className="text-red-600 text-xs">{errors.bio}</span>
