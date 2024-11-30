@@ -47,17 +47,17 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
     const buffer = await file1.arrayBuffer();
     console.log("buffer:   ", buffer);
     
-    context.cloudflare.env.QYAM_BUCKET.put(key, buffer, {
+   return context.cloudflare.env.QYAM_BUCKET.put(key, buffer, {
       httpMetadata: {
         contentType,
       },
     })
-      .then((res) => {
-        console.log("upload done:   [cloudflare upload]: ",res);
+      .then((r:any) => {
+        console.log("upload done:   [cloudflare upload]: ",r);
 
         const userId = params.id;
         if (userId) {
-          userDB
+         return userDB
             .addCertificateToUser(
               {
                 userId,
@@ -71,6 +71,7 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
             .then((res) => {
 
               console.log("response:   [addCertificateToUser]: ",res);
+              return res
               
             })
             .catch((err) => {
@@ -78,17 +79,17 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
 
               throw new Error("FAILED_ADD_USER_CERTS");
             });
-        }
+        
+          
+          }
       })
       .catch((err) => {
         console.log("error upload ", err);
+        return null
+
       });
 
-    return {
-      key,
-      filename,
-      contentType,
-    };
+    
   };
 
   try {
