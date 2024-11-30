@@ -32,6 +32,7 @@ const ControlPanel = () => {
           {tabs.map((tab) => (
             <li key={tab.link}>
               <NavLink
+              prefetch="viewport"
                 className="p-3 hover:bg-gray-200/50  aria-[current=page]:hover:opacity-90 transition-all  border border-[#D0D5DD] aria-[current=page]:text-white rounded-lg aria-[current=page]:bg-primary"
                 to={tab.link}
               >

@@ -33,10 +33,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
       sendEmail(
         {
           to: context.cloudflare.env.ADMIN_EMAIL,
-          subject: "Qyam program regiseration request",
-          text: `User: ${formData.get(
+          subject: "طلب التسجيل في برنامج قيم",
+          text: `المستخدم: ${formData.get(
             "name"
-          )} has requuested to register into qyam program`,
+          )} قام بإنشاء طلب انضمام لبرنامج قيم. يمكنك قبول أو رفض الطلب عبر المنصة.`,
         },
         context.cloudflare.env.RESEND_API,
         context.cloudflare.env.MAIN_EMAIL

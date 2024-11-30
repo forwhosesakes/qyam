@@ -67,7 +67,7 @@ const levels = {
 const footer = {
   copyrights: "© جميع الحقوق محفوظة لجمعية أفاق الخفجي.",
   description:
-    "منصة ذكاء اصطناعي تدعم الجهات المتحولة لنظام الاستحقاق، لتمكين الشفافية والحوكمة في القطاع العام.",
+    "منصة تدعو إلى مبادرة شاملة لإعداد الخبراء والمختصين لتقديم محتوى تربوي بمنهجيات عملية فعالة تؤثر في البيئات الشبابية والتربوية",
 };
 
 const status_response = {
@@ -103,12 +103,22 @@ const cp = {
     pending:"قيد التنفيذ",
     denied:"مرفوض",
     accepted:"مقبول",
-    idle:"غير نشط"
+    idle:"غير نشط",
+    edit_status_success:"تم تحديث حالة انضمام المستخدم",
+    edit_status_failure:"فشلت عملية تحديث حالة انضمام المستخدم"
+
   }
 
 
 }
 
+
+
+const email = {
+  program_status_subject:"حالة طلب الانضمام",
+  acceptence_message : "تم قبولك في برنامج قيم٬ يمكنك الاطلاع على مختلف البرامج عبر المنصة",
+  rejection_message: "تم رفض طلبك للانضمام إلى برنامج قيم٫ نتمنى لك حظًا موفقًا"
+}
 
 const contact = {
   title: "تواصل معنا",
@@ -145,6 +155,7 @@ const contact = {
 export default {
   about,
   hero,
+  email,
   partners,
   teaching_methods,
   evaluation_methods,

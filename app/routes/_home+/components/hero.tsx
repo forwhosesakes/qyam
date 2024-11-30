@@ -7,8 +7,10 @@ import ColoredDrop from "~/components/ui/colored-drop";
 import DropsGroup from "~/assets/images/drops-group.png";
 import glossary from "../../../lib/glossary";
 import { Icon } from "~/components/icon";
+import { useNavigate } from "@remix-run/react";
 
 const Hero = () => {
+  const navigate = useNavigate()
   return (
     <section
       id="hero"
@@ -44,7 +46,7 @@ const Hero = () => {
         <h1 className="text-primary">{glossary.hero.title}</h1>
 
         <div className="flex gap-x-4 ">
-          <button className="text-center text-nowrap  bg-primary text-white border border-tertiary px-7 md:py-4 py-2 rounded-lg md:text-lg text-sm hover:opacity-80 transition-opacity">
+          <button onClick={()=>navigate("/levels")} className="text-center text-nowrap  bg-primary text-white border border-tertiary px-7 md:py-4 py-2 rounded-lg md:text-lg text-sm hover:opacity-80 transition-opacity">
             {glossary.hero.join}
           </button>
           <button className="text-center text-nowrap shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)

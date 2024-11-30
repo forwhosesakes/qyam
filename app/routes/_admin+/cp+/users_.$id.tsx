@@ -20,8 +20,6 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
     return userDB
       .getUserWithCertificates(userId, context.cloudflare.env.DATABASE_URL)
       .then((res: any) => {
-        console.log("response [getUserWithCertificates]: ",res.data);
-        
         return res.data;
       })
       .catch((error) => {
@@ -33,9 +31,7 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
 
 export async function action({ request, context, params }: ActionFunctionArgs) {
   const uploadHandler = async (props: any) => {
-    console.log("upload handler:    ",props);
-    
-    const { name, data, filename, contentType, size } = props;
+    const {  data, filename, contentType } = props;
     const key = `${Date.now()}-${createId()}.${filename.split(".")[1]}`;
     const dataArray1 = [];
 
@@ -45,16 +41,12 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
 
     const file1 = new File(dataArray1, filename, { type: contentType });
     const buffer = await file1.arrayBuffer();
-    console.log("buffer:   ", buffer);
-    
    return context.cloudflare.env.QYAM_BUCKET.put(key, buffer, {
       httpMetadata: {
         contentType,
       },
     })
-      .then((r:any) => {
-        console.log("upload done:   [cloudflare upload]: ",r);
-
+      .then(() => {
         const userId = params.id;
         if (userId) {
          return userDB
@@ -69,27 +61,16 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
               context.cloudflare.env.DATABASE_URL
             )
             .then((res) => {
-
-              console.log("response:   [addCertificateToUser]: ",res);
               return res
-              
             })
             .catch((err) => {
-              console.log("error:   [addCertificateToUser]: ",err);
-
               throw new Error("FAILED_ADD_USER_CERTS");
             });
-        
-          
           }
       })
       .catch((err) => {
-        console.log("error upload ", err);
         return null
-
       });
-
-    
   };
 
   try {
@@ -97,7 +78,6 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
       request,
       uploadHandler as any
     );
-    const results = formData.getAll("files");
 
     return Response.json(
       { success: true },

@@ -190,7 +190,7 @@ export default function Signup() {
               bio,
               cvKey: actionData.key,
               phone: Number(phone),
-              acceptenceState,
+              acceptenceState:"idle",
             },
             {
               onRequest: (ctx) => {

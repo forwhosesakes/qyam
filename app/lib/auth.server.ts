@@ -29,8 +29,9 @@ export const initAuth = (c: AppLoadContext): Auth => {
          sendEmail(
           {
             to: user.email,
-            subject: "Reset",
-            text: `Click the link to verify your email: ${url}`,
+            subject: "إعادة تعيين كلمة المرور",
+            text: ` قم بتعيين كلمة مرورك بالضغط على هذا : <a href="${url}"> الرابط</a>`,
+
           },
           c.cloudflare.env.RESEND_API,
           c.cloudflare.env.MAIN_EMAIL
@@ -42,13 +43,11 @@ export const initAuth = (c: AppLoadContext): Auth => {
       sendOnSignUp: true,
       
       sendVerificationEmail: async ({ user, url, token }, request) => {
-      console.log("emailVerification",user, request);
-
          sendEmail(
           {
             to: user.email,
-            subject: "Verify your email address",
-            text: `Click the link to verify your email: ${url}`,
+            subject: "تأكيد التسجيل في قيم",
+            text: ` قم بتأكيد تسجيلك عن طريق دخول   <a href="${url}">  هذا الرابط</a>`,
           },
           c.cloudflare.env.RESEND_API,
           c.cloudflare.env.MAIN_EMAIL

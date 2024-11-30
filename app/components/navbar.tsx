@@ -6,8 +6,6 @@ import {  useReducer } from "react";
 import { cn } from "~/lib/tw-merge";
 import { NavbarElements } from "~/lib/contstants";
 import { Link } from "@remix-run/react";
-import { authClient } from "~/lib/auth.client";
-import { toast as showToast } from "sonner";
 import { canViewElement } from "~/lib/check-permission";
 
 
@@ -21,28 +19,12 @@ type TProps = {
 
 
 const Navbar = (props: TProps) => {
-console.log("hi",props);
-
-  
   const navigate = useNavigate();
 
   const [isMenuOpen, toggleMenu] = useReducer((st) => !st, false);
 
-  const expandElement = () => {};
-  const scrollToSection = () => {};
-
   const handleLogout = async() => {
-    try{
-     const result = await authClient.signOut()
-     if(result.data?.success)navigate("/")
-     console.log(result);
-     
-    }catch(e){
-      console.error(e)
-      showToast.error("حدث خطأ أثناء تسجيل الخروج");
-      
-
-    }
+    navigate("/logout")
   }
 
   const AuthActions = () =>
@@ -78,7 +60,7 @@ console.log("hi",props);
         .filter(element => canViewElement(element,props?.user?.role ?? null))
         .map(element=>(
           <li key={element.id} className="flex cursor-pointer font-bold text-gray-700">
-            <NavLink to={element.link}>
+            <NavLink prefetch="viewport" to={element.link}>
               <span>{element.arabicLabel}</span>
               {element.children && element.children.length && (
                 <Icon name="below-arrow" size="sm" />
@@ -91,7 +73,7 @@ console.log("hi",props);
   );
 
   return (
-    <nav className="z-50 fixed w-full h-12 md:h-24  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-5 md:px-32  px-3 gap-x-8">
+    <nav className="z-50 fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-5 md:px-32  px-3 gap-x-8">
      <Link to="/">
      <img
         className={"h-8 w-8 md:h-auto md:w-auto  ml-auto md:ml-0"}
