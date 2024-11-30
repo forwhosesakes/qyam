@@ -1,13 +1,11 @@
 import {
   Form,
   Link,
-  redirect,
   useNavigate,
-  useLoaderData,
   useActionData,
   useNavigation,
 } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import { getErrorMessage } from "../../lib/get-error-messege";
 import LoginShapeImg from "~/assets/images/login-drop-group.png";
