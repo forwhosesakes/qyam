@@ -20,8 +20,9 @@ import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { requireSpecialCase } from "~/lib/get-authenticated.server";
 
 export async function loader ({request,context}:LoaderFunctionArgs){
+  
 
- const user = await requireSpecialCase(request,context,(user)=>(user !==null))
+ const user = await requireSpecialCase(request,context,(user)=>(user==null))
   return{user}
 }
 
