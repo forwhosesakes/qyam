@@ -33,6 +33,8 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
 
 export async function action({ request, context, params }: ActionFunctionArgs) {
   const uploadHandler = async (props: any) => {
+    console.log("upload handler:    ",props);
+    
     const { name, data, filename, contentType, size } = props;
     const key = `${Date.now()}-${createId()}.${filename.split(".")[1]}`;
     const dataArray1 = [];
@@ -49,6 +51,8 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
       },
     })
       .then((res) => {
+        console.log("upload done:   [cloudflare upload]: ",res);
+
         const userId = params.id;
         if (userId) {
           userDB
