@@ -62,8 +62,14 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
               },
               context.cloudflare.env.DATABASE_URL
             )
-            .then(() => {})
-            .catch(() => {
+            .then((res) => {
+
+              console.log("response:   [addCertificateToUser]: ",res);
+              
+            })
+            .catch((err) => {
+              console.log("error:   [addCertificateToUser]: ",err);
+
               throw new Error("FAILED_ADD_USER_CERTS");
             });
         }
