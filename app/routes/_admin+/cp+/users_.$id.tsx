@@ -20,6 +20,8 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
     return userDB
       .getUserWithCertificates(userId, context.cloudflare.env.DATABASE_URL)
       .then((res: any) => {
+        console.log("response [getUserWithCertificates]: ",res.data);
+        
         return res.data;
       })
       .catch((error) => {
@@ -135,8 +137,7 @@ const User = () => {
       const reader = new FileReader();
       reader.onabort = () => console.log("file reading was aborted");
       reader.onerror = () => console.log("file reading has failed");
-      reader.onload = () => {
-      };
+      reader.onload = () => {};
       reader.readAsArrayBuffer(file);
     });
     setSelectedFiles((prev) => [...prev, ...acceptedFiles]);
@@ -150,33 +151,23 @@ const User = () => {
 
           {user.name}
         </p>
-        <p className="text-[#475467] border border-[#D0D5DD] rounded-lg p-2 w-72 text-center"
-        
-        
-        
-        >
-         <span className="text-secondary"> الإيميل :</span>
-        
-        {user.email}</p>
+        <p className="text-[#475467] border border-[#D0D5DD] rounded-lg p-2 w-72 text-center">
+          <span className="text-secondary"> الإيميل :</span>
 
-        <p className="text-[#475467] border border-[#D0D5DD] rounded-lg p-2 w-72 text-center"
-        
-        
-        >
-                   <span className="text-secondary">     ساعات التدريب  :</span>
-          
-
-          
-          {user.trainingHours}</p>
+          {user.email}
+        </p>
 
         <p className="text-[#475467] border border-[#D0D5DD] rounded-lg p-2 w-72 text-center">
-          
-        <span className="text-secondary">            عدد المتدربين   :</span>
-          
-   
-          
-          
-           {user.noStudents}</p>
+          <span className="text-secondary"> ساعات التدريب :</span>
+
+          {user.trainingHours}
+        </p>
+
+        <p className="text-[#475467] border border-[#D0D5DD] rounded-lg p-2 w-72 text-center">
+          <span className="text-secondary"> عدد المتدربين :</span>
+
+          {user.noStudents}
+        </p>
       </div>
 
       <div>

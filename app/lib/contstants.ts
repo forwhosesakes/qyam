@@ -34,6 +34,16 @@ export const NavbarElements: NavElement[] = [
       visibility: true,
       onClick() {},
     },
+
+    {
+      id: "cp",
+      arabicLabel: "لوحة التحكم",
+      link:"cp",
+      visibility: true,
+      onClick() {},
+    },
+
+
     {
       id: "contact-us",
       arabicLabel: "تواصل معنا",
