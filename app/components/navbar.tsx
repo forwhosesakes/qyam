@@ -2,12 +2,13 @@ import { User } from "better-auth/types";
 import { Icon } from "./icon";
 import { NavLink, useNavigate } from "@remix-run/react";
 import Logo from "~/assets/images/logo.svg";
-import { useReducer } from "react";
+import {  useReducer } from "react";
 import { cn } from "~/lib/tw-merge";
 import { NavbarElements } from "~/lib/contstants";
 import { Link } from "@remix-run/react";
 import { authClient } from "~/lib/auth.client";
 import { toast as showToast } from "sonner";
+import { canViewElement } from "~/lib/check-permission";
 
 
 
@@ -20,6 +21,9 @@ type TProps = {
 
 
 const Navbar = (props: TProps) => {
+console.log("hi",props);
+
+  
   const navigate = useNavigate();
 
   const [isMenuOpen, toggleMenu] = useReducer((st) => !st, false);
@@ -67,20 +71,22 @@ const Navbar = (props: TProps) => {
         </button>
       </div>
     );
-
   const DisplayedNavList = () => (
     <ul className="flex flex-col-reverse md:flex-row  items-end gap-x-8 gap-y-8 ">
-      {NavbarElements.map((el) => (
-        <li key={el.id} className="flex cursor-pointer font-bold text-gray-700">
-          <NavLink to={el.link}>
-          <span>{el.arabicLabel}</span>
-          {el.children && el.children.length && (
-            <Icon name="below-arrow" size="sm" />
-          )}
-          </NavLink>
-       
-        </li>
-      ))}
+      {
+        NavbarElements
+        .filter(element => canViewElement(element,props?.user?.role ?? null))
+        .map(element=>(
+          <li key={element.id} className="flex cursor-pointer font-bold text-gray-700">
+            <NavLink to={element.link}>
+              <span>{element.arabicLabel}</span>
+              {element.children && element.children.length && (
+                <Icon name="below-arrow" size="sm" />
+              )}
+            </NavLink>
+          </li>
+        ))
+      }
     </ul>
   );
 

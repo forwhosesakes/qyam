@@ -6,6 +6,7 @@ import EvaluationMethods from "./components/evaluation-methods";
 import TargetedUsers from "./components/targeted-users";
 import Partners from "./components/partners";
 import Outro from "./components/outro";
+import Statistics from "./components/statistics";
 export async function loader({ request , context}: LoaderFunctionArgs) {
   
 	//check if the user is logged in 
@@ -26,6 +27,7 @@ export default function Index() {
       <TeachingMethods/>
       <TargetedUsers/>
       <Partners/>
+      <Statistics/>
       <Outro/>
     </div>
   );
