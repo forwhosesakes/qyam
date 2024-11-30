@@ -109,6 +109,39 @@ const cp = {
 
 }
 
+
+const contact = {
+  title: "تواصل معنا",
+  description: "يمكنك التواصل معنا عبر تعبئة النموذج التالي",
+  form: {
+    name: "الاسم",
+    email: "البريد الإلكتروني",
+    message: "الرسالة",
+    submit: "إرسال",
+    placeholders: {
+      name: "الاسم الكامل",
+      email: "example@domain.com",
+      message: "اكتب رسالتك هنا"
+    }
+  },
+  validation: {
+    name: {
+      required: "الرجاء إدخال الاسم"
+    },
+    email: {
+      required: "الرجاء إدخال البريد الإلكتروني",
+      invalid: "الرجاء إدخال بريد إلكتروني صحيح"
+    },
+    message: {
+      required: "الرجاء إدخال الرسالة",
+      minLength: "الرسالة يجب أن تكون على الأقل ١٠ أحرف"
+    }
+  },
+  toasts: {
+    success: "تم إرسال رسالتك بنجاح",
+    error: "حدث خطأ في إرسال الرسالة. الرجاء المحاولة مرة أخرى"
+  }
+};
 export default {
   about,
   hero,
@@ -119,5 +152,6 @@ export default {
   levels,
   footer,
   status_response,
-  cp
+  cp,
+  contact
 };

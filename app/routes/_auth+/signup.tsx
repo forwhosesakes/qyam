@@ -1,14 +1,11 @@
 import {
   Form,
   useActionData,
-  useLoaderData,
-  useNavigate,
   useSubmit,
 } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
-  redirect,
 } from "@remix-run/cloudflare";
 import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
@@ -16,18 +13,12 @@ import glossary from "./glossary";
 import TitleBlock from "~/components/ui/title-block";
 import { createId } from "@paralleldrive/cuid2";
 import { toast as showToast } from "sonner";
-import { useToast } from "~/components/toaster";
-import { getToast } from "~/lib/toast.server";
-import { getAuthenticated } from "~/lib/get-authenticated.server";
+import { requireNoAuth } from "~/lib/get-authenticated.server";
 
 
 
 export async function loader({ request,context }: LoaderFunctionArgs) {
-  const { toast } = await getToast(request);
-  const user = await getAuthenticated({ request, context }) ?? null;
-  if(user !==null) throw redirect("/")
-  
-  return { toast };
+  return await requireNoAuth(request,context)
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -75,10 +66,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 export default function Signup() {
   
-  const { toast } = useLoaderData<typeof loader>();
  
   
-  useToast(toast);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");

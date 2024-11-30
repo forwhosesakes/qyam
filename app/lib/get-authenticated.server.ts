@@ -24,6 +24,7 @@ export const requireAuth = async (request: Request, context: any, redirectTo: st
 
 export const requireNoAuth = async (request: Request, context: any, redirectTo: string = '/') => {
   const user = await getAuthenticated({ request, context });
+  
   if (user) {
     throw redirect(redirectTo);
   }
