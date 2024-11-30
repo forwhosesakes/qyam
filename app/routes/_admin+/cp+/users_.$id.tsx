@@ -45,6 +45,8 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
 
     const file1 = new File(dataArray1, filename, { type: contentType });
     const buffer = await file1.arrayBuffer();
+    console.log("buffer:   ", buffer);
+    
     context.cloudflare.env.QYAM_BUCKET.put(key, buffer, {
       httpMetadata: {
         contentType,
