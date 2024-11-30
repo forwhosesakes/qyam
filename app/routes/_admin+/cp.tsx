@@ -1,11 +1,12 @@
 import glossary from "~/lib/glossary";
 import { NavLink, Outlet } from "@remix-run/react";
+import React from "react";
 
 const ControlPanel = () => {
   const tabs = [
     {
       name: glossary.cp.registered,
-      link: "user",
+      link: "users",
     },
     {
       name: glossary.cp.material,

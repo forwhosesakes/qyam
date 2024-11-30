@@ -70,7 +70,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 const Levels = () => {
   const user = useLoaderData<any>();
 
-  const isJoinEnabled = user && user?.role === "user" && (user?.acceptenceState === "rejected"|| user?.acceptenceState === "idle");
+  const isJoinEnabled = user ?user?.role === "user" && (user?.acceptenceState === "rejected"|| user?.acceptenceState === "idle"):false;
   const fetcher = useFetcher();
 
   const joinTheProgram = () => {

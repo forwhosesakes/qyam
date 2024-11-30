@@ -14,7 +14,7 @@ export type Material = {
 
 
 
-export type Category {
+export type Category= {
     id?: string;
     title: string;
     icon: string;
@@ -27,6 +27,8 @@ export type QUser = User&  {
     cvKey:string
     bio:string 
     phone:number
+    trainingHours:number
+    noStudents:number
     role:"user"|"admin"
      
 }
@@ -40,3 +42,6 @@ export type StatusResponse<T>= {
     data?:T|T[]
 }
  
+type UserCertificate = {
+    userId:string, certificateKey:string, size:number, contentType:string,name:DialogTitleProps, id?:string
+}

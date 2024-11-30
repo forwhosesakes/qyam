@@ -26,11 +26,14 @@ model User {
   bio             String?
   phone           Int?
   acceptenceState String? @default("idle")
+  trainingHours Int @default(0)
+  noStudents Int @default(0)
 
   @@unique([email])
   @@map("user")
   Session Session[]
   Account Account[]
+  UserCertificate UserCertificate[]
 }
 
 model Session {
@@ -103,4 +106,20 @@ model Category {
   @@unique([title])
   @@map("category")
   Material Material[]
+}
+
+
+model UserCertificate {
+  id   String  @id @default(cuid())
+  userId String 
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentType String
+  size      Int
+  certificateKey String
+  name String
+  @@map("userCertificate")
+
+
+
+
 }

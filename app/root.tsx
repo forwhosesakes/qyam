@@ -42,6 +42,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   ? (session.user as User)
   : null;
   const { toast, headers } = await getToast(request);
+  
   return Response.json({ toast,user }, { headers: headers || undefined });
   
  

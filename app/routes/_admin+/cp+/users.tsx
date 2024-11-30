@@ -5,7 +5,7 @@ import ChartGray from "~/assets/images/chart-gray.png";
 import ChartGreen from "~/assets/images/chart-green.png";
 import ChartRed from "~/assets/images/chart-red.png";
 import { Icon } from "~/components/icon";
-import { Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import {
   createColumnHelper,
   flexRender,
@@ -22,9 +22,9 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { AcceptenceState, QUser } from "~/types/types";
-import { useMemo, useReducer, useState } from "react";
+import { useMemo, useState } from "react";
 import { sendEmail } from "~/lib/send-email.server";
-import EditConfirmationDialog from "./components/editConfirmationDialog";
+import EditConfirmationDialog from "../components/editConfirmationDialog";
 import { Input } from "~/components/ui/input";
 
 const columnHelper = createColumnHelper<QUser>();
@@ -48,7 +48,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
       formData.get("status") as "denied" | "accepted",
       context.cloudflare.env.DATABASE_URL
     )
-    .then((res) => {
+    .then(() => {
       sendEmail(
         {
           to: formData.get("email") as string,
@@ -94,6 +94,7 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState<QUser | null>(null);
   const isLoading = fetcher.state !== "idle";
   const [globalFilter, setGlobalFilter] = useState<any>([])
+  const navigate = useNavigate()
 
   const editUserProgramStatus = (
     id: string,
@@ -232,7 +233,7 @@ const Users = () => {
       <Table className="mx-auto  text-[#027163]">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} >
               {headerGroup.headers.map((header) => (
                 <TableHead key={header.id}>
                   {header.isPlaceholder
@@ -248,7 +249,8 @@ const Users = () => {
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
+            <TableRow onClick={()=>navigate(row.original.id)} key={row.id}>
+              
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
