@@ -16,7 +16,6 @@ import { useFetcher, useLoaderData } from "@remix-run/react";
 import userDB from "~/db/user/user.server";
 import { sendEmail } from "~/lib/send-email.server";
 import { createToastHeaders } from "~/lib/toast.server";
-import { AcceptenceState } from "~/types/types";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
   const user = await getAuthenticated({ request, context });
@@ -122,7 +121,7 @@ const Levels = () => {
                   disabled={!isJoinEnabled}
                   className=" bg-primary hover:bg-primary/90 transition-all md:p-3 p-2 md:text-lg text-xs font-bold text-white rounded-lg disabled:cursor-not-allowed disabled:bg-slate-400"
                 >
-                  {glossary.levels.button_user[user.acceptenceState as keyof typeof glossary.levels.button_user]}
+                  {glossary.levels.button_user[user?user.acceptenceState as keyof typeof glossary.levels.button_user:"idle"]}
 
                 </button>
               </TooltipTrigger>

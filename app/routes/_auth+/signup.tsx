@@ -85,7 +85,6 @@ export default function Signup() {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [cv, setCv] = useState<File | null>(null);
   const [bio, setBio] = useState("");
-  const [acceptenceState, setAcceptenceState] = useState("accepted");
   const [isFormValid, setIsFormValid] = useState(false);
   const submit = useSubmit();
   const actionData = useActionData<ActionData>();
