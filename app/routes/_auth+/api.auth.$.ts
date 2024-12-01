@@ -3,7 +3,7 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/cloudfla
 import { getAuth } from "../../lib/auth.server";
  
 export async function loader({ request,context }: LoaderFunctionArgs) {
-    // console.log("The request in the loader auth api:  ", request);
+    console.log("The request in the loader auth api:  ", request);
     const auth = getAuth(context)
     
     return auth.handler(request)
