@@ -177,37 +177,37 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const location = useLocation();
-  const { toast, error } = useLoaderData<LoaderData>();
+  // const location = useLocation();
+  // const { toast, error } = useLoaderData<LoaderData>();
   
-  useToast(toast);
+  // useToast(toast);
 
-  // Handle errors
-  React.useEffect(() => {
-    if (error) {
-      switch (error.type) {
-        case 'auth':
-          // You can add custom error handling here
-          console.error('Authentication error:', error.message);
-          break;
-        case 'toast':
-          console.error('Toast error:', error.message);
-          break;
-        case 'unknown':
-          console.error('Unknown error:', error.message);
-          break;
-      }
-    }
-  }, [error]);
+  // // Handle errors
+  // React.useEffect(() => {
+  //   if (error) {
+  //     switch (error.type) {
+  //       case 'auth':
+  //         // You can add custom error handling here
+  //         console.error('Authentication error:', error.message);
+  //         break;
+  //       case 'toast':
+  //         console.error('Toast error:', error.message);
+  //         break;
+  //       case 'unknown':
+  //         console.error('Unknown error:', error.message);
+  //         break;
+  //     }
+  //   }
+  // }, [error]);
 
-  const noNavbarRoutes = ["/login"];
-  const showNavbar = !noNavbarRoutes.includes(location.pathname);
+  // const noNavbarRoutes = ["/login"];
+  // const showNavbar = !noNavbarRoutes.includes(location.pathname);
 
   return (
     <>
       {/* {showNavbar && <Navbar />} */}
       <Outlet />
-      {showNavbar && <Footer />}
+      {/* {showNavbar && <Footer />} */}
     </>
   );
 }
