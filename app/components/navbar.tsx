@@ -52,7 +52,7 @@ const Navbar = () => {
         .filter(element => canViewElement(element,(user as any)?.role ?? null))
         .map(element=>(
           <li key={element.id} className="flex cursor-pointer font-bold text-gray-700">
-            <NavLink  prefetch="viewport" to={element.link}>
+            <NavLink  to={element.link}>
               <span>{element.arabicLabel}</span>
               {element.children && element.children.length && (
                 <Icon name="below-arrow" size="sm" />
