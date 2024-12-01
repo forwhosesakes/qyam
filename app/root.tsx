@@ -9,7 +9,6 @@ import {
   ScrollRestoration,
   useLoaderData,
   useLocation,
-  useRouteLoaderData,
 } from "@remix-run/react";
 
 import "./tailwind.css";
@@ -54,10 +53,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   }
 }
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { toast } = useRouteLoaderData<any>("root")
-  console.log("toast.. ", toast);
-  
-  useToast(toast);
+ 
 
   return (
     <html dir="rtl" lang="ar">
@@ -95,7 +91,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const location = useLocation();
-  const { user } = useLoaderData<any>();
+  const { toast,user } = useLoaderData<any>();
+  console.log("toast.. ", toast);
+  
+  useToast(toast);
 
   const noNavbarRoutes = ["/login"];
 
