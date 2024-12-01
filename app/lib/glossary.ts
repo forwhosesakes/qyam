@@ -77,6 +77,9 @@ const status_response = {
     material_deleted: "تم حذف المقرر بنجاح",
     user_accepted: "تم قبول المستخدم بنجاح",
     user_denied: "تم استبعاد المستخدم بنجاح",
+    article_added:"تمت اضافة المقال",
+    article_updated:"تم تعديل المقال",
+    article_deleted:"تم حذف المقال"
   },
   error: {
     general:"حدث خطأ ما",
@@ -85,6 +88,9 @@ const status_response = {
     material_deleted: "حدث خطأ أثناء حذف المقرر",
     user_accepted: "حدث خطأ أثناء قبول المستخدم",
     user_denied: "حدث خطأ أثناء استبعاد المستخدم",
+    article_added:"حدث خطأ أثناء اضافة المقال",
+    article_updated:"حدث خطأ أثناء تعديل المقال",
+    article_deleted:"حدث خطأ أثناء حذف المقال"
   },
 };
 

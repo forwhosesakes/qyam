@@ -120,6 +120,19 @@ model Category {
   Material Material[]
 }
 
+model Article {
+  id          String   @id @default(cuid()) 
+  title       String   
+  description String  
+  image       String?   @db.Text
+  content     String  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt    
+
+  @@map("article")
+}
+
+
 
 model UserCertificate {
   id   String  @id @default(cuid())
