@@ -103,6 +103,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 
     return null
 }
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
