@@ -102,7 +102,7 @@ export default function App() {
 
   return (
     <>
-      {showNavbar && <Navbar user={user as User} />}
+      {showNavbar && <Navbar />}
       <Outlet />
       {showNavbar && <Footer />}
     </>

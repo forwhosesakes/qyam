@@ -1,6 +1,6 @@
 import { User } from "better-auth/types";
 import { Icon } from "./icon";
-import { NavLink, useNavigate } from "@remix-run/react";
+import { NavLink, useNavigate, useRouteLoaderData } from "@remix-run/react";
 import Logo from "~/assets/images/logo.svg";
 import {  useReducer } from "react";
 import { cn } from "~/lib/tw-merge";
@@ -18,8 +18,12 @@ type TProps = {
 
 
 
-const Navbar = (props: TProps) => {
+const Navbar = () => {
   const navigate = useNavigate();
+  const {user} = useRouteLoaderData<any>("root")
+  console.log("user in navbar:  ", user);
+  
+
 
   const [isMenuOpen, toggleMenu] = useReducer((st) => !st, false);
 
@@ -28,11 +32,11 @@ const Navbar = (props: TProps) => {
   }
 
   const AuthActions = () =>
-    props.user ? (
-      <div className="h-full bg-white  ">
+    user ? (
+      <div className="h-full bg-white   ">
         <button
         onClick={handleLogout}
-         className="button  font-bold text-center text-sm md:text-lg p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
+         className="button  font-bold text-center p-2 text-md  rounded-lg text-gray-700 hover:bg-black/5 transition-all">
           تسجيل الخروج
         </button>
       </div>
@@ -57,10 +61,10 @@ const Navbar = (props: TProps) => {
     <ul className="flex flex-col-reverse md:flex-row  items-end gap-x-8 gap-y-8 ">
       {
         NavbarElements
-        .filter(element => canViewElement(element,props?.user?.role ?? null))
+        .filter(element => canViewElement(element,user?.role ?? null))
         .map(element=>(
           <li key={element.id} className="flex cursor-pointer font-bold text-gray-700">
-            <NavLink prefetch="viewport" to={element.link}>
+            <NavLink to={element.link}>
               <span>{element.arabicLabel}</span>
               {element.children && element.children.length && (
                 <Icon name="below-arrow" size="sm" />
@@ -73,7 +77,7 @@ const Navbar = (props: TProps) => {
   );
 
   return (
-    <nav className="z-50 fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-5 md:px-32  px-3 gap-x-8">
+    <nav className="z-50 fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-3 md:px-32  px-3 gap-x-8">
      <Link to="/">
      <img
         className={"h-8 w-8 md:h-auto md:w-auto  ml-auto md:ml-0"}
