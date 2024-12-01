@@ -1,6 +1,16 @@
 import glossary from "~/lib/glossary";
 import { NavLink, Outlet } from "@remix-run/react";
-import React from "react";
+import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
+import { getAuthenticated, requireSpecialCase } from "~/lib/get-authenticated.server";
+import { QUser } from "~/types/types";
+
+
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const user = await getAuthenticated({request,context})
+  if (user && (user as QUser).role==="admin") return null
+  return redirect("/")
+}
+
 
 const ControlPanel = () => {
   const tabs = [

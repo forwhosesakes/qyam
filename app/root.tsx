@@ -40,13 +40,9 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     session?.user && session.user.emailVerified ? (session.user as User) : null;
   try {
     const { toast, headers } = await getToast(request);
-    console.log("toast in loader:  ", toast, user);
     
     return Response.json({ toast, user }, { headers: headers || undefined });
   } catch (error) {
-
-    console.log("error in route.tsx: ",error);
-    
 
     return Response.json({ toast:null, user }, { headers:  undefined });
 
@@ -54,8 +50,6 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 }
 export function Layout({ children }: { children: React.ReactNode }) {
   const { toast } = useLoaderData<any>();
-  console.log("toast.. ", toast);
-  
   useToast(toast);
 
   return (

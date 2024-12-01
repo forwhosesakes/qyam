@@ -15,7 +15,7 @@ const editUserRegisteration = (userId:string,status:"accepted"|"denied",dbUrl:st
         }).then(()=>{
             resolve({status:"success", message:glossary.status_response.success[status==="accepted"?"user_accepted":"user_denied"]})
         }).catch((error:any)=>{
-            console.log("ERROR [toggleUserRegisterationAcceptence]: ", error);
+            // console.log("ERROR [toggleUserRegisterationAcceptence]: ", error);
             reject({status:"error", message:glossary.status_response.error[status==="accepted"?"user_accepted":"user_denied"]})
         })
       });
@@ -29,7 +29,7 @@ const getAllUsers = (dbUrl:string)=>{
         db.user.findMany({where:{emailVerified:true}}).then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
-            console.log("ERROR [getAllUsers]: ", error);
+            // console.log("ERROR [getAllUsers]: ", error);
             reject({status:"error", message:glossary.status_response.error.general})
         })
       });
@@ -63,7 +63,7 @@ const registerUserIntoProgram = (userID:string,dbUrl:string)=>{
             where:{id:userID}}).then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
-            console.log("ERROR [registerUserIntoProgram]: ", error);
+            // console.log("ERROR [registerUserIntoProgram]: ", error);
             reject({status:"error", message:glossary.status_response.error.general})
         })
       });
@@ -78,7 +78,7 @@ const addCertificateToUser =(data:UserCertificate, dbUrl:string)=>{
      }).then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
-            console.log("ERROR [addCertificateToUser]: ", error);
+            // console.log("ERROR [addCertificateToUser]: ", error);
             reject({status:"error", message:glossary.status_response.error.general})
         })
       });
@@ -94,7 +94,7 @@ const getUserCertificates =(userId:string, dbUrl:string)=>{
      }).then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
-            console.log("ERROR [getUserCertificates]: ", error);
+            // console.log("ERROR [getUserCertificates]: ", error);
             reject({status:"error", message:glossary.status_response.error.general})
         })
       });
@@ -116,7 +116,7 @@ const getUserWithCertificates = (userId:string, dbUrl:string)=>{
      }).then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
-            console.log("ERROR [getUserCertificates]: ", error);
+            // console.log("ERROR [getUserCertificates]: ", error);
             reject({status:"error", message:glossary.status_response.error.general})
         })
       });

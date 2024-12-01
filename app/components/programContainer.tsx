@@ -1,4 +1,3 @@
-
 import { Link } from "@remix-run/react";
 import {
   Card,
@@ -8,10 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import ImagePlaceholder from "~/assets/images/placeholder.png";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -24,19 +23,23 @@ import ImageZoom from "~/assets/images/zoom.png";
 import { Program } from "~/types/types";
 import { useState } from "react";
 type Props = {
-  role: "admin" | "user", programs:any[] , 
-  onAddNewProgram : (program:Program)=>void
-}
+  role: "admin" | "user";
+  programs: any[];
+  onAddNewProgram: (program: Program) => void;
+};
 
-const ProgramContainer = ({ role = "admin" , programs, onAddNewProgram}:Props) => {
+const ProgramContainer = ({
+  role = "admin",
+  programs,
+  onAddNewProgram,
+}: Props) => {
+  const [title, setTitle] = useState("");
+  const [link, setLink] = useState("");
 
-  const [title, setTitle ]= useState("")
-    const [link,setLink] = useState("")
-  
   return (
-    <div className="flex flex-wrap">
+    <div className="flex mx-auto  flex-wrap justify-around gap-y-6">
       {role === "admin" && (
-        <Card className="w-[350px]">
+        <Card className="max-w-[300px]">
           <CardHeader>
             <img
               className="opacity-50"
@@ -49,15 +52,17 @@ const ProgramContainer = ({ role = "admin" , programs, onAddNewProgram}:Props) =
             <CardDescription>أضف رابط البرنامج هنا.</CardDescription>
           </CardContent>
           <CardFooter className="flex w-full justify-end">
-            <Dialog >
+            <Dialog>
               <DialogTrigger asChild>
                 <Button>جديد</Button>
               </DialogTrigger>
               <DialogContent dir="rtl" className="text-right w-full">
-                <DialogHeader  className=" mt-4  ml-auto">
-                  <DialogTitle className="text-right">إضافة برنامج جديد </DialogTitle>
+                <DialogHeader className=" mt-4  ml-auto">
+                  <DialogTitle className="text-right">
+                    إضافة برنامج جديد{" "}
+                  </DialogTitle>
                   <DialogDescription>
-                   أضف برنامجًا جديدًا إلى مركز المعرفة
+                    أضف برنامجًا جديدًا إلى مركز المعرفة
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -67,9 +72,8 @@ const ProgramContainer = ({ role = "admin" , programs, onAddNewProgram}:Props) =
                     </label>
                     <Input
                       id="name"
-                      onChange={(e)=>setTitle(e.target.value)}
+                      onChange={(e) => setTitle(e.target.value)}
                       value={title}
-
                       className="col-span-3"
                     />
                   </div>
@@ -80,39 +84,53 @@ const ProgramContainer = ({ role = "admin" , programs, onAddNewProgram}:Props) =
                     <Input
                       id="username"
                       value={link}
-                      onChange={(e)=>setLink(e.target.value)}
+                      onChange={(e) => setLink(e.target.value)}
                       className="col-span-3"
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button onClick={()=>onAddNewProgram({title,link,description:""})}>إضافة </Button>
+                <DialogClose asChild>
+                  <Button
+                    disabled={!title || !link}
+                    onClick={() =>
+                      onAddNewProgram({ title, link, description: "" })
+                    }
+                  >
+                    إضافة{" "}
+                  </Button>
+                  </DialogClose>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </CardFooter>
         </Card>
       )}
-      {programs.length ? (
-        <div>
-          {programs.map((program: any) => (
-            <Card className="w-[350px]">
-              <CardContent>
-                <img src={ImagePlaceholder} alt="image-placeholder" />
-              </CardContent>
+      {programs.length ? 
+     
+          programs.map((program: any) => (
+            <Card key={program.id} className="max-w-[300px]">
               <CardHeader>
-                <CardTitle>برنامج جديد</CardTitle>
+                <img
+                  className="opacity-50"
+                  src={ImageZoom}
+                  alt="image-placeholder"
+                />
+                <CardTitle className="mt-2"> {program.title}</CardTitle>
               </CardHeader>
-              <CardFooter className="flex justify-between">
-                <Link className="text-blue-900" to={program.link}>
+              <CardContent>
+                <CardDescription>{program.description}</CardDescription>
+              </CardContent>
+              <CardFooter className="flex w-full justify-end">
+                <a target="_blank" rel="noopener noreferrer" className="text-blue-900" href={program.link}>
                   {"اضغط هنا"}
-                </Link>
+                </a>
               </CardFooter>
             </Card>
-          ))}
-        </div>
-      ) : (
-        <p>لا توجد أية برامج بعد</p>
+          ))
+       
+       : (
+        <></>
       )}
     </div>
   );
