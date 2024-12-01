@@ -61,87 +61,88 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   let user: User | null = null;
   let toast = null;
   let headers = undefined;
+  return null
 
-  try {
-    // Handle authentication
-    const session = await getAuth(context).api.getSession({
-      headers: request.headers,
-    }).catch((error:any) => {
-      console.error('Authentication error:', error);
-      throw new AuthenticationError('Failed to get user session');
-    });
+  // try {
+  //   // Handle authentication
+  //   const session = await getAuth(context).api.getSession({
+  //     headers: request.headers,
+  //   }).catch((error:any) => {
+  //     console.error('Authentication error:', error);
+  //     throw new AuthenticationError('Failed to get user session');
+  //   });
 
-    // Verify user session
-    user = session?.user && session.user.emailVerified 
-      ? (session.user as User) 
-      : null;
+  //   // Verify user session
+  //   user = session?.user && session.user.emailVerified 
+  //     ? (session.user as User) 
+  //     : null;
 
-    // Handle toast
-    const toastResult = await getToast(request).catch((error) => {
-      console.error('Toast error:', error);
-      throw new ToastError('Failed to get toast notification');
-    });
+  //   // Handle toast
+  //   const toastResult = await getToast(request).catch((error) => {
+  //     console.error('Toast error:', error);
+  //     throw new ToastError('Failed to get toast notification');
+  //   });
 
-    if (toastResult) {
-      toast = toastResult.toast;
-      headers = toastResult.headers;
-    }
+  //   if (toastResult) {
+  //     toast = toastResult.toast;
+  //     headers = toastResult.headers;
+  //   }
 
-    return json<LoaderData>(
-      { 
-        toast, 
-        user,
-        error: undefined 
-      }, 
-      { 
-        headers: headers || undefined,
-        status: 200
-      }
-    );
+  //   return json<LoaderData>(
+  //     { 
+  //       toast, 
+  //       user,
+  //       error: undefined 
+  //     }, 
+  //     { 
+  //       headers: headers || undefined,
+  //       status: 200
+  //     }
+  //   );
 
-  } catch (error) {
-    console.error('Root loader error:', error);
+  // } catch (error) {
+  //   console.error('Root loader error:', error);
 
-    if (error instanceof AuthenticationError) {
-      return json<LoaderData>(
-        {
-          toast: null,
-          user: null,
-          error: {
-            type: 'auth',
-            message: 'Authentication failed. Please try logging in again.'
-          }
-        },
-        { status: 401 }
-      );
-    }
+  //   if (error instanceof AuthenticationError) {
+  //     return json<LoaderData>(
+  //       {
+  //         toast: null,
+  //         user: null,
+  //         error: {
+  //           type: 'auth',
+  //           message: 'Authentication failed. Please try logging in again.'
+  //         }
+  //       },
+  //       { status: 401 }
+  //     );
+  //   }
 
-    if (error instanceof ToastError) {
-      return json<LoaderData>(
-        {
-          toast: null,
-          user,
-          error: {
-            type: 'toast',
-            message: 'Failed to load notifications'
-          }
-        },
-        { status: 200 }
-      );
-    }
+  //   if (error instanceof ToastError) {
+  //     return json<LoaderData>(
+  //       {
+  //         toast: null,
+  //         user,
+  //         error: {
+  //           type: 'toast',
+  //           message: 'Failed to load notifications'
+  //         }
+  //       },
+  //       { status: 200 }
+  //     );
+  //   }
 
-    return json<LoaderData>(
-      {
-        toast: null,
-        user: null,
-        error: {
-          type: 'unknown',
-          message: 'An unexpected error occurred'
-        }
-      },
-      { status: 500 }
-    );
-  }
+  //   return json<LoaderData>(
+  //     {
+  //       toast: null,
+  //       user: null,
+  //       error: {
+  //         type: 'unknown',
+  //         message: 'An unexpected error occurred'
+  //       }
+  //     },
+  //     { status: 500 }
+  //   );
+  // }
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
