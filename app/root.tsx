@@ -66,10 +66,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   try {
     const session = await getAuth(context).api.getSession({
       headers: request.headers,
-    }).catch((error:any) => {
-      console.error('Authentication error:', error);
-      throw new AuthenticationError('Failed to get user session');
-    });
+    })
 
   
     // user = session?.user && session.user.emailVerified 
@@ -104,46 +101,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   } catch (error) {
     console.error('Root loader error:', error);
 
-    if (error instanceof AuthenticationError) {
-      return json<LoaderData>(
-        {
-          toast: null,
-          user: null,
-          error: {
-            type: 'auth',
-            message: 'Authentication failed. Please try logging in again.'
-          }
-        },
-        { status: 401 }
-      );
-    }
-
-    if (error instanceof ToastError) {
-      return json<LoaderData>(
-        {
-          toast: null,
-          user,
-          error: {
-            type: 'toast',
-            message: 'Failed to load notifications'
-          }
-        },
-        { status: 200 }
-      );
-    }
-
-    return json<LoaderData>(
-      {
-        toast: null,
-        user: null,
-        error: {
-          type: 'unknown',
-          message: 'An unexpected error occurred'
-        }
-      },
-      { status: 500 }
-    );
-  }
+    return null
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
