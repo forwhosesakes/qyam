@@ -85,9 +85,10 @@ const Navbar = (props: TProps) => {
 
       <div
         className={cn(
-          " md:bg-transparent bg-white/95 md:h-auto h-[60vh] md:w-fit w-2/3 md:rounded-none md:p-0 p-5 rounded-r-lg text-right md:static absolute top-12 left-0",
-          isMenuOpen ? "block" : "hidden",
-          "md:block"
+          " md:bg-transparent bg-white/95 md:h-auto h-[60vh] md:w-fit md:max-w-full max-w-[300px] w-2/3 md:rounded-none md:p-0 p-5 rounded-r-lg text-right md:static absolute top-12 left-0",
+          "transform transition-transform duration-300 ease-in-out",
+          isMenuOpen ? "translate-x-0" : "-translate-x-full",
+          "md:transform-none md:translate-x-0"
         )}
       >
         <DisplayedNavList />

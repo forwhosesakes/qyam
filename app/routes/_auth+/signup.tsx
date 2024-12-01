@@ -495,7 +495,7 @@ export default function Signup() {
             </button>
           </Form>
         </div>
-        <div className=" flex flex-col justify-start  sm:items-start items-center sm:w-7/12 w-[80%] h-full">
+        <div className=" flex flex-col justify-start sm:mt-0 mt-10  sm:mb-0 mb-10 sm:items-start items-center sm:w-7/12 w-[80%] h-full">
           <div className="flex flex-col justify-start sm:items-start items-center  sm:w-1/2 w-[80%]">
             <TitleBlock
               className="mb-10 mt-5"
