@@ -296,9 +296,9 @@ export default function Signup() {
 
 
   return (
-    <div className="h-screen min-h-fit w-full pt-[96px]">
+    <div className="min-h-screen  w-full pt-[96px] pb-8">
       <div className="flex sm:flex-row flex-col items-center min-h-fit h-full w-full">
-        <div className=" sm:w-5/12 w-[80%] h-full flex flex-col justify-start sm:items-end  items-center ml-5 sm:ml-0">
+        <div className=" sm:w-5/12 w-[80%] h-full flex flex-col items-start min-h-fit w-full">
           <Form
             method="post"
             encType="multipart/form-data"
