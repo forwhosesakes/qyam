@@ -72,12 +72,7 @@ const Navbar = () => {
         src={Logo}
         alt="logo"
       />
-
-{JSON.stringify(user)}
-
      </Link>
-     
-
       <div
         className={cn(
           " md:bg-transparent bg-white/95 md:h-auto h-[60vh] md:w-fit md:max-w-full max-w-[300px] w-2/3 md:rounded-none md:p-0 p-5 rounded-r-lg text-right md:static absolute top-12 left-0",
