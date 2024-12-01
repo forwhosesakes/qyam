@@ -19,9 +19,10 @@ export const getAuth = (c: AppLoadContext) => {
   return initAuth(c);
 };
 export const initAuth = (c: AppLoadContext): Auth => {
+  console.log("init authhhh :::::::::");
+  
   
   auth = betterAuth({
-    
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
