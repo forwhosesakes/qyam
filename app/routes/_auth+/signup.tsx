@@ -14,6 +14,7 @@ import TitleBlock from "~/components/ui/title-block";
 import { createId } from "@paralleldrive/cuid2";
 import { toast as showToast } from "sonner";
 import { requireNoAuth } from "~/lib/get-authenticated.server";
+import LoadingOverlay from "~/components/loading-overlay";
 
 
 
@@ -23,7 +24,6 @@ export async function loader({ request,context }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-  console.log("request: ", request, "xxxxxxxxx context :", context);
 
   try {
     const intent = formData.get("intent");
@@ -76,6 +76,8 @@ export default function Signup() {
   const [bio, setBio] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
   const submit = useSubmit();
+  const [loading, setLoading] = useState(false);
+
   const actionData = useActionData<ActionData>();
   const [phone, setPhone] = useState<string>();
 
@@ -194,12 +196,12 @@ export default function Signup() {
             },
             {
               onRequest: (ctx) => {
-                console.log("onRequest: ", ctx);
+                setLoading(true)
 
                 // show loading state
               },
               onSuccess: async (ctx) => {
-                console.log("onSuccess: ", ctx);
+               setLoading(false)
 
                 showToast.success(glossary.signup.toasts.verifyEmail.title, {
                   description: glossary.signup.toasts.verifyEmail.description,
@@ -207,12 +209,7 @@ export default function Signup() {
 
               },
               onError: (ctx) => {
-                console.log("onError details: ", {
-                  error: ctx.error,
-                  status: ctx.status,
-                  message: ctx.message,
-                  data: ctx.data,
-                });
+               setLoading(false)
 
                 if (ctx.error.code === "USER_WITH_THIS_EMAIL_ALREADY_EXISTS") {
                   showToast.error(glossary.signup.toasts.signupError.title, {
@@ -228,8 +225,6 @@ export default function Signup() {
             }
           );
         } catch (e) {
-          console.error("signup error: ", e);
-
           showToast.error(glossary.signup.toasts.signupError.title, {
             description: e instanceof Error ? e.message : String(e),
           });
@@ -297,6 +292,8 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen w-full pt-[96px] pb-8">
+      { (loading )&& <LoadingOverlay />}
+
       <div className="flex sm:flex-row flex-col items-center min-h-fit h-full w-full">
         <div className=" sm:w-5/12 w-[80%] h-full flex flex-col justify-start sm:items-end  items-center ml-5 sm:ml-0">
           <Form

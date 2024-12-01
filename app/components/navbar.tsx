@@ -1,6 +1,5 @@
-import { User } from "better-auth/types";
 import { Icon } from "./icon";
-import { NavLink, useNavigate } from "@remix-run/react";
+import { NavLink, useNavigate, useRouteLoaderData } from "@remix-run/react";
 import Logo from "~/assets/images/logo.svg";
 import {  useReducer } from "react";
 import { cn } from "~/lib/tw-merge";
@@ -10,29 +9,22 @@ import { canViewElement } from "~/lib/check-permission";
 
 
 
-
-type TProps = {
-  // navElements: NavElement[],
-  user: User | null;
-};
-
-
-
-const Navbar = (props: TProps) => {
+const Navbar = () => {
   const navigate = useNavigate();
-
+  const {user} = useRouteLoaderData<any>("root")
+  
   const [isMenuOpen, toggleMenu] = useReducer((st) => !st, false);
 
-  const handleLogout = async() => {
+  const handleLogout = () => {
     navigate("/logout")
   }
 
   const AuthActions = () =>
-    props.user ? (
+    user ? (
       <div className="h-full bg-white  ">
         <button
         onClick={handleLogout}
-         className="button  font-bold text-center text-md p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
+         className="button  font-bold text-center text-xs md:text-sm  p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
           تسجيل الخروج
         </button>
       </div>
@@ -57,7 +49,7 @@ const Navbar = (props: TProps) => {
     <ul className="flex flex-col-reverse md:flex-row  items-end gap-x-8 gap-y-8 ">
       {
         NavbarElements
-        .filter(element => canViewElement(element,props?.user?.role ?? null))
+        .filter(element => canViewElement(element,(user as any)?.role ?? null))
         .map(element=>(
           <li key={element.id} className="flex cursor-pointer font-bold text-gray-700">
             <NavLink  prefetch="viewport" to={element.link}>
@@ -80,6 +72,9 @@ const Navbar = (props: TProps) => {
         src={Logo}
         alt="logo"
       />
+
+{JSON.stringify(user)}
+
      </Link>
      
 

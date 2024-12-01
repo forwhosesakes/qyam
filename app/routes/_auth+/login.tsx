@@ -5,23 +5,26 @@ import {
   useActionData,
   useNavigation,
 } from "@remix-run/react";
-import {  useState } from "react";
+import { useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import { getErrorMessage } from "../../lib/get-error-messege";
 import LoginShapeImg from "~/assets/images/login-drop-group.png";
 import Logo from "~/assets/images/logo.svg";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
+import LoadingOverlay from "~/components/loading-overlay";
 import { toast as showToast } from "sonner";
 import glossary from "./glossary";
 
 import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { requireSpecialCase } from "~/lib/get-authenticated.server";
 
-export async function loader ({request,context}:LoaderFunctionArgs){
-  
-
- const user = await requireSpecialCase(request,context,(user)=>(user===null))
-  return{user}
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const user = await requireSpecialCase(
+    request,
+    context,
+    (user) => user === null
+  );
+  return { user };
 }
 
 type ActionData = {
@@ -33,18 +36,15 @@ type ActionData = {
 };
 
 export default function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
   const actionData = useActionData<ActionData>();
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const isSubmitting = navigation.state === "submitting";
-
-
-  
-  // const raiseToast= useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,12 +66,16 @@ export default function Login() {
         { email, password },
         {
           onRequest: () => {
-            // You can add loading state here
+            setLoading(true);
           },
           onSuccess: () => {
+            setLoading(false);
+
             navigate("/");
           },
           onError: (ctx) => {
+            setLoading(false);
+
             console.log(ctx);
             if (
               ctx.error.code ===
@@ -80,7 +84,6 @@ export default function Login() {
               showToast.error(glossary.login.errors.unverified);
             } else {
               showToast.error(glossary.login.errors.invalid);
-
             }
 
             const errorMessage = getErrorMessage(ctx);
@@ -90,35 +93,16 @@ export default function Login() {
         }
       );
     } catch (error) {
+      setLoading(false);
       setLoginError("An unexpected error occurred. Please try again.");
 
       console.error("Login failed:", error);
     }
   };
 
-  // const signIn = async () => {
-  //   await authClient.signIn.email(
-  //     {
-  //       email,
-  //       password,
-  //     },
-  //     {
-  //       onRequest: (ctx: any) => {
-  //         // show loading state
-  //       },
-  //       onSuccess: (ctx: any) => {
-  //         navigate("/");
-  //       },
-  //       onError: (ctx: any) => {
-  //         const msg = getErrorMessage(ctx);
-  //         console.log("msg error in login", ctx);
-  //       },
-  //     }
-  //   );
-  // };
-
   return (
     <div className="lg:flex lg:flex-row  justify-between items-center w-full h-screen overflow-hidden ">
+      { (loading || isSubmitting )&& <LoadingOverlay />}
       <div className="blur-[180px] inset-0 absolute">
         <div className="relative h-full w-full overflow-hidden">
           <GradientEllipse
@@ -188,7 +172,7 @@ export default function Login() {
               disabled={isSubmitting}
               className="button text-xs lg:text-lg md:text-sm text-center bg-primary hover:opacity-90 transition-opacity text-white rounded-lg mt-6  w-full p-3 z-10"
             >
-             {isSubmitting ? "جاري تسجيل الدخول..." : glossary.login.login}
+              {isSubmitting ? "جاري تسجيل الدخول..." : glossary.login.login}
             </button>
 
             <Link
@@ -203,8 +187,10 @@ export default function Login() {
               </p>
             )}
             {loginError && (
-          <p className="text-red-500 text-sm text-center mt-2">{loginError}</p>
-        )}
+              <p className="text-red-500 text-sm text-center mt-2">
+                {loginError}
+              </p>
+            )}
           </div>
         </Form>
       </div>
