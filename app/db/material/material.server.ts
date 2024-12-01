@@ -16,7 +16,6 @@ const createMaterial = (material: Material, dbUrl:string):Promise<StatusResponse
         resolve({status:"success", message:glossary.status_response.success.material_added})
 
     }).catch((error:any)=>{
-        console.log("ERROR [createMaterial]: ", error);
         reject({status:"error", message:glossary.status_response.error.material_added})
 
     })
@@ -29,7 +28,7 @@ const getAllMaterials = (dbUrl:string):Promise<StatusResponse<Material>> => {
         db.material.findMany().then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
-            console.log("ERROR [getAllMaterials]: ", error);
+            // console.log("ERROR [getAllMaterials]: ", error);
             reject({status:"error", message:glossary.status_response.error.general})
     
         })
@@ -43,7 +42,7 @@ const getMaterial = (id:number, dbUrl:string) => {
         db.material.findFirstOrThrow().then((res)=>{
             resolve({status:"success", data:res})
         }).catch((error:any)=>{
-            console.log("ERROR [getMaterial]: ", error);
+            // console.log("ERROR [getMaterial]: ", error);
             reject({status:"error", message:glossary.status_response.error.general})
         })
       });
@@ -62,7 +61,7 @@ const updateMaterial = (material:Material,dbUrl:string ) => {
         }).then(()=>{
             resolve({status:"success", message:glossary.status_response.success.material_updated})
         }).catch((error:any)=>{
-            console.log("ERROR [updateMaterial]: ", error);
+            // console.log("ERROR [updateMaterial]: ", error);
             reject({status:"error", message:glossary.status_response.error.material_updated})
     
         })
@@ -79,7 +78,7 @@ const deleteMaterial = (materialId:string,dbUrl:string) => {
         }).then(()=>{
             resolve({status:"success", message:glossary.status_response.success.material_deleted})
         }).catch((error:any)=>{
-            console.log("ERROR [ deleteMaterial]: ", error);
+            // console.log("ERROR [ deleteMaterial]: ", error);
             reject({status:"error", message:glossary.status_response.error.material_deleted})
     
         })
@@ -102,7 +101,7 @@ const getAllCategoriesWithLinkedMaterials = (dbUrl:string)=>{
         }).then((res)=>{
             resolve({status:"success",data:res, message:glossary.status_response.success.material_deleted})
         }).catch((error:any)=>{
-            console.log("ERROR [ deleteMaterial]: ", error);
+            // console.log("ERROR [ deleteMaterial]: ", error);
             reject({status:"error", message:glossary.status_response.error.material_deleted})
     
         })

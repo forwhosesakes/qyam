@@ -44,17 +44,12 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     return Response.json({ toast, user }, { headers: headers || undefined });
   } catch (error) {
 
-    
-
     return Response.json({ toast:null, user }, { headers:  undefined });
 
   }
 }
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { toast } = useLoaderData<any>();
-  console.log("toast.. ", toast);
-  
-  useToast(toast);
+ 
 
   return (
     <html dir="rtl" lang="ar">
@@ -92,7 +87,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const location = useLocation();
-  const { user } = useLoaderData<any>();
+  const { toast } = useLoaderData<any>();
+  useToast(toast);
 
   const noNavbarRoutes = ["/login"];
 
@@ -100,7 +96,7 @@ export default function App() {
 
   return (
     <>
-      {showNavbar && <Navbar user={user as User} />}
+      {showNavbar && <Navbar/>}
       <Outlet />
       {showNavbar && <Footer />}
     </>

@@ -106,7 +106,7 @@
 
 @layer components {
   .animated-path {
-    @apply animate-[dash_3s_linear_forwards];
+    @apply animate-[dash_7s_infinite];
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
   }

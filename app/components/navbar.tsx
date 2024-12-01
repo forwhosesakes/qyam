@@ -1,6 +1,5 @@
-import { User } from "better-auth/types";
 import { Icon } from "./icon";
-import { NavLink, useNavigate } from "@remix-run/react";
+import { NavLink, useNavigate, useRouteLoaderData } from "@remix-run/react";
 import Logo from "~/assets/images/logo.svg";
 import {  useReducer } from "react";
 import { cn } from "~/lib/tw-merge";
@@ -10,29 +9,22 @@ import { canViewElement } from "~/lib/check-permission";
 
 
 
-
-type TProps = {
-  // navElements: NavElement[],
-  user: User | null;
-};
-
-
-
-const Navbar = (props: TProps) => {
+const Navbar = () => {
   const navigate = useNavigate();
-
+  const {user} = useRouteLoaderData<any>("root")
+  
   const [isMenuOpen, toggleMenu] = useReducer((st) => !st, false);
 
-  const handleLogout = async() => {
+  const handleLogout = () => {
     navigate("/logout")
   }
 
   const AuthActions = () =>
-    props.user ? (
+    user ? (
       <div className="h-full bg-white  ">
         <button
         onClick={handleLogout}
-         className="button  font-bold text-center text-md p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
+         className="button  font-bold text-center text-xs md:text-sm  p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
           تسجيل الخروج
         </button>
       </div>
@@ -57,10 +49,10 @@ const Navbar = (props: TProps) => {
     <ul className="flex flex-col-reverse md:flex-row  items-end gap-x-8 gap-y-8 ">
       {
         NavbarElements
-        .filter(element => canViewElement(element,props?.user?.role ?? null))
+        .filter(element => canViewElement(element,(user as any)?.role ?? null))
         .map(element=>(
           <li key={element.id} className="flex cursor-pointer font-bold text-gray-700">
-            <NavLink to={element.link}>
+            <NavLink  prefetch="viewport" to={element.link}>
               <span>{element.arabicLabel}</span>
               {element.children && element.children.length && (
                 <Icon name="below-arrow" size="sm" />
@@ -81,8 +73,6 @@ const Navbar = (props: TProps) => {
         alt="logo"
       />
      </Link>
-     
-
       <div
         className={cn(
           " md:bg-transparent bg-white/95 md:h-auto h-[60vh] md:w-fit md:max-w-full max-w-[300px] w-2/3 md:rounded-none md:p-0 p-5 rounded-r-lg text-right md:static absolute top-12 left-0",
