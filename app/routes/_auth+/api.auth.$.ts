@@ -11,6 +11,8 @@ export async function loader({ request,context }: LoaderFunctionArgs) {
  
 export async function action({ request ,context}: ActionFunctionArgs) {
     // console.log("The request in the action auth api:  ", request);
+    console.log("The request in the loader auth api:  ", request);
+
     const auth = getAuth(context)
 
     return auth.handler(request)

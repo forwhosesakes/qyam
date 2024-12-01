@@ -207,7 +207,7 @@ export default function App() {
     <>
       {showNavbar && <Navbar />}
       <Outlet />
-      {showNavbar && <Footer />}
+      {/* {showNavbar && <Footer />} */}
     </>
   );
 }
