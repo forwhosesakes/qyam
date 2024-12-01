@@ -22,6 +22,14 @@ export type Category= {
 
 }
 
+export type Program = {
+    id?: string;
+    link: string;
+    title: string;
+    description: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+  };
 export type AcceptenceState = "accepted" |"denied" |"pending" |"idle"
 export type QUser = User&  {
     acceptenceState:AcceptenceState

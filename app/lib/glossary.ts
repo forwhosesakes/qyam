@@ -96,6 +96,8 @@ const cp = {
   rejected:" الغير مقبولين",
   material:"المناهج",
   messages:"الرسائل",
+  articles:"المقالات",
+  programs:"البرامج",
   admin:"مدير النظام",
 
 

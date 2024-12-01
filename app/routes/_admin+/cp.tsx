@@ -12,11 +12,16 @@ const ControlPanel = () => {
       name: glossary.cp.material,
       link: "material",
     },
-
     {
-      name: glossary.cp.messages,
-      link: "messages",
+      name: glossary.cp.articles,
+      link: "articles",
     },
+    {
+      name: glossary.cp.programs,
+      link: "programs",
+    },
+   
+
   ];
 
   return (

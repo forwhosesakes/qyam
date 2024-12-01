@@ -13,7 +13,7 @@ import {
 } from "@remix-run/react";
 import { createId } from '@paralleldrive/cuid2';
 
-import React, { useState } from "react";
+import  { useState } from "react";
 
 interface UploadResponse {
   success?: boolean;
