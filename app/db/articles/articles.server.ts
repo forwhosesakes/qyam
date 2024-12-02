@@ -51,7 +51,7 @@ const getArticleBySlug = (slug: string, dbUrl: string) => {
   return new Promise((resolve, reject) => {
     db.article
       .findFirstOrThrow({
-        where: { slug }
+        where: { id:slug }
       })
       .then((res) => {
         resolve({ status: "success", data: res });

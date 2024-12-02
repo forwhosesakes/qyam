@@ -30,7 +30,7 @@ export default function ArticleCard({ article, onEdit, onDelete }: ArticleCardPr
       )}
       <div className="p-4">
       <Link 
-            to={`/articles/${article.id}`}
+            to={`/cp/articles/${article.id}`}
             className="text-primary hover:underline"
           >
         <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
