@@ -4,7 +4,7 @@ import ColoredDrop from "~/assets/images/coloreddrop.png";
 const Statistics = () => {
   return (
     <section id="statistics" className="relative   min-h-[40vh]">
-      <TitleBlock className="" text="إحصائيات" />
+      <TitleBlock className="md:m-24 m-6" text="إحصائيات" />
       <div className="flex gap-36 w-full h-full m-10 mt-24 justify-center flex-wrap">
         <div className="bg-secondary py-10  min-w-44 rounded-3xl h-[30vh] max-h-full w-1/6">
           <div className="relative">
