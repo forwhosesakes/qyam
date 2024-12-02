@@ -4,38 +4,57 @@ import userDB from "~/db/user/user.server";
 import { UserCertificate } from "~/types/types";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Icon } from "~/components/icon";
+import ProfileImage from "~/assets/images/profile.png";
 
-
-export async function loader({ request,context }: LoaderFunctionArgs) {
+export async function loader({ request, context }: LoaderFunctionArgs) {
   try {
-    const user = await getAuthenticated({request, context})
-     if (user){
+    const user = await getAuthenticated({ request, context });
+    if (user) {
       return userDB
-      .getUserWithCertificates(user.id, context.cloudflare.env.DATABASE_URL)
-      .then((res: any) => {
-        console.log("datataa:", res);
-        
-        return Response.json({ success: true, user:res.data});
-      })
-      .catch((error) => {
-        return error;
-      });
+        .getUserWithCertificates(user.id, context.cloudflare.env.DATABASE_URL)
+        .then((res: any) => {
+          console.log("datataa:", res);
 
-     }
-     else return redirect("/")
-
+          return Response.json({ success: true, user: res.data });
+        })
+        .catch((error) => {
+          return error;
+        });
+    } else return redirect("/");
   } catch (error) {
     console.error("Loader error:", error);
     return Response.json({ success: false, error });
   }
 }
 const Profile = () => {
-
-  const {user} = useLoaderData<any>()
+  const { user } = useLoaderData<any>();
 
   return (
-    <section className="pt-24 px-48 flex justify-between gap-x-12 bg-section ">
-  
+    <section className="pt-24 px-48  bg-section ">
+      <div className="my-6 flex w-full justify-between">
+        <div className="">
+        <h3>بياناتي</h3>
+        <div className="flex gap-x-2 my-4">
+          <Link to={"/"}>الرئيسية</Link>
+          <span>{">"}</span>
+          <span className="font-bold">{"حسابي"}</span>
+        </div>
+        </div>
+     
+
+        <div className="flex gap-x-3 items-center">
+          <p className="flex flex-col text-sm gap-y-1 text-[#475467]">
+            <span className="font-bold ">{user.name}</span>
+            <span>متدرب</span>
+          </p>
+
+          <img
+            className={"w-16 h-16 border-2 border-[#D0D5DD]  rounded-full"}
+            src={ProfileImage}
+            alt="profile"
+          />
+        </div>
+      </div>
 
       <div className="bg-white p-5 rounded-xl border border-[#D0D5DD]">
         <div className="bg-gray-50 rounded-xl p-8">
@@ -101,44 +120,41 @@ const Profile = () => {
         </div>
 
         <div className="bg-gray-50 rounded-xl p-8 my-6">
-        <>
-        <h4 className="font-bold text-primary my-4">شهاداتي</h4>
-      <div className="bg-gray-50 rounded-xl p-8 my-6">
+          <>
+            <h4 className="font-bold text-primary my-4">شهاداتي</h4>
+            <div className="bg-gray-50 rounded-xl p-8 my-6">
+              <div className="border border-gray-100 rounded-lg p-4">
+                {user.UserCertificate.length ? (
+                  <ul>
+                    {user.UserCertificate.map(
+                      (m: UserCertificate, i: number) => (
+                        <li
+                          key={i}
+                          className="flex my-2 p-2 w-full justify-between attachment-container"
+                        >
+                          <span className="w-1/2">{m.name}</span>
 
-
-      <div className="border border-gray-100 rounded-lg p-4">
-          {user.UserCertificate.length ? (
-            <ul>
-          
-              {user.UserCertificate.map((m: UserCertificate, i: number) => (
-                <li
-                  key={i}
-                  className="flex my-2 p-2 w-full justify-between attachment-container"
-                >
-                  <span className="w-1/2">{m.name}</span>
-
-                  <div className="flex gap-x-4">
-
-                  <Link
-                    className="ml-2 p-2 hover:bg-gray-100 rounded-md transition-all"
-                    to={`/download/${m.certificateKey}`}
-                    reloadDocument
-                    download={m.certificateKey}
-                  >
-                    <Icon name="download" size={"lg"} />
-                  </Link>
-                  </div>            
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>لا توجد شهادات  </p>
-          )}
+                          <div className="flex gap-x-4">
+                            <Link
+                              className="ml-2 p-2 hover:bg-gray-100 rounded-md transition-all"
+                              to={`/download/${m.certificateKey}`}
+                              reloadDocument
+                              download={m.certificateKey}
+                            >
+                              <Icon name="download" size={"lg"} />
+                            </Link>
+                          </div>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                ) : (
+                  <p>لا توجد شهادات </p>
+                )}
+              </div>
+            </div>
+          </>
         </div>
-      
-    </div>
-    </>
-        </div> 
       </div>
     </section>
   );

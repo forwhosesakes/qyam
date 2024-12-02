@@ -16,9 +16,13 @@ const EvaluationMethods = () => {
         <p className="py-4">{glossary.evaluation_methods.description}</p>
       </div>
 
-      <div className="relative  bg-primary flex  flex-wrap 2xl:gap-x-20 lg:gap-x-24 gap-x-8 justify-center items-center 2xl:w-3/6  xl:w-4/6 w-5/6  md:h-[266px] h-[180px]  clip-path-evaluation-methods-path">
+
+      <div className="relative  mx-auto   2xl:w-3/6  xl:w-4/6 w-5/6  md:h-[266px] h-[180px]  ">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1217 266" width="100%">
+  <path d="M1178.02 266L234.736 225.59C108.902 225.601 14.3527 147.309 0 38.8604V33.6182C0 15.0562 15.1023 0 33.7321 0H1178.02C1199.55 0 1217 17.397 1217 38.8604V227.14C1217 248.603 1199.55 266 1178.02 266Z" fill="#0D3151"/>
+</svg>
         <svg
-          className="md:block hidden absolute right-0"
+          className="md:block hidden absolute top-0 right-1"
           xmlns="http://www.w3.org/2000/svg"
           width="104"
           height="208"
@@ -62,9 +66,10 @@ const EvaluationMethods = () => {
             strokeMiterlimit="10"
           />
         </svg>
+        <div className="absolute  right-36 top-6   flex  flex-wrap 2xl:gap-x-20 lg:gap-x-24 gap-x-8 justify-center items-center">
 
         {methods.map((method: any) => (
-          <div key={method.name} className="flex flex-col gap-y-4 w-min">
+          <div   key={method.name} className="flex z-20 flex-col gap-y-4 w-min">
             <Icon size="xl7" name={method.icon} />
             <h5 className="text-white text-wrap">
               {
@@ -75,6 +80,9 @@ const EvaluationMethods = () => {
             </h5>
           </div>
         ))}
+
+        </div>
+
       </div>
     </section>
   );

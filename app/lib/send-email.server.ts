@@ -18,14 +18,13 @@ export const sendEmail = (
   apiKey: string,
   sourceEmail: string
 ) => {
-  // TODO: the html should have a defined template customized for this application
   return getResendObject(apiKey).emails.send({
     from: sourceEmail,
     to: body.to,
     subject: body.subject,
     html: `
     <!DOCTYPE html>
-    <html dir="rtl">
+    <html dir="rtl" lang="ar">
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,7 +76,7 @@ export const sendEmail = (
       </head>
       <body>
         <div class="content">
-        <img src="https://dev.qyam-app.pages.dev/logo.svg" alt="logo"/>
+        <img src="https://qyam.org/logo.svg" alt="logo"/>
           <p>مرحبًا بك في قيم</p>
           <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
             ${body.text}
