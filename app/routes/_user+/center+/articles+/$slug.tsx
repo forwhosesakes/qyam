@@ -5,8 +5,6 @@ import UserArticleView from "~/components/userArticleView";
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const { slug } = params;
-  console.log("sloggg:  ", slug);
-  
   try {
     const response = await articleDB.getArticleBySlug(
       slug as string, 

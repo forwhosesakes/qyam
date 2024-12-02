@@ -7,7 +7,7 @@ interface ArticleCardProps {
 
 export default function UserArticleCard({ article }: ArticleCardProps) {
   return (
-    <Link to={`/profile/articles/${article.id}`} className="block">
+    <Link to={`${article.id}`} className="block">
       <div className="w-[300px] bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         {article.image && (
           <img
