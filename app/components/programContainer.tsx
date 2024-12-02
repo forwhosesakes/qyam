@@ -37,7 +37,7 @@ const ProgramContainer = ({
   const [link, setLink] = useState("");
 
   return (
-    <div className="flex mx-auto  flex-wrap justify-around gap-y-6">
+    <div className="flex mx-auto  flex-wrap  gap-x-12 gap-y-6">
       {role === "admin" && (
         <Card className="max-w-[300px]">
           <CardHeader>

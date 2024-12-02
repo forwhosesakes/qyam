@@ -17,8 +17,10 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 const Programs = () => {
   const { programs } = useLoaderData<any>();
-  return (<>
-    <h4 className="font-bold my-4">البرامج</h4>
+  return (    <div className="w-full">
+
+  
+    <h4 className="font-bold text-primary my-4">البرامج</h4>
     <div className="bg-gray-50 rounded-xl p-8 my-6">
       <ProgramContainer
         role="user"
@@ -28,7 +30,7 @@ const Programs = () => {
         }}
       />
     </div>
-    </>
+    </div>
   );
 };
 

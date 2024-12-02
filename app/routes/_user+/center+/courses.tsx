@@ -18,13 +18,13 @@ export async function loader({ context }: LoaderFunctionArgs) {
 const Courses = () => {
   const materials = useLoaderData<any[]>();
   return (
-    <>
-      <h4 className="font-bold my-4">المناهج</h4>
+    <div className="w-full">
+      <h4 className="font-bold  text-primary my-4">المناهج</h4>
       <div className="bg-gray-50 rounded-xl p-8 my-6">
 
 
 
-      <div className="border border-gray-100 rounded-lg p-4">
+      <div className=" rounded-lg p-4">
           {materials.length ? (
             <ul>
           
@@ -54,7 +54,7 @@ const Courses = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

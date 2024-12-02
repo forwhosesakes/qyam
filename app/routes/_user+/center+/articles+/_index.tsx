@@ -20,8 +20,8 @@ export default function Articles() {
 
   return (
     <div className="px-8 py-6">
-      <h2 className="text-2xl font-bold mb-8">المقالات</h2>
-      <div className="flex flex-wrap gap-6">
+      <h4 className="text-primary font-bold mb-8">المقالات</h4>
+      <div className="flex flex-wrap bg-gray-50 rounded-lg p-4 gap-6">
         {articles?.map((article) => (
           <UserArticleCard key={article.id} article={article} />
         ))}

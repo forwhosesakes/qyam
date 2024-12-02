@@ -1,7 +1,9 @@
 
 
 const AllTabs  = ()=>{
-    return <div> All tabs goes here</div>
+    return <div>
+
+    </div>
 }
 
 export default AllTabs

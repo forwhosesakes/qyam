@@ -23,6 +23,14 @@ export const NavbarElements: NavElement[] = [
         onClick() {},
         requiredRole:"userOnly"
       },
+      {
+        id: "center",
+        arabicLabel: "مركز المعرفة",
+        link:"center",
+        visibility: true,
+        onClick() {},
+        requiredRole:"userOnly"
+      },
     {
       id: "registeration",
       arabicLabel: "شروط التسجيل",
