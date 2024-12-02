@@ -6,7 +6,6 @@ interface ArticleViewProps {
 }
 
 export default function UserArticleView({ article }: ArticleViewProps) {
-  
     // const Component = useMemo(() => getMDXComponent(article.content), [article.content]);
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
