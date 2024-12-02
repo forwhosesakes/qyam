@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { getAuthenticated } from "~/lib/get-authenticated.server";
 import userDB from "~/db/user/user.server";
 import { UserCertificate } from "~/types/types";
@@ -9,8 +9,8 @@ import { Icon } from "~/components/icon";
 export async function loader({ request,context }: LoaderFunctionArgs) {
   try {
     const user = await getAuthenticated({request, context})
-     if (user)
-    return userDB
+     if (user){
+      return userDB
       .getUserWithCertificates(user.id, context.cloudflare.env.DATABASE_URL)
       .then((res: any) => {
         console.log("datataa:", res);
@@ -20,6 +20,10 @@ export async function loader({ request,context }: LoaderFunctionArgs) {
       .catch((error) => {
         return error;
       });
+
+     }
+     else return redirect("/")
+
   } catch (error) {
     console.error("Loader error:", error);
     return Response.json({ success: false, error });

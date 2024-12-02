@@ -1,7 +1,10 @@
 
 import {redirect} from "@remix-run/react";
-export function loader() {
-    return redirect("courses");
+import { getAuthenticated } from "~/lib/get-authenticated.server";
+
+export async function loader({request, context}) {
+    const user = await getAuthenticated({request, context})
+    return user?redirect("courses"):redirect("/")
   }
 
 

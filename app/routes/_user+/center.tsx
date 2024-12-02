@@ -4,7 +4,6 @@ import { NavLink, Outlet } from "@remix-run/react";
 const Center = () => {
 
   const categories = [
-    // { id: "all", label: "الكل" },
     { id: "courses", label: "المناهج" },
     { id: "programs", label: "البرامج" },
     { id: "articles", label: "المقالات" },

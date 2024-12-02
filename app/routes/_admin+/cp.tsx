@@ -1,7 +1,7 @@
 import glossary from "~/lib/glossary";
 import { NavLink, Outlet } from "@remix-run/react";
 import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
-import { getAuthenticated, requireSpecialCase } from "~/lib/get-authenticated.server";
+import { getAuthenticated } from "~/lib/get-authenticated.server";
 import { QUser } from "~/types/types";
 
 
