@@ -36,7 +36,11 @@ export default function Article() {
         )}
         <h1 className="text-3xl font-bold  mb-4">{article.title}</h1>
         
-        <div dangerouslySetInnerHTML={{ __html: article.content }} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: article.content.replace(/\n/g, '<br />'),
+          }}
+        />
       </article>
     </div>
   );

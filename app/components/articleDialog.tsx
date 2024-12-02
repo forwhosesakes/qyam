@@ -83,6 +83,7 @@ export default function ArticleDialog({ open, onOpenChange, article }: ArticleDi
               name="title"
               defaultValue={article?.title}
               required
+              
             />
           </div>
 
@@ -105,6 +106,8 @@ export default function ArticleDialog({ open, onOpenChange, article }: ArticleDi
               defaultValue={article?.content}
               required
             />
+
+            
           </div>
 
           <div className="space-y-2">
