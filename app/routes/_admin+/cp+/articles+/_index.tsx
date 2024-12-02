@@ -56,17 +56,19 @@ export async function action({ request, context }: ActionFunctionArgs) {
       }
   
       if (method === "POST") {
+        const content = (formData.get("content") as string).replace(/\n/g, '\n\n');
         await articleDB.createArticle({
           title: formData.get("title") as string,
-          content: formData.get("content") as string,
+          content: content,
           description: formData.get("description") as string,
           image: formData.get("image") as string,
         }, context.cloudflare.env.DATABASE_URL);
       } else if (method === "PUT") {
+        const content = (formData.get("content") as string).replace(/\n/g, '\n\n');
         await articleDB.updateArticle({
           id: formData.get("id") as string,
           title: formData.get("title") as string,
-          content: formData.get("content") as string,
+          content: content,
           description: formData.get("description") as string,
           image: formData.get("image") as string,
         }, context.cloudflare.env.DATABASE_URL);
