@@ -21,10 +21,10 @@ const Navbar = () => {
 
   const AuthActions = () =>
     user ? (
-      <div className="h-full bg-white  ">
+      <div className="h-full flex flex-auto  justify-end   ">
         <button
         onClick={handleLogout}
-         className="button  font-bold text-center text-xs md:text-sm  p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
+         className="button  font-bold text-center text-xs md:text-sm  md:p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
           تسجيل الخروج
         </button>
       </div>
@@ -65,7 +65,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="z-50 fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-2 md:px-32  px-3 gap-x-8">
+    <nav className="z-50  fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-2 md:px-32  px-3 gap-x-8">
      <Link to="/">
      <img
         className={"h-8 w-8 md:h-auto md:w-auto  ml-auto md:ml-0"}
@@ -85,7 +85,7 @@ const Navbar = () => {
       </div>
       <AuthActions />
 
-      <div className="md:hidden ">
+      <div className="md:hidden  mr-auto">
         <Icon
           onClick={toggleMenu}
           name={`${isMenuOpen ? "close" : "menu"}`}
