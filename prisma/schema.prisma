@@ -28,6 +28,8 @@ model User {
   acceptenceState String? @default("idle")
   trainingHours Int @default(0)
   noStudents Int @default(0)
+  region String  @default("none")
+  level String @default("LEVEL_1")
 
   @@unique([email])
   @@map("user")

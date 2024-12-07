@@ -31,11 +31,11 @@ const Navbar = () => {
     ) : (
       <div className="visitors flex flex-auto  justify-end  gap-x-4">
         <button
-          onClick={() => navigate("/signup")}
+          onClick={() => navigate("/join")}
           className="button font-bold text-xs  md:text-sm text-center p-3 rounded-lg bg-primary text-white hover:opacity-90 transition-opacity"
         >
           {" "}
-          تسجيل جديد
+          انضمام
         </button>
         <button
           onClick={() => navigate("/login")}

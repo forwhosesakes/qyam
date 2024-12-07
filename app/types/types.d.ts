@@ -45,6 +45,8 @@ export type QUser = User & {
   trainingHours: number;
   noStudents: number;
   role: "user" | "admin";
+  region:string,
+  level:string
 };
 
 export type StatusResponse<T> = {

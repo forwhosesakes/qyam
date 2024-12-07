@@ -82,9 +82,18 @@ export default function Login() {
               "EMAIL_IS_NOT_VERIFIED_CHECK_YOUR_EMAIL_FOR_A_VERIFICATION_LINK"
             ) {
               showToast.error(glossary.login.errors.unverified);
-            } else {
+            } 
+            
+            else if(ctx.error.code === "FAILED_TO_CREATE_SESSION"){
+              showToast.error(glossary.signup.toasts.signupError.title, {
+                description: glossary.signup.toasts.signupError.sessionFailure,
+              });
+
+            }
+            else {
               showToast.error(glossary.login.errors.invalid);
             }
+            
 
             const errorMessage = getErrorMessage(ctx);
             // Handle error appropriately - you might want to set this in state
