@@ -20,11 +20,20 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { AcceptenceState, QUser } from "~/types/types";
-import { HTMLProps, useEffect, useMemo, useRef, useState } from "react";
-import { sendEmail } from "~/lib/send-email.server";
+import {
+  HTMLProps,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
+import { sendBatchEmail, sendEmail } from "~/lib/send-email.server";
 import EditConfirmationDialog from "../components/editConfirmationDialog";
 import { Input } from "~/components/ui/input";
 import { createToastHeaders } from "~/lib/toast.server";
+import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/tw-merge";
 
 const columnHelper = createColumnHelper<QUser>();
 
@@ -41,52 +50,111 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-  return userDB
-    .editUserRegisteration(
-      formData.get("id") as string,
-      formData.get("status") as "denied" | "accepted",
-      context.cloudflare.env.DATABASE_URL
-    )
-    .then(() => {
-     return sendEmail(
-        {
-          to: formData.get("email") as string,
-          subject: glossary.email.program_status_subject,
-          text:
-            formData.get("status") === "accepted"
-              ? glossary.email.acceptence_message
-              : glossary.email.rejection_message,
-        },
-        context.cloudflare.env.RESEND_API,
-        context.cloudflare.env.MAIN_EMAIL
-      )}).
-    then(async ()=>{
-      return Response.json(
-        { success: true },
-        {
-          headers: await createToastHeaders({
-            description:"",
-            title: glossary.cp.user.edit_status_success,
-            type: "success",
-          }),
-        }
-      );
+  if (formData.get("id")) {
+    return userDB
+      .editUserRegisteration(
+        formData.get("id") as string,
+        formData.get("status") as "denied" | "accepted",
+        context.cloudflare.env.DATABASE_URL
+      )
+      .then(() => {
+        return sendEmail(
+          {
+            to: formData.get("email") as string,
+            subject: glossary.email.program_status_subject,
+            text:
+              formData.get("status") === "accepted"
+                ? glossary.email.acceptence_message
+                : glossary.email.rejection_message,
+          },
+          context.cloudflare.env.RESEND_API,
+          context.cloudflare.env.MAIN_EMAIL
+        );
+      })
+      .then(async () => {
+        return Response.json(
+          { success: true },
+          {
+            headers: await createToastHeaders({
+              description: "",
+              title: glossary.cp.user.edit_status_success,
+              type: "success",
+            }),
+          }
+        );
+      })
+      .catch(async () => {
+        return Response.json(
+          { success: false },
+          {
+            headers: await createToastHeaders({
+              description: "",
+              title: glossary.cp.user.edit_status_failure,
+              type: "error",
+            }),
+          }
+        );
+      });
+  } else if (formData.get("ids")) {
+    const ids = JSON.parse(formData.get("ids") as string) as string[];
+    const emails = JSON.parse(formData.get("emails") as string) as string[];
 
-    })
-    .catch(async () => {
-      return Response.json(
-        { success: false },
-        {
-          headers: await createToastHeaders({
-            description:"",
-            title: glossary.cp.user.edit_status_failure,
-            type: "error",
-          }),
-        }
-      );
-    });
-
-  
+    return userDB
+      .bulkEditUserRegisteration(
+        ids,
+        formData.get("status") as "accepted" | "denied",
+        context.cloudflare.env.DATABASE_URL
+      )
+      .then(() => {
+        return sendBatchEmail(
+          {
+            to: emails,
+            subject: glossary.email.program_status_subject,
+            text:
+              formData.get("status") === "accepted"
+                ? glossary.email.acceptence_message
+                : glossary.email.rejection_message,
+          },
+          context.cloudflare.env.RESEND_API,
+          context.cloudflare.env.MAIN_EMAIL
+        );
+      })
+      .then(async () => {
+        return Response.json(
+          { success: true },
+          {
+            headers: await createToastHeaders({
+              description: "",
+              title: glossary.cp.user.bulk_edit_status_success,
+              type: "success",
+            }),
+          }
+        );
+      })
+      .catch(async () => {
+        return Response.json(
+          { success: false },
+          {
+            headers: await createToastHeaders({
+              description: "",
+              title: glossary.cp.user.bulk_edit_status_failure,
+              type: "error",
+            }),
+          }
+        );
+      });
+  } else {
+    return Response.json(
+      { success: false },
+      {
+        headers: await createToastHeaders({
+          description: "",
+          title: glossary.cp.user.edit_status_failure,
+          type: "error",
+        }),
+      }
+    );
+  }
 }
 
 const Users = () => {
@@ -117,12 +185,19 @@ const Users = () => {
   const fetcher = useFetcher();
   const [selectedUser, setSelectedUser] = useState<QUser | null>(null);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({}) //
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({}); //
   const navigate = useNavigate();
-  const acceptedCount =  data.filter((user: any) => user.acceptenceState === "accepted")
-  .length
-  const rejectedCount =       data.filter((user: any) => user.acceptenceState === "denied")
-  .length
+  const [bulkAction, setBulkAction] = useState({
+    status: "",
+    triggered: false,
+  });
+
+  const acceptedCount = data.filter(
+    (user: any) => user.acceptenceState === "accepted"
+  ).length;
+  const rejectedCount = data.filter(
+    (user: any) => user.acceptenceState === "denied"
+  ).length;
 
   const editUserProgramStatus = (
     id: string,
@@ -132,17 +207,29 @@ const Users = () => {
     fetcher.submit({ status, id, email }, { method: "POST" });
   };
 
-  const handleEditUserClick = (status: "accepted" | "denied", user: QUser,e:any) => {
-    e.preventDefault()
-    e.stopPropagation()
+  const bulkEditUserProgramStatus = (status: AcceptenceState) => {
+    const ids = JSON.stringify(Object.keys(rowSelection));
+    const emails = JSON.stringify(
+      table.getSelectedRowModel().rows.map((row) => row.original.email)
+    );
+    fetcher.submit({ status, ids, emails }, { method: "POST" });
+  };
+
+  const handleEditUserClick = (
+    status: "accepted" | "denied",
+    user: QUser,
+    e: any
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
     setSelectedUser({ ...user, acceptenceState: status });
   };
 
   const columns = useMemo(
     () => [
       {
-        id: 'select',
-        header: ({ table }:any) => (
+        id: "select",
+        header: ({ table }: any) => (
           <IndeterminateCheckbox
             {...{
               checked: table.getIsAllRowsSelected(),
@@ -151,7 +238,7 @@ const Users = () => {
             }}
           />
         ),
-        cell: ({ row }:any) => (
+        cell: ({ row }: any) => (
           <div className="px-1">
             <IndeterminateCheckbox
               {...{
@@ -179,7 +266,8 @@ const Users = () => {
       }),
       columnHelper.accessor("region", {
         header: () => "المنطقة",
-        cell: (info) => info.getValue()==="none"?"غير محدد": info.getValue(),
+        cell: (info) =>
+          info.getValue() === "none" ? "غير محدد" : info.getValue(),
       }),
       columnHelper.accessor("acceptenceState", {
         header: "حالة التسجيل في البرنامج",
@@ -191,9 +279,9 @@ const Users = () => {
           <button className="button p-3">
             {" "}
             <Link
-            onClick={(e)=>{
-              e.stopPropagation()
-            }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
               to={`/download/${info.getValue()}`}
               reloadDocument
               download={info.getValue()}
@@ -212,7 +300,9 @@ const Users = () => {
             row.original.acceptenceState !== "idle" && (
               <div className="flex gap-x-4">
                 <button
-                  onClick={(e) => handleEditUserClick("accepted", row.original,e)}
+                  onClick={(e) =>
+                    handleEditUserClick("accepted", row.original, e)
+                  }
                   disabled={row.original.acceptenceState === "accepted"}
                   className={`button p-2 text-[#1A7F37] border border-[#1A7F37] rounded-lg disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
                 >
@@ -220,7 +310,9 @@ const Users = () => {
                 </button>
 
                 <button
-                  onClick={(e) => handleEditUserClick("denied", row.original,e)}
+                  onClick={(e) =>
+                    handleEditUserClick("denied", row.original, e)
+                  }
                   disabled={row.original.acceptenceState === "denied"}
                   className={`button p-2 rounded-lg text-[#D1242F] border border-[#D1242F] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
                 >
@@ -242,10 +334,10 @@ const Users = () => {
     onRowSelectionChange: setRowSelection, //hoist up the row selection state to your own scope
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getRowId: (row) => row.id,
     state: {
       globalFilter,
       rowSelection, //pass the row selection state back to the table instance
-
     },
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: "includesString",
@@ -255,57 +347,122 @@ const Users = () => {
     <div>
       <div className="flex w-full px-12 gap-x-8">
         <div className="analytics-box-filled flex-1 flex">
-          <p className="text-lg font-bold">{glossary.cp.registered+":  "}{data.length} </p>
+          <p className="text-lg font-bold">
+            {glossary.cp.registered + ":  "}
+            {data.length}{" "}
+          </p>
         </div>
         <div className="analytics-box flex-1 flex">
-          <p className="text-lg font-bold">{glossary.cp.accepted+":  "} {
-            acceptedCount
-        
-            }</p>
-    
+          <p className="text-lg font-bold">
+            {glossary.cp.accepted + ":  "} {acceptedCount}
+          </p>
         </div>
 
         <div className="analytics-box flex-1 flex">
-          <p className="text-lg font-bold">{glossary.cp.rejected+":  "} {
-         rejectedCount
-            } </p>
+          <p className="text-lg font-bold">
+            {glossary.cp.rejected + ":  "} {rejectedCount}{" "}
+          </p>
         </div>
       </div>
 
       <div className="flex w-full px-12 gap-x-8 my-5 p-3 bg-gray-100/50 rounded-md">
-      <h5 className="font-bold ml-12">الإحصائيات</h5>
-      <div>
-        <h6 className="text-[#344054] text-center my-2">المسجلين</h6>
-        <div className="admin-stat-box">{data.length}</div>
+        <h5 className="font-bold ml-12">الإحصائيات</h5>
+        <div>
+          <h6 className="text-[#344054] text-center my-2">المسجلين</h6>
+          <div className="admin-stat-box">{data.length}</div>
+        </div>
+
+        <div>
+          <h6 className="text-[#344054] text-center my-2">المناهج</h6>
+          <div className="admin-stat-box">{data.length}</div>
+        </div>
+
+        <div>
+          <h6 className="text-[#344054] text-center my-2">الساعات التدريبية</h6>
+          <div className="admin-stat-box">{data.length}</div>
+        </div>
       </div>
 
+      <div className="flex justify-between mb-5  items-center w-full">
+        <div className="flex items-center gap-x-2">
+          <p>عدد المختارين :{Object.keys(rowSelection).length}</p>
 
+          {Object.keys(rowSelection).length > 0 && (
+            <div className="flex gap-x-4">
+              <Button
+                onClick={() =>
+                  setBulkAction({ triggered: true, status: "accepted" })
+                }
+                className="bg-white hover:bg-gray-50 text-[#12B76A] border hover:shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),0px_0px_0px_4px_#F2F4F7] rounded-lg border-solid border-[#D0D5DD]"
+              >
+                <span>قبول</span>
+                <Icon name="accept" size="md" />
+              </Button>
 
-      <div>
-        <h6 className="text-[#344054] text-center my-2">المناهج</h6>
-        <div className="admin-stat-box">{data.length}</div>
-      </div>
+              <Button
+                onClick={() =>
+                  setBulkAction({ triggered: true, status: "denied" })
+                }
+                className="bg-white hover:bg-gray-50 text-[#D1242F] border hover:shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05),0px_0px_0px_4px_#F2F4F7] rounded-lg border-solid border-[#D0D5DD]"
+              >
+                <span>رفض</span>
+                <Icon name="reject" size="md" />
+              </Button>
+            </div>
+          )}
+        </div>
 
+        <div className="relative w-1/3">
+          <Icon className="absolute right-2 top-3" name="search" size="sm" />
+          <div className="absolute gap-x-2 flex left-2 top-1">
+            <button
+              onClick={() =>
+                table.getState().globalFilter === "accepted"
+                  ? table.resetGlobalFilter()
+                  : table.setGlobalFilter("accepted")
+              }
+              className={cn(
+                "rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
+                table.getState().globalFilter === "accepted"
+                  ? "bg-gray-200"
+                  : ""
+              )}
+            >
+              مقبول
+            </button>
+            <button
+              onClick={() =>
+                table.getState().globalFilter === "denied"
+                  ? table.resetGlobalFilter()
+                  : table.setGlobalFilter("denied")
+              }
+              className={cn("rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",   table.getState().globalFilter === "denied"
+                ? "bg-gray-200"
+                : "")}
+            >
+              مرفوض
+            </button>
+            <button
+              onClick={() =>
+                table.getState().globalFilter === "idle"
+                  ? table.resetGlobalFilter()
+                  : table.setGlobalFilter("idle")
+              }
+              className={cn("rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",   table.getState().globalFilter === "idle"
+                ? "bg-gray-200"
+                : "")}
+            >
+              غير نشط
+            </button>
+          </div>
 
-
-      <div>
-        <h6 className="text-[#344054] text-center my-2">الساعات التدريبية</h6>
-        <div className="admin-stat-box">{data.length}</div>
-      </div>
-        
-  
-      </div>
-
-      <div className="w-full"></div>
-      <div className="relative w-1/3 mr-auto mt-12">
-        <Icon className="absolute left-2 top-3" name="search" size="sm" />
-
-        <Input
-          onChange={(e) => table.setGlobalFilter(String(e.target.value))}
-          className="rounded-xl"
-          placeholder="ابحث هنا"
-          value={globalFilter}
-        />
+          <Input
+            onChange={(e) => table.setGlobalFilter(String(e.target.value))}
+            className="rounded-xl pr-8"
+            placeholder="ابحث هنا"
+            value={globalFilter}
+          />
+        </div>
       </div>
 
       <Table className="mx-auto  text-[#027163]">
@@ -353,30 +510,50 @@ const Users = () => {
           user={selectedUser}
         ></EditConfirmationDialog>
       )}
+
+      {Object.keys(rowSelection).length > 0 && bulkAction.triggered && (
+        <EditConfirmationDialog
+          acceptenceState={bulkAction.status as "accepted" | "denied"}
+          isOpen={Object.keys(rowSelection).length > 0 && bulkAction.triggered}
+          onClose={() => {
+            setBulkAction({ triggered: false, status: "" });
+            setRowSelection({});
+          }}
+          onConfirm={() =>
+            bulkEditUserProgramStatus(
+              bulkAction.status as "accepted" | "denied"
+            )
+          }
+          // user={selectedUser}
+        ></EditConfirmationDialog>
+      )}
     </div>
   );
 };
 
 function IndeterminateCheckbox({
   indeterminate,
-  className = '',
+  className = "",
   ...rest
 }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
-  const ref = useRef<HTMLInputElement>(null!)
+  const ref = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
-    if (typeof indeterminate === 'boolean') {
-      ref.current.indeterminate = !rest.checked && indeterminate
+    if (typeof indeterminate === "boolean") {
+      ref.current.indeterminate = !rest.checked && indeterminate;
     }
-  }, [ref, indeterminate])
+  }, [ref, indeterminate]);
 
   return (
     <input
       type="checkbox"
       ref={ref}
-      className={className + ' cursor-pointer'}
+      onClick={(e: any) => {
+        e.stopPropagation();
+      }}
+      className={className + " cursor-pointer"}
       {...rest}
     />
-  )
+  );
 }
 export default Users;
