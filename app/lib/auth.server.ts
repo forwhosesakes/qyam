@@ -61,7 +61,6 @@ export const getAuth = (context: AppLoadContext): Auth | any => {
       session: {
         create: {
             before: async (sessionInstance:any) => {
-              console.log("session instance", sessionInstance);
               const user=await dbClient.user.findUnique({where:{id:sessionInstance.userId}}) as QUser
               if(user && user.acceptenceState!=="accepted"&&user.role==="user")
               return false

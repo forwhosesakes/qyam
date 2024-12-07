@@ -76,7 +76,7 @@ export default function Login() {
           onError: (ctx) => {
             setLoading(false);
 
-            console.log(ctx);
+            // console.log(ctx);
             if (
               ctx.error.code ===
               "EMAIL_IS_NOT_VERIFIED_CHECK_YOUR_EMAIL_FOR_A_VERIFICATION_LINK"

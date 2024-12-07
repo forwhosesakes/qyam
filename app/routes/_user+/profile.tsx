@@ -13,8 +13,6 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
       return userDB
         .getUserWithCertificates(user.id, context.cloudflare.env.DATABASE_URL)
         .then((res: any) => {
-          console.log("datataa:", res);
-
           return Response.json({ success: true, user: res.data });
         })
         .catch((error) => {
