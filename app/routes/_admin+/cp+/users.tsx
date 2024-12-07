@@ -33,6 +33,7 @@ import EditConfirmationDialog from "../components/editConfirmationDialog";
 import { Input } from "~/components/ui/input";
 import { createToastHeaders } from "~/lib/toast.server";
 import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/tw-merge";
 
 const columnHelper = createColumnHelper<QUser>();
 
@@ -208,9 +209,9 @@ const Users = () => {
 
   const bulkEditUserProgramStatus = (status: AcceptenceState) => {
     const ids = JSON.stringify(Object.keys(rowSelection));
-    const emails = JSON.stringify(table
-      .getSelectedRowModel()
-      .rows.map((row) => row.original.email));
+    const emails = JSON.stringify(
+      table.getSelectedRowModel().rows.map((row) => row.original.email)
+    );
     fetcher.submit({ status, ids, emails }, { method: "POST" });
   };
 
@@ -384,7 +385,7 @@ const Users = () => {
 
       <div className="flex justify-between mb-5  items-center w-full">
         <div className="flex items-center gap-x-2">
-          <p>عدد المختارين :{(Object.keys(rowSelection).length)}</p>
+          <p>عدد المختارين :{Object.keys(rowSelection).length}</p>
 
           {Object.keys(rowSelection).length > 0 && (
             <div className="flex gap-x-4">
@@ -412,11 +413,52 @@ const Users = () => {
         </div>
 
         <div className="relative w-1/3">
-          <Icon className="absolute left-2 top-3" name="search" size="sm" />
+          <Icon className="absolute right-2 top-3" name="search" size="sm" />
+          <div className="absolute gap-x-2 flex left-2 top-1">
+            <button
+              onClick={() =>
+                table.getState().globalFilter === "accepted"
+                  ? table.resetGlobalFilter()
+                  : table.setGlobalFilter("accepted")
+              }
+              className={cn(
+                "rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
+                table.getState().globalFilter === "accepted"
+                  ? "bg-gray-200"
+                  : ""
+              )}
+            >
+              مقبول
+            </button>
+            <button
+              onClick={() =>
+                table.getState().globalFilter === "denied"
+                  ? table.resetGlobalFilter()
+                  : table.setGlobalFilter("denied")
+              }
+              className={cn("rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",   table.getState().globalFilter === "denied"
+                ? "bg-gray-200"
+                : "")}
+            >
+              مرفوض
+            </button>
+            <button
+              onClick={() =>
+                table.getState().globalFilter === "idle"
+                  ? table.resetGlobalFilter()
+                  : table.setGlobalFilter("idle")
+              }
+              className={cn("rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",   table.getState().globalFilter === "idle"
+                ? "bg-gray-200"
+                : "")}
+            >
+              غير نشط
+            </button>
+          </div>
 
           <Input
             onChange={(e) => table.setGlobalFilter(String(e.target.value))}
-            className="rounded-xl"
+            className="rounded-xl pr-8"
             placeholder="ابحث هنا"
             value={globalFilter}
           />
@@ -478,7 +520,6 @@ const Users = () => {
             setRowSelection({});
           }}
           onConfirm={() =>
-           
             bulkEditUserProgramStatus(
               bulkAction.status as "accepted" | "denied"
             )
