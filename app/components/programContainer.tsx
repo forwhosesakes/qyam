@@ -25,7 +25,7 @@ const ProgramContainer = ({
               <CardHeader>
                 <img
                   className="opacity-50"
-                  src={ImageZoom}
+                  src={program.image??ImageZoom}
                   alt="image-placeholder"
                 />
                 <CardTitle className="mt-2"> {program.title}</CardTitle>

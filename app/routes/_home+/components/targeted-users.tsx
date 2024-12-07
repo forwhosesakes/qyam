@@ -11,7 +11,7 @@ const TargetedUsers = () => {
   ];
 
   return (
-    <section id="targeted-users" className="md:px-24 px-6 w-full  min-h-[60vh]">
+    <section id="targeted-users" className="md:px-24 px-6 w-full min-h-[60vh]">
       <TitleBlock className="my-8" text={glossary.targeted_users.title} />
       <div className="flex flex-wrap md:h-48 md:gap-24 gap-6 justify-center ">
         {users.map((user) => (
