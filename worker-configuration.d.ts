@@ -8,4 +8,5 @@ interface Env {
   DATABASE_URL: string;
   R2_AUTH_KEY_SECRET:string,
   QYAM_BUCKET:R2Bucket
+  CONTACT_NUMBER:string
 }

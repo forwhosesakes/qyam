@@ -10,6 +10,7 @@ import {
   useLoaderData,
   useLocation,
 } from "@remix-run/react";
+import  QrCode from "qrcode"
 
 import "./tailwind.css";
 import { getAuth } from "./lib/auth.server";
@@ -49,12 +50,17 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   const session = await getAuth(context).api.getSession({
     headers: request.headers, // you need to pass the headers object.
   });
+  const text = "أحمد الجميل جدا"
   const user =
     session?.user && session.user.emailVerified ? (session.user as User) : null;
+    const contactNumber = context.cloudflare.env.CONTACT_NUMBER
+    const whatsappURL = `https://wa.me/${contactNumber}?text=${text}`
   try {
     const { toast, headers } = await getToast(request);
+    const generatedQRCode = await QrCode.toDataURL(whatsappURL)
+    // console.log("qrcode:::",generatedQRCode);
     
-    return Response.json({ toast, user }, { headers: headers || undefined });
+    return Response.json({ toast, user, generatedQRCode }, { headers: headers || undefined });
   } catch (error) {
 
     return Response.json({ toast:null, user }, { headers:  undefined });
@@ -100,8 +106,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const location = useLocation();
-  const { toast } = useLoaderData<any>();
+  const { toast, generatedQRCode } = useLoaderData<any>();
   useToast(toast);
+  // console.log("qrcode:::",generatedQRCode);
+
 
   const noNavbarRoutes = ["/login"];
 
@@ -111,7 +119,7 @@ export default function App() {
     <>
       {showNavbar && <Navbar/>}
       <Outlet />
-      {showNavbar && <Footer />}
+      {showNavbar && <Footer generatedQRCode={generatedQRCode} />}
     </>
   );
 }
