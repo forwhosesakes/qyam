@@ -42,7 +42,13 @@ export async function redirectWithToast(
 }
 
 export async function createToastHeaders(toastInput: ToastInput) {
+
+	
+
+
 	const session = await toastSessionStorage.getSession()
+	
+
 	const toast = ToastSchema.parse(toastInput)
 	session.flash(toastKey, toast)
 	const cookie = await toastSessionStorage.commitSession(session)

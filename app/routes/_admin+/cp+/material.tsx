@@ -50,7 +50,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
               context.cloudflare.env.DATABASE_URL
             )
             .then((res) => {
-              console.log("response from material", res);
               
               return res
             })

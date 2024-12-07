@@ -179,8 +179,6 @@ export default function Signup() {
   }
   useEffect(() => {
     const handleSigneup = async () => {
-      console.log("action data : ", actionData);
-
       if (actionData?.success && actionData?.key) {
         try {
           await authClient.signUp.email(
@@ -339,8 +337,6 @@ export default function Signup() {
                 value={phone}
                 onChange={(e) => {
                   const phoneNubmer: string = e.target.value;
-                  console.log("phone number : ", phoneNubmer);
-
                   setPhone(phoneNubmer);
                 }}
                 onBlur={() => handleBlur("phone")}
@@ -467,8 +463,6 @@ export default function Signup() {
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
-                    console.log(file);
-
                     setCv(file);
                   }
                 }}
