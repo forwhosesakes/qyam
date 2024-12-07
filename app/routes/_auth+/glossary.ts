@@ -29,6 +29,7 @@ const signup={
         phoneNumber:"رقم الجوال",
         email:"البريد الإلكتروني",
         cv:"السيرة الذاتية",
+        region:"المنطقة",
         selfIntroduction:"نبذة تعريفية عن نفسك واهتمامك بالبرنامج",
         selfIntrodutionPlaceholder:"تحدث عن نفسك",
         password:"كلمة المرور",
@@ -89,6 +90,7 @@ const signup={
           title: "فشل التسجيل",
           generalDescription: "حدث خطأ أثناء التسجيل. الرجاء المحاولة مرة أخرى",
           emailExist:"البريد الالكتروني مستخدم سابقا",
+          sessionFailure: " لم يتم تخويلك للانضمام إلى البرنامج حتى الآن",
           error: "خطأ في إرسال البريد",
           errorDescription: "لم نتمكن من إرسال بريد التحقق. الرجاء المحاولة مرة أخرى"
       

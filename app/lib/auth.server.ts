@@ -4,6 +4,7 @@ import { admin } from "better-auth/plugins";
 import { sendEmail } from "./send-email.server";
 import { AppLoadContext } from "@remix-run/cloudflare";
 import { client } from "~/db/db-client.server";
+import { QUser } from "~/types/types";
 
 export type Environment = {
   Variables: {
@@ -12,14 +13,17 @@ export type Environment = {
   };
 };
 
-let auth: Auth | null|any = null;
 
-export const getAuth = (context: AppLoadContext): Auth|any => {
+export const getAuth = (context: AppLoadContext): Auth | any => {
   // Create a new auth instance for each request
+  const dbClient = client(context.cloudflare.env.DATABASE_URL)
+  
+
   return betterAuth({
     emailAndPassword: {
       enabled: true,
-      requireEmailVerification: true,
+      autoSignIn: false ,
+      // requireEmailVerification: true,
       sendResetPassword: async ({ user, url, token }, request) => {
         await sendEmail(
           {
@@ -32,39 +36,49 @@ export const getAuth = (context: AppLoadContext): Auth|any => {
         );
       },
     },
-    emailVerification: {
-      autoSignInAfterVerification: true,
-      sendOnSignUp: true,
-      sendVerificationEmail: async ({ user, url, token }, request) => {
-        await sendEmail(
-          {
-            to: user.email,
-            subject: "تأكيد التسجيل في قيم",
-            text: `قم بتأكيد تسجيلك عن طريق دخول <a href="${url}">هذا الرابط</a>`,
-          },
-          context.cloudflare.env.RESEND_API,
-          context.cloudflare.env.MAIN_EMAIL
-        );
-      },
-    },
+
     user: {
       additionalFields: {
         cvKey: { type: "string" },
         bio: { type: "string" },
         phone: { type: "number" },
-        acceptenceState: { type: "string" }
-      }
+        acceptenceState: { type: "string" },
+        trainingHours:{type:"number"},
+        noStudents:{type:"number"},
+        region:{type:"string"},
+      level:{type:"string"},
+
+
+      },
     },
-    database: prismaAdapter(
-      client(context.cloudflare.env.DATABASE_URL),
-      {
-        provider: "postgresql"
-      }
-    ),
+    database:  prismaAdapter(dbClient, {
+      provider: "postgresql",
+    }) ,
+
+
+
+    databaseHooks: {
+      session: {
+        create: {
+            before: async (sessionInstance:any) => {
+              console.log("session instance", sessionInstance);
+              const user=await dbClient.user.findUnique({where:{id:sessionInstance.userId}}) as QUser
+              if(user && user.acceptenceState!=="accepted"&&user.role==="user")
+              return false
+              
+               return {
+                   data: {
+                      ...sessionInstance,
+                     
+                   }
+                }
+            },
+        },
+
+     
+    },
+ },
     plugins: [admin()],
   });
 };
-
-
-
 

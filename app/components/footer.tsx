@@ -3,8 +3,6 @@ import LogoBW from "~/assets/images/logo-bw.png";
 import FooterLogo from "~/assets/images/footer-logo.png";
 import glossary from "~/lib/glossary";
 import { Icon } from "./icon";
-import { NavbarElements } from "~/lib/contstants";
-import { NavLink } from "@remix-run/react";
 
 
 const Footer = () => {
@@ -15,8 +13,7 @@ const Footer = () => {
         <div className="flex justify-between">
         <div>
                 <img src={LogoBW} alt="logo-bw"/>
-                <p className="font-normal md:w-3/5 mt-4">{glossary.footer.description}</p>
-         <ul className="mt-4 flex gap-x-4">{NavbarElements.map((el)=><li key={el.id} className="text-white md:text-lg text-xs font-bold"><NavLink to={el.link}>{el.arabicLabel}</NavLink></li>)}</ul>
+                <p className="font-normal  md:w-3/5 mt-4 md:mt-12">{glossary.footer.description}</p>
 
             </div>
             <img src={FooterLogo} alt="logo" className="md:block hidden"/>

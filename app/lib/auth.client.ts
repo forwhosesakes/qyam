@@ -10,6 +10,9 @@ export const authClient = createAuthClient({
         bio: { type: "string" },
         phone: { type: "number" },
         acceptenceState: { type: "string" },
+        region:{type:"string"},
+
+        
       },
     }),
   ],

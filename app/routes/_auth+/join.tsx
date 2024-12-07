@@ -1,12 +1,5 @@
-import {
-  Form,
-  useActionData,
-  useSubmit,
-} from "@remix-run/react";
-import {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-} from "@remix-run/cloudflare";
+import { Form, useActionData, useSubmit } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import glossary from "./glossary";
@@ -15,11 +8,20 @@ import { createId } from "@paralleldrive/cuid2";
 import { toast as showToast } from "sonner";
 import { requireNoAuth } from "~/lib/get-authenticated.server";
 import LoadingOverlay from "~/components/loading-overlay";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { Button } from "~/components/ui/button";
+import { REGIONS } from "~/lib/constants";
+import { Icon } from "~/components/icon";
 
-
-
-export async function loader({ request,context }: LoaderFunctionArgs) {
-  return await requireNoAuth(request,context)
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  return await requireNoAuth(request, context);
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -65,13 +67,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
 }
 
 export default function Signup() {
-  
- 
-  
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [region, setRegion] = useState("الرياض");
   const [cv, setCv] = useState<File | null>(null);
   const [bio, setBio] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
@@ -93,8 +93,8 @@ export default function Signup() {
 
   const [touched, setTouched] = useState<{
     email?: boolean;
-    password?: boolean;
-    passwordConfirmation?: boolean;
+    // password?: boolean;
+    // passwordConfirmation?: boolean;
     name?: boolean;
     phone?: boolean;
     cv?: boolean;
@@ -118,17 +118,17 @@ export default function Signup() {
       }
     }
 
-    if (touchedFields.password) {
-      if (!password) {
-        newErrors.password = g.password.required;
-      } else if (password.length < 8) {
-        newErrors.password = g.password.length;
-      }
-    }
+    // if (touchedFields.password) {
+    //   if (!password) {
+    //     newErrors.password = g.password.required;
+    //   } else if (password.length < 8) {
+    //     newErrors.password = g.password.length;
+    //   }
+    // }
 
-    if (touchedFields.passwordConfirmation && password !== passwordConfirmation) {
-      newErrors.passwordConfirmation = g.passwordConfirmation;
-    }
+    // if (touchedFields.passwordConfirmation && password !== passwordConfirmation) {
+    //   newErrors.passwordConfirmation = g.passwordConfirmation;
+    // }
 
     if (touchedFields.phone) {
       if (!phone || phone == "") {
@@ -168,7 +168,7 @@ export default function Signup() {
   };
 
   const handleBlur = (field: keyof typeof touched) => {
-    setTouched(prev => ({ ...prev, [field]: true }));
+    setTouched((prev) => ({ ...prev, [field]: true }));
     validateForm({ ...touched, [field]: true });
   };
 
@@ -178,7 +178,6 @@ export default function Signup() {
     error?: string;
   }
   useEffect(() => {
-
     const handleSigneup = async () => {
       console.log("action data : ", actionData);
 
@@ -187,35 +186,37 @@ export default function Signup() {
           await authClient.signUp.email(
             {
               email,
-              password,
+              password: createId(),
               name,
               bio,
               cvKey: actionData.key,
               phone: Number(phone),
-              acceptenceState:"idle",
+              region,
+              acceptenceState: "pending",
             },
             {
               onRequest: (ctx) => {
-                setLoading(true)
+                setLoading(true);
 
                 // show loading state
               },
               onSuccess: async (ctx) => {
-               setLoading(false)
+                setLoading(false);
 
                 showToast.success(glossary.signup.toasts.verifyEmail.title, {
                   description: glossary.signup.toasts.verifyEmail.description,
                 });
-
               },
               onError: (ctx) => {
-               setLoading(false)
+                setLoading(false);
 
                 if (ctx.error.code === "USER_WITH_THIS_EMAIL_ALREADY_EXISTS") {
                   showToast.error(glossary.signup.toasts.signupError.title, {
                     description: glossary.signup.toasts.signupError.emailExist,
                   });
-                } else {
+                }
+       
+                else {
                   showToast.error(glossary.signup.toasts.signupError.title, {
                     description:
                       glossary.signup.toasts.signupError.generalDescription,
@@ -241,14 +242,14 @@ export default function Signup() {
   // Add function to check if all required fields are filled
   const areAllFieldsFilled = () => {
     return (
-      name.trim() !== '' &&
-      email.trim() !== '' &&
-      password !== '' &&
-      passwordConfirmation !== '' &&
+      name.trim() !== "" &&
+      email.trim() !== "" &&
+      // password !== '' &&
+      // passwordConfirmation !== '' &&
       phone !== undefined &&
-      phone !== '' &&
+      phone !== "" &&
       cv !== null &&
-      bio.trim() !== ''
+      bio.trim() !== ""
     );
   };
 
@@ -261,26 +262,24 @@ export default function Signup() {
     } else {
       setIsFormValid(false); // Ensure button is disabled initially
     }
-  }, [email, password, passwordConfirmation, name, phone, cv, bio]);
-
- 
+  }, [email, name, phone, cv, bio]);
 
   // Update the signUp function to double-check
   const signUp = async () => {
     // Mark all fields as touched before submission
     const allTouched = {
       email: true,
-      password: true,
-      passwordConfirmation: true,
+      // password: true,
+      // passwordConfirmation: true,
       name: true,
       phone: true,
       cv: true,
-      bio: true
+      bio: true,
     };
     setTouched(allTouched);
-    
+
     if (!validateForm(allTouched) || !areAllFieldsFilled()) return;
-    
+
     if (cv) {
       const formData = new FormData();
       formData.set("intent", "upload");
@@ -289,20 +288,19 @@ export default function Signup() {
     }
   };
 
-
   return (
-    <div className="min-h-screen w-full pt-[96px] pb-8">
-      { (loading )&& <LoadingOverlay />}
+    <div className="min-h-screen  bg-section w-full pt-[96px] pb-8">
+      {loading && <LoadingOverlay />}
 
-      <div className="flex sm:flex-row flex-col items-center min-h-fit h-full w-full">
-        <div className=" sm:w-5/12 w-[80%] h-full flex flex-col justify-start sm:items-end  items-center ml-5 sm:ml-0">
+      <div className="flex sm:flex-row flex-col items-start min-h-fit h-full w-full">
+        <div className=" w-[80%] sm:w-5/12  h-full flex flex-col justify-start items-center sm:items-end   ml-5 sm:ml-0">
           <Form
             method="post"
             encType="multipart/form-data"
             className="w-8/12 flex flex-col sm:items-start items-center gap-3"
           >
             <TitleBlock
-              className="my-5"
+              className="mt-10 mb-5"
               text={glossary.signup.newSignup.title}
             />
             <div className=" md:w-2/3 sm:w-[80%] min-w-24 w-full">
@@ -377,7 +375,7 @@ export default function Signup() {
               )}
             </div>
 
-            <div className="md:w-2/3 sm:w-[80%] min-w-24 w-full">
+            {/* <div className="md:w-2/3 sm:w-[80%] min-w-24 w-full">
               <p className="text-xs lg:text-base md:text-sm my-1 text-primary">
                 {glossary.signup.newSignup.password}
               </p>
@@ -425,6 +423,35 @@ export default function Signup() {
                   {errors.passwordConfirmation}
                 </span>
               )}
+            </div> */}
+            <div className="md:w-2/3 sm:w-[80%] min-w-24 w-full">
+              <p className="text-xs lg:text-base md:text-sm my-1 text-primary">
+                {glossary.signup.newSignup.region}
+              </p>
+
+              <DropdownMenu >
+                <DropdownMenuTrigger className="w-full bg-white justify-between">
+               <span>
+               {region}
+
+               </span>
+                    {/* <Icon name={"below-arrow"} size="md"/> */}
+                    
+            
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 border-6">
+                  <DropdownMenuRadioGroup
+                    value={region}
+                    onValueChange={setRegion}
+                  >
+                    {REGIONS.map((reg) => (
+                      <DropdownMenuRadioItem className={`${region===reg?"bg-gray-50":""}`} value={reg}>
+                        {reg}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             <div className="md:w-2/3 sm:w-[80%] min-w-24 w-full">
@@ -479,7 +506,7 @@ export default function Signup() {
             </div>
 
             <button
-              className={`button min-w-24 text-xs lg:text-base md:text-sm text-center bg-primary hover:opacity-90 ${
+              className={`button min-w-24 text-xs lg:text-base md:text-sm text-center  hover:opacity-90 ${
                 isFormValid
                   ? "bg-primary hover:opacity-90"
                   : "bg-gray-400 cursor-not-allowed"
@@ -492,13 +519,13 @@ export default function Signup() {
             </button>
           </Form>
         </div>
-        <div className=" flex flex-col justify-start sm:mt-0 mt-10  sm:mb-0 mb-10 sm:items-start items-center sm:w-7/12 w-[80%] h-full">
-          <div className="flex flex-col justify-start sm:items-start items-center  sm:w-1/2 w-[80%]">
+        <div className="flex  flex-col  justify-start  mt-24  sm:mt-0 sm:mb-0 mb-10  items-center sm:items-start sm:w-7/12 w-[80%] h-full">
+          <div className=" flex flex-col justify-start sm:items-start items-center  sm:w-2/3 w-[80%]">
             <TitleBlock
-              className="mb-10 mt-5"
+              className="my-10"
               text={glossary.signup.registrationTerms.title}
             />
-            <div>
+            <div className="mt-2">
               <p className="text-xs lg:text-base md:text-sm">
                 1. {glossary.signup.registrationTerms.first}
               </p>
@@ -511,16 +538,14 @@ export default function Signup() {
               <p className="mb-3 text-xs lg:text-base md:text-sm">
                 4. {glossary.signup.registrationTerms.forth}
               </p>
-              <p className="text-xs lg:text-base md:text-sm">
-                {glossary.signup.registrationTerms.notice}
-              </p>
-              <p className="text-xs lg:text-base md:text-sm">
+
+              <p className="text-xs text-[#BC4C00] lg:text-base md:text-sm">
                 {glossary.signup.registrationTerms.noticeText}
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col justify-start sm:items-start items-center sm:w-2/3 w-[80%] ">
+          <div className="  flex flex-col justify-start sm:items-start items-center sm:w-2/3 w-[80%] ">
             <TitleBlock
               className="my-12"
               text={glossary.signup.admissionCriteria.title}
