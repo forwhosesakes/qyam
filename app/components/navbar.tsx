@@ -22,11 +22,11 @@ const Navbar = () => {
   const AuthActions = () =>
     user ? (
       <div className="h-full flex flex-auto  justify-end   ">
-        <button
+        {/* <button
         onClick={handleLogout}
          className="button  font-bold text-center text-xs md:text-sm  md:p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
           تسجيل الخروج
-        </button>
+        </button> */}
       </div>
     ) : (
       <div className="visitors flex flex-auto  justify-end  gap-x-4">
@@ -37,12 +37,12 @@ const Navbar = () => {
           {" "}
           انضمام
         </button>
-        <button
+        {/* <button
           onClick={() => navigate("/login")}
           className="button font-bold text-xs  md:text-sm text-center p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all"
         >
           دخول
-        </button>
+        </button> */}
       </div>
     );
   const DisplayedNavList = () => (

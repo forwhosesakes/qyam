@@ -72,7 +72,7 @@ const EvaluationMethods = () => {
             strokeMiterlimit="10"
           />
         </svg>
-        <div className="absolute right-2 md:right-36 top-2 md:top-12   flex  flex-wrap 2xl:gap-x-36 lg:gap-x-32 gap-x-8 justify-center items-center">
+        <div className="absolute right-2 md:right-36 top-2 md:top-8   flex  flex-wrap 2xl:gap-x-36 lg:gap-x-32 gap-x-8 justify-center items-center">
           {methods.map((method: any) => (
             <div
               key={method.name}
