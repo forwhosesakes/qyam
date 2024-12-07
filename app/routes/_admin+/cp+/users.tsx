@@ -19,6 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import statisticsDB from "~/lib/statistics.server";
+
 import { AcceptenceState, QUser } from "~/types/types";
 import {
   HTMLProps,
@@ -38,18 +40,58 @@ import { cn } from "~/lib/tw-merge";
 const columnHelper = createColumnHelper<QUser>();
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  return userDB
-    .getAllUsers(context.cloudflare.env.DATABASE_URL)
-    .then((res) => {
-      return res;
-    })
-    .catch((error) => {
-      return error;
-    });
+  const [usersResult, statsResult] = await Promise.all([
+    userDB
+      .getAllUsers(context.cloudflare.env.DATABASE_URL)
+      .catch((error) => ({ error })),
+    statisticsDB
+      .getStatistics(context.cloudflare.env.DATABASE_URL)
+      .catch((error) => ({ error })),
+  ]);
+
+  return {
+    users: "error" in usersResult ? null : usersResult,
+    stats: "error" in statsResult ? null : statsResult,
+  };
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
+
+  if (formData.get("type") === "updateStatistics") {
+    try {
+      await statisticsDB.updateStatistics(
+        {
+          registeredUsers: Number(formData.get("registeredUsers")),
+          curriculums: Number(formData.get("curriculums")),
+          trainingHours: Number(formData.get("trainingHours")),
+        },
+        context.cloudflare.env.DATABASE_URL
+      );
+      return Response.json(
+        { success: true },
+        {
+          headers: await createToastHeaders({
+            description: "",
+            title: "تم تحديث الإحصائيات بنجاح",
+            type: "success",
+          }),
+        }
+      );
+    } catch (e) {
+      return Response.json(
+        { success: false },
+        {
+          headers: await createToastHeaders({
+            description: "",
+            title: "فشل تحديث الإحصائيات",
+            type: "error",
+          }),
+        }
+      );
+    }
+  }
+
   if (formData.get("id")) {
     return userDB
       .editUserRegisteration(
@@ -180,9 +222,24 @@ const Users = () => {
       </div>
     );
   };
-  const { data } = useLoaderData<any>();
+  const { users, stats } = useLoaderData<{ users: any[]; stats: any }>();
+  const data = users.data;
+  console.log("stats::", stats, "users::", users);
 
   const fetcher = useFetcher();
+  const [localStats, setLocalStats] = useState({
+    registeredUsers: stats.registeredUsers,
+    curriculums: stats.curriculums,
+    trainingHours: stats.trainingHours,
+  });
+  const updateStats = () => {
+    const formData = new FormData();
+    formData.append("type", "updateStatistics");
+    formData.append("registeredUsers", localStats.registeredUsers.toString());
+    formData.append("curriculums", localStats.curriculums.toString());
+    formData.append("trainingHours", localStats.trainingHours.toString());
+    fetcher.submit(formData, { method: "POST" });
+  };
   const [selectedUser, setSelectedUser] = useState<QUser | null>(null);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({}); //
@@ -365,21 +422,46 @@ const Users = () => {
         </div>
       </div>
 
-      <div className="flex w-full px-12 gap-x-8 my-5 p-3 bg-gray-100/50 rounded-md">
-        <h5 className="font-bold ml-12">الإحصائيات</h5>
+      <div className="flex lg:flex-row flex-col  w-full px-24 lg:gap-x-8 gap-y-5 my-5 p-3 bg-gray-100/50 rounded-md justify-between">
+        <div className="flex flex-col justify-center items-center gap-4">
+          <h5 className="font-bold ">الإحصائيات</h5>
+          <Button onClick={updateStats} className="hidden lg:flex">
+            حفظ الإحصائيات
+          </Button>
+        </div>
         <div>
-          <h6 className="text-[#344054] text-center my-2">المسجلين</h6>
-          <div className="admin-stat-box">{data.length}</div>
+          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">المسجلين</h6>
+          <Input
+            type="number"
+            className="admin-stats-box text-center"
+            value={localStats.registeredUsers}
+            onChange={(e)=>setLocalStats(prev=>({...prev,registeredUsers:Number(e.target.value)}))}
+          />
         </div>
 
         <div>
-          <h6 className="text-[#344054] text-center my-2">المناهج</h6>
-          <div className="admin-stat-box">{data.length}</div>
+          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">المناهج</h6>
+          <Input
+            type="number"
+            className="admin-stats-box text-center"
+            value={localStats.curriculums}
+            onChange={(e)=>setLocalStats(prev=>({...prev, curriculums:Number(e.target.value)}))}
+          />
         </div>
 
         <div>
-          <h6 className="text-[#344054] text-center my-2">الساعات التدريبية</h6>
-          <div className="admin-stat-box">{data.length}</div>
+          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">الساعات التدريبية</h6>
+          <Input
+            type="number"
+            className="admin-stats-box text-center"
+            value={localStats.trainingHours}
+            onChange={(e)=>setLocalStats(prev=>({...prev,trainingHours:Number(e.target.value)}))}
+          />
+        </div>
+        <div className="flex lg:hidden  justify-center items-center">
+        <Button onClick={updateStats} className="">
+            حفظ الإحصائيات
+          </Button>
         </div>
       </div>
 
@@ -436,9 +518,10 @@ const Users = () => {
                   ? table.resetGlobalFilter()
                   : table.setGlobalFilter("denied")
               }
-              className={cn("rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",   table.getState().globalFilter === "denied"
-                ? "bg-gray-200"
-                : "")}
+              className={cn(
+                "rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
+                table.getState().globalFilter === "denied" ? "bg-gray-200" : ""
+              )}
             >
               مرفوض
             </button>
@@ -448,9 +531,10 @@ const Users = () => {
                   ? table.resetGlobalFilter()
                   : table.setGlobalFilter("idle")
               }
-              className={cn("rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",   table.getState().globalFilter === "idle"
-                ? "bg-gray-200"
-                : "")}
+              className={cn(
+                "rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
+                table.getState().globalFilter === "idle" ? "bg-gray-200" : ""
+              )}
             >
               غير نشط
             </button>

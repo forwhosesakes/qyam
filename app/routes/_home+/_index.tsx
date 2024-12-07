@@ -7,7 +7,9 @@ import TargetedUsers from "./components/targeted-users";
 import Partners from "./components/partners";
 import Outro from "./components/outro";
 import Statistics from "./components/statistics";
+import statisticsDB from "~/lib/statistics.server";
 export async function loader({ request , context}: LoaderFunctionArgs) {
+  const stats = await statisticsDB.getStatistics(context.cloudflare.env.DATABASE_URL)
   
 	//check if the user is logged in 
 //   const session = await getAuth(context).api.getSession({
@@ -15,7 +17,7 @@ export async function loader({ request , context}: LoaderFunctionArgs) {
 // })
 //   if (session?.user && session.user.emailVerified) return null
 //   else return  redirect("login")
-return null
+return {stats}
 }
 
 export default function Index() {

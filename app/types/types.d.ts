@@ -26,6 +26,11 @@ export type Program = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+export type Statistics = {
+  registeredUsers:number;
+  curriculums:number;
+  trainingHours:number;
+}
 
 export type Article = {
   id?: string;
