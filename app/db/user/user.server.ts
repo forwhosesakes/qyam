@@ -1,6 +1,7 @@
 import glossary from "~/lib/glossary";
 import { client } from "../db-client.server";
 import { UserCertificate } from "~/types/types";
+import { LEVELS } from "~/lib/constants";
 
 
 
@@ -142,7 +143,50 @@ const getUserWithCertificates = (userId:string, dbUrl:string)=>{
 
 }
 
+const updateTrainingInfo = (info:any,dbUrl:string)=>{
+    const db = client(dbUrl)
+    return new Promise((resolve, reject) => {
+        db.user.update({
+            where: {id:info.id},
+            data:{
+                noStudents:info.noStudents,
+                trainingHours:info.trainingHours,
+    
+            }
+            
+            }
+     ).then((res)=>{
+            resolve({status:"success", data:res})
+        }).catch((error:any)=>{
+            // console.log("ERROR [getUserCertificates]: ", error);
+            reject({status:"error", message:glossary.status_response.error.general})
+        })
+      });
 
+}
+
+
+
+const updateUserLevel = (id:string,level:keyof typeof LEVELS,dbUrl:string)=>{
+    const db = client(dbUrl)
+    return new Promise((resolve, reject) => {
+        db.user.update({
+            where: {id},
+            data:{
+          
+                level
+            }
+            
+            }
+     ).then((res)=>{
+            resolve({status:"success", data:res})
+        }).catch((error:any)=>{
+            // console.log("ERROR [getUserCertificates]: ", error);
+            reject({status:"error", message:glossary.status_response.error.general})
+        })
+      });
+
+}
 
 
 
@@ -156,6 +200,8 @@ export default ({
     addCertificateToUser,
     getUserWithCertificates,
     getUserCertificates,
-    bulkEditUserRegisteration
+    bulkEditUserRegisteration,
+    updateTrainingInfo,
+    updateUserLevel
 
 })
