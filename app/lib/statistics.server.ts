@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { client } from "~/db/db-client.server";
 
 const statisticsDB = {
   async getStatistics(databaseUrl: string) {
-    const prisma = new PrismaClient({
-      datasourceUrl: databaseUrl,
-    });
+    const prisma = client(databaseUrl)
 
     try {
       // Get or create the single statistics entry
@@ -38,9 +36,8 @@ const statisticsDB = {
     },
     databaseUrl: string
   ) {
-    const prisma = new PrismaClient({
-      datasourceUrl: databaseUrl,
-    });
+    const prisma = client(databaseUrl)
+
 
     try {
       const stats = await prisma.statistics.upsert({
