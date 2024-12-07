@@ -9,13 +9,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '~/components/ui/alert-dialog';
+import { QUser } from "~/types/types";
+
+
+type TProps = {
+  isOpen:boolean, 
+  onClose :any, 
+  onConfirm:any,
+  user?:QUser ,
+  acceptenceState?:"accepted"|"denied"
+}
 
 const EditConfirmationDialog = ({ 
     isOpen, 
     onClose, 
     onConfirm, 
+    acceptenceState,
     user 
-  }:any) => {
+  }:TProps) => {
     // Create a handleConfirm function to ensure the event is passed
     const handleConfirm = (e:any) => {
       e.preventDefault();
@@ -30,9 +41,15 @@ const EditConfirmationDialog = ({
              تغيير حالة القبول
             </AlertDialogTitle>
             <AlertDialogDescription  className="text-right">
+             {user? <span>
+              هل انت متأكد من تغيير حالة المستخدم {user.name} إلى '{glossary.cp.user[user.acceptenceState as "accepted"|"denied"]}'؟
+              </span>:
               <span>
-              هل انت متأكد من تغيير حالة المستخدم {user.name} إلى '{glossary.cp.user[user.acceptenceState]}'؟
+
+  هل أنت متأكد من تغيير حالات المستخدمين الذين قد تم اختيارهم إلى '{[glossary.cp.user[acceptenceState as "accepted"|"denied"]]}' ؟
               </span>
+              
+              }
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter dir="rtl" className=" gap-x-4  mr-auto">

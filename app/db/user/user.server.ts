@@ -22,6 +22,23 @@ const editUserRegisteration = (userId:string,status:"accepted"|"denied",dbUrl:st
 }
 
 
+const bulkEditUserRegisteration = (userIds:string[],status:"accepted"|"denied",dbUrl:string )=>{
+    const db = client(dbUrl)
+
+    return new Promise((resolve, reject) => {
+        db.user.updateMany({
+            data: {acceptenceState:status},
+            where: {id:{in:userIds}}
+        }).then(()=>{
+            resolve({status:"success", message:glossary.status_response.success[status==="accepted"?"user_accepted":"user_denied"]})
+        }).catch((error:any)=>{
+            // console.log("ERROR [toggleUserRegisterationAcceptence]: ", error);
+            reject({status:"error", message:glossary.status_response.error[status==="accepted"?"user_accepted":"user_denied"]})
+        })
+      });
+}
+
+
 const getAllUsers = (dbUrl:string)=>{
     const db = client(dbUrl)
 
@@ -138,6 +155,7 @@ export default ({
     editUserRegisteration,
     addCertificateToUser,
     getUserWithCertificates,
-    getUserCertificates
+    getUserCertificates,
+    bulkEditUserRegisteration
 
 })
