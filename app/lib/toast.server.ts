@@ -22,6 +22,9 @@ export const toastSessionStorage = createCookieSessionStorage({
 		sameSite: 'lax',
 		path: '/',
 		httpOnly: true,
+		domain: process.env.NODE_ENV === 'production' 
+		? '.qyam.org'  // Note the leading dot to include subdomains
+		: undefined,
 		// secrets: process.env.SESSION_SECRET!.split(','),
 		secure: process.env.NODE_ENV === 'production',
 	},
