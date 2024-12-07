@@ -1,9 +1,6 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import userDB from "~/db/user/user.server";
 import glossary from "~/lib/glossary";
-import ChartGray from "~/assets/images/chart-gray.png";
-import ChartGreen from "~/assets/images/chart-green.png";
-import ChartRed from "~/assets/images/chart-red.png";
 import { Icon } from "~/components/icon";
 import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import {
@@ -11,6 +8,7 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  RowSelectionState,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -22,7 +20,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { AcceptenceState, QUser } from "~/types/types";
-import { useMemo, useState } from "react";
+import { HTMLProps, useEffect, useMemo, useRef, useState } from "react";
 import { sendEmail } from "~/lib/send-email.server";
 import EditConfirmationDialog from "../components/editConfirmationDialog";
 import { Input } from "~/components/ui/input";
@@ -119,7 +117,12 @@ const Users = () => {
   const fetcher = useFetcher();
   const [selectedUser, setSelectedUser] = useState<QUser | null>(null);
   const [globalFilter, setGlobalFilter] = useState<any>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({}) //
   const navigate = useNavigate();
+  const acceptedCount =  data.filter((user: any) => user.acceptenceState === "accepted")
+  .length
+  const rejectedCount =       data.filter((user: any) => user.acceptenceState === "denied")
+  .length
 
   const editUserProgramStatus = (
     id: string,
@@ -137,6 +140,30 @@ const Users = () => {
 
   const columns = useMemo(
     () => [
+      {
+        id: 'select',
+        header: ({ table }:any) => (
+          <IndeterminateCheckbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
+            }}
+          />
+        ),
+        cell: ({ row }:any) => (
+          <div className="px-1">
+            <IndeterminateCheckbox
+              {...{
+                checked: row.getIsSelected(),
+                disabled: !row.getCanSelect(),
+                indeterminate: row.getIsSomeSelected(),
+                onChange: row.getToggleSelectedHandler(),
+              }}
+            />
+          </div>
+        ),
+      },
       columnHelper.accessor("name", {
         header: () => "الاسم",
         cell: (info) => info.getValue(),
@@ -149,6 +176,10 @@ const Users = () => {
       columnHelper.accessor("phone", {
         header: () => "رقم الجوال",
         cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("region", {
+        header: () => "المنطقة",
+        cell: (info) => info.getValue()==="none"?"غير محدد": info.getValue(),
       }),
       columnHelper.accessor("acceptenceState", {
         header: "حالة التسجيل في البرنامج",
@@ -207,10 +238,14 @@ const Users = () => {
   const table = useReactTable({
     data,
     columns,
+    enableMultiRowSelection: true,
+    onRowSelectionChange: setRowSelection, //hoist up the row selection state to your own scope
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       globalFilter,
+      rowSelection, //pass the row selection state back to the table instance
+
     },
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: "includesString",
@@ -219,32 +254,46 @@ const Users = () => {
   return (
     <div>
       <div className="flex w-full px-12 gap-x-8">
-        <div className="analytics-box-filled flex-1 flex flex-col justify-center">
-          <p className="text-lg font-bold">{glossary.cp.registered} </p>
-          <h4 className="text-white mt-3">{data.length}</h4>
-          <img alt="chart" className="mr-auto " src={ChartGray} />
+        <div className="analytics-box-filled flex-1 flex">
+          <p className="text-lg font-bold">{glossary.cp.registered+":  "}{data.length} </p>
         </div>
-        <div className="analytics-box flex-1 flex flex-col justify-center">
-          <p className="text-lg font-bold">{glossary.cp.accepted} </p>
-          <h4 className=" mt-3">
-            {
-              data.filter((user: any) => user.acceptenceState === "accepted")
-                .length
-            }
-          </h4>
-          <img alt="chart" className="mr-auto " src={ChartGreen} />
+        <div className="analytics-box flex-1 flex">
+          <p className="text-lg font-bold">{glossary.cp.accepted+":  "} {
+            acceptedCount
+        
+            }</p>
+    
         </div>
 
-        <div className="analytics-box flex-1 flex flex-col justify-center">
-          <p className="text-lg font-bold">{glossary.cp.rejected} </p>
-          <h4 className=" mt-3">
-            {
-              data.filter((user: any) => user.acceptenceState === "denied")
-                .length
-            }
-          </h4>
-          <img alt="chart" className="mr-auto " src={ChartRed} />
+        <div className="analytics-box flex-1 flex">
+          <p className="text-lg font-bold">{glossary.cp.rejected+":  "} {
+         rejectedCount
+            } </p>
         </div>
+      </div>
+
+      <div className="flex w-full px-12 gap-x-8 my-5 p-3 bg-gray-100/50 rounded-md">
+      <h5 className="font-bold ml-12">الإحصائيات</h5>
+      <div>
+        <h6 className="text-[#344054] text-center my-2">المسجلين</h6>
+        <div className="admin-stat-box">{data.length}</div>
+      </div>
+
+
+
+      <div>
+        <h6 className="text-[#344054] text-center my-2">المناهج</h6>
+        <div className="admin-stat-box">{data.length}</div>
+      </div>
+
+
+
+      <div>
+        <h6 className="text-[#344054] text-center my-2">الساعات التدريبية</h6>
+        <div className="admin-stat-box">{data.length}</div>
+      </div>
+        
+  
       </div>
 
       <div className="w-full"></div>
@@ -308,4 +357,26 @@ const Users = () => {
   );
 };
 
+function IndeterminateCheckbox({
+  indeterminate,
+  className = '',
+  ...rest
+}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+  const ref = useRef<HTMLInputElement>(null!)
+
+  useEffect(() => {
+    if (typeof indeterminate === 'boolean') {
+      ref.current.indeterminate = !rest.checked && indeterminate
+    }
+  }, [ref, indeterminate])
+
+  return (
+    <input
+      type="checkbox"
+      ref={ref}
+      className={className + ' cursor-pointer'}
+      {...rest}
+    />
+  )
+}
 export default Users;

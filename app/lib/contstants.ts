@@ -34,7 +34,7 @@ export const NavbarElements: NavElement[] = [
     {
       id: "registeration",
       arabicLabel: "شروط التسجيل",
-      link:"/signup",
+      link:"/join",
       visibility: true,
       onClick() {},
       requiredRole:null

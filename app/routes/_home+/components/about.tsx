@@ -40,10 +40,10 @@ const About = () => {
         </p>
 
         <div className="flex justify-end mt-12 gap-x-4">
-          <button onClick={()=>navigate("/levels")} className="text-center text-xs md:text-lg shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05) bg-white  text-primary border border-[#D0D5DD] px-5 py-2 rounded-lg hover:opacity-60 transition-opacity">
+          {/* <button onClick={()=>navigate("/levels")} className="text-center text-xs md:text-lg shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05) bg-white  text-primary border border-[#D0D5DD] px-5 py-2 rounded-lg hover:opacity-60 transition-opacity">
           {glossary.about.more}
-          </button>
-          <button onClick={()=>navigate("/levels")} className="text-center text-xs md:text-lg  bg-primary text-white border border-tertiary px-5 py-2  rounded-lg  hover:opacity-80 transition-opacity">
+          </button> */}
+          <button onClick={()=>navigate("/join")} className="text-center text-xs md:text-lg  bg-primary text-white border border-tertiary px-5 py-2  rounded-lg  hover:opacity-80 transition-opacity">
           {glossary.about.join} {" "}
           </button>
         </div>
