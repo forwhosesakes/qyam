@@ -49,7 +49,7 @@ const Navbar = () => {
     <ul className="flex flex-col-reverse md:flex-row  items-end gap-x-8 gap-y-8 ">
       {
         NavbarElements
-        .filter(element => canViewElement(element,(user as any)?.role ?? null))
+        .filter(element => canViewElement(element,(user as any)))
         .map(element=>(
           <li key={element.id} className="flex cursor-pointer font-bold text-gray-700">
             <NavLink prefetch="intent" to={element.link}>

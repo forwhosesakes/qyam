@@ -1,12 +1,12 @@
 import glossary from "~/lib/glossary";
 import { client } from "../db-client.server";
-import { UserCertificate } from "~/types/types";
+import { AcceptenceState, UserCertificate } from "~/types/types";
 import { LEVELS } from "~/lib/constants";
 
 
 
 
-const editUserRegisteration = (userId:string,status:"accepted"|"denied",dbUrl:string)=>{
+const editUserRegisteration = (userId:string,status:AcceptenceState,dbUrl:string)=>{
     const db = client(dbUrl)
 
     return new Promise((resolve, reject) => {

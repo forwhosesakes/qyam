@@ -1,7 +1,6 @@
 import glossary from "../../lib/glossary";
 import TitleBlock from "~/components/ui/title-block";
 import QyamSign from "~/assets/images/qyam-sign.png";
-import { Button } from "~/components/ui/button";
 import { Link } from "@remix-run/react";
 
 

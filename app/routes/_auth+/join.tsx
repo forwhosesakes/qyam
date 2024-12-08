@@ -1,27 +1,32 @@
 import { Form, useActionData, useSubmit } from "@remix-run/react";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import glossary from "./glossary";
 import TitleBlock from "~/components/ui/title-block";
 import { createId } from "@paralleldrive/cuid2";
 import { toast as showToast } from "sonner";
-import { requireNoAuth } from "~/lib/get-authenticated.server";
+import { getAuthenticated } from "~/lib/get-authenticated.server";
 import LoadingOverlay from "~/components/loading-overlay";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Button } from "~/components/ui/button";
 import { REGIONS } from "~/lib/constants";
-import { Icon } from "~/components/icon";
+import { QUser } from "~/types/types";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  return await requireNoAuth(request, context);
+  const user= await getAuthenticated({request, context});
+  if(!user) null
+    else if((user as QUser).acceptenceState==="accepted")
+      return redirect("/")
+    else 
+    return redirect(`/404?status=${(user as QUser).acceptenceState}`)
+
+  
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {

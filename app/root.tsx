@@ -50,9 +50,9 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   const session = await getAuth(context).api.getSession({
     headers: request.headers, // you need to pass the headers object.
   });
-  const text = "أحمد الجميل جدا"
+  const text = "Test"
   const user =
-    session?.user && session.user.emailVerified ? (session.user as User) : null;
+    session?.user ? (session.user as User) : null;
     const contactNumber = context.cloudflare.env.CONTACT_NUMBER
     const whatsappURL = `https://wa.me/${contactNumber}?text=${text}`
   try {

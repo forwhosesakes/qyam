@@ -224,7 +224,6 @@ const Users = () => {
   };
   const { users, stats } = useLoaderData<{ users: any[]; stats: any }>();
   const data = users.data;
-  console.log("stats::", stats, "users::", users);
 
   const fetcher = useFetcher();
   const [localStats, setLocalStats] = useState({
@@ -273,7 +272,7 @@ const Users = () => {
   };
 
   const handleEditUserClick = (
-    status: "accepted" | "denied",
+    status: AcceptenceState,
     user: QUser,
     e: any
   ) => {
@@ -354,7 +353,7 @@ const Users = () => {
         header: () => "الإجراء",
         cell: ({ row }: any) => {
           return (
-            row.original.acceptenceState !== "idle" && (
+            row.original.acceptenceState !== "idle" ? (
               <div className="flex gap-x-4">
                 <button
                   onClick={(e) =>
@@ -375,8 +374,28 @@ const Users = () => {
                 >
                   رفض
                 </button>
+
+
+
+                <button
+                  onClick={(e) =>
+                    handleEditUserClick("idle", row.original, e)
+                  }
+                  disabled={row.original.acceptenceState === "idle"}
+                  className={`button p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+                >
+                تعطيل
+                </button>
               </div>
-            )
+            ):    <button
+            onClick={(e) =>
+              handleEditUserClick("accepted", row.original, e)
+            }
+            disabled={row.original.acceptenceState === "accepted"}
+            className={`button p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+          >
+          إعادة تنشيط
+          </button>
           );
         },
       },
