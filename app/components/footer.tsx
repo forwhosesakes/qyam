@@ -3,8 +3,23 @@ import LogoBW from "~/assets/images/logo-bw.png";
 import FooterLogo from "~/assets/images/footer-logo.png";
 import glossary from "~/lib/glossary";
 import { Icon } from "./icon";
+import { useFetcher } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
-const Footer = ({ generatedQRCode }) => {
+const Footer = () => {
+  const fetcher = useFetcher()
+    const [generatedQRCode,setGeneratedQRCode] = useState<null|string>(null)
+
+useEffect(()=>{
+  fetcher.load("/api/qrcode")
+},[])
+
+useEffect(()=>{
+  if(fetcher.data?.generatedQRCode){
+    setGeneratedQRCode(fetcher.data?.generatedQRCode)
+  }
+},[fetcher.data])
+  
   return (
     <footer className="text-white bg-transparent">
       <img className={"w-full"} src={FooterPaths} alt="footer" />

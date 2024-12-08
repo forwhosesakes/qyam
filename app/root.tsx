@@ -47,44 +47,32 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  const text = "Test";
-  const contactNumber = context.cloudflare.env.CONTACT_NUMBER;
-  const whatsappURL = `https://wa.me/${contactNumber}?text=${text}`;
-
   try {
-    const [sessionResponse, toastResponse, qrCodeResponse] = await Promise.all([
+    const [sessionResponse, toastResponse] = await Promise.all([
       getAuth(context).api.getSession({
         headers: request.headers,
       }),
-      
       getToast(request),
-      
-      QrCode.toDataURL(whatsappURL)
     ]);
 
-    const user = sessionResponse?.user ? (sessionResponse.user as User) : null;
-    
+    const user = sessionResponse?.user && sessionResponse.user.emailVerified 
+      ? (sessionResponse.user as User) 
+      : null;
+
     return Response.json(
       { 
         toast: toastResponse.toast, 
-        user, 
-        generatedQRCode:qrCodeResponse
+        user,
       }, 
       { 
         headers: toastResponse.headers || undefined 
       }
     );
-
   } catch (error) {
-    // If there's an error, return minimal response
-    const user = (await getAuth(context).api.getSession({
-      headers: request.headers,
-    }))?.user as User || null;
-
     return Response.json(
       { 
         toast: null, 
-        user 
+        user: null 
       }, 
       { 
         headers: undefined 
