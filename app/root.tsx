@@ -63,6 +63,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
       { 
         toast: toastResponse.toast, 
         user,
+        phoneNumber:context.cloudflare.env.CONTACT_NUMBER,
       }, 
       { 
         headers: toastResponse.headers || undefined 
@@ -119,7 +120,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const location = useLocation();
-  const { toast, generatedQRCode } = useLoaderData<any>();
+  const { toast, phoneNumber } = useLoaderData<any>();
   useToast(toast);
   // console.log("qrcode:::",generatedQRCode);
 
@@ -132,7 +133,7 @@ export default function App() {
     <>
       {showNavbar && <Navbar/>}
       <Outlet />
-      {showNavbar && <Footer/>}
+      {showNavbar && <Footer phoneNumber={phoneNumber} text={""} />}
     </>
   );
 }

@@ -3,22 +3,25 @@ import LogoBW from "~/assets/images/logo-bw.png";
 import FooterLogo from "~/assets/images/footer-logo.png";
 import glossary from "~/lib/glossary";
 import { Icon } from "./icon";
-import { useFetcher } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import QRCode from "qrcode"
+import toSJIS from "qrcode/helper/to-sjis"
 
-const Footer = () => {
-  const fetcher = useFetcher()
-    const [generatedQRCode,setGeneratedQRCode] = useState<null|string>(null)
+const Footer = ({phoneNumber,text}:{phoneNumber:number,text:string}) => {
+  
+
+
+// const canvasRef = useRef<HTMLCanvasElement>(null)
 
 useEffect(()=>{
-  fetcher.load("/api/qrcode")
-},[])
+  QRCode.toCanvas(document.getElementById("qrcode"), `https://wa.me/${phoneNumber}?text=${text}`, {toSJISFunc:toSJIS},(error)=>{
+    if(error)console.error(error);
+    else console.log("success");
+  })
 
-useEffect(()=>{
-  if(fetcher.data?.generatedQRCode){
-    setGeneratedQRCode(fetcher.data?.generatedQRCode)
-  }
-},[fetcher.data])
+  console.log("happened qrcode");
+  
+})
   
   return (
     <footer className="text-white bg-transparent">
@@ -34,7 +37,8 @@ useEffect(()=>{
           <div className="flex flex-col gap-3 justify-center items-center ">
             <p className="text-white">تواصل معنا على</p>
             <p>٠٥١٢٣٤٦٧٨٩</p>
-            <img className=" w-32 h-32" src={generatedQRCode} alt="" />
+            {/* <img className=" w-32 h-32" src={} alt="" /> */}
+            <canvas id="qrcode"></canvas>
           </div>
           <img src={FooterLogo} alt="logo" className="md:block hidden" />
         </div>
