@@ -57,10 +57,10 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     const whatsappURL = `https://wa.me/${contactNumber}?text=${text}`
   try {
     const { toast, headers } = await getToast(request);
-    const generatedQRCode = await QrCode.toDataURL(whatsappURL)
+    // const generatedQRCode = await QrCode.toDataURL(whatsappURL)
     // console.log("qrcode:::",generatedQRCode);
     
-    return Response.json({ toast, user, generatedQRCode }, { headers: headers || undefined });
+    return Response.json({ toast, user, generatedQRCode:null }, { headers: headers || undefined });
   } catch (error) {
 
     return Response.json({ toast:null, user }, { headers:  undefined });
