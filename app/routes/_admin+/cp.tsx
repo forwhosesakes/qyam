@@ -45,7 +45,7 @@ const ControlPanel = () => {
   });
 
   return (
-    <section className="pt-12 md:pt-24 px-24 md:px-48 bg-section min-h-screen">
+    <section className="pt-12 md:pt-24 px-8  pb-36 lg:px-48 bg-section min-h-screen">
       <div className="my-6 flex w-full justify-between">
         <div className="">
           <h3>{glossary.cp.control_panel}</h3>

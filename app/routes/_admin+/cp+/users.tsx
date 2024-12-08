@@ -217,7 +217,7 @@ const Users = () => {
     }
 
     return (
-      <div className={`border w-fit mr-4 px-5 rounded-full p-2 ${styles}`}>
+      <div className={`border w-fit mr-4 px-5 text-nowrap rounded-full p-2 ${styles}`}>
         {glossary.cp.user[status]}
       </div>
     );
@@ -382,7 +382,7 @@ const Users = () => {
                     handleEditUserClick("idle", row.original, e)
                   }
                   disabled={row.original.acceptenceState === "idle"}
-                  className={`button p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+                  className={`button  p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
                 >
                 تعطيل
                 </button>
@@ -420,7 +420,7 @@ const Users = () => {
   });
 
   return (
-    <div>
+    <div >
       <div className="flex w-full px-12 gap-x-8">
         <div className="analytics-box-filled flex-1 flex">
           <p className="text-lg font-bold">
@@ -513,7 +513,7 @@ const Users = () => {
           )}
         </div>
 
-        <div className="relative w-1/3">
+        <div className="relative w-1/2 lg:w-1/3">
           <Icon className="absolute right-2 top-3" name="search" size="sm" />
           <div className="absolute gap-x-2 flex left-2 top-1">
             <button

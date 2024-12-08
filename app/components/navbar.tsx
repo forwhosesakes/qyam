@@ -65,7 +65,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="z-50  fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-2 md:px-32  px-3 gap-x-8">
+    <nav className="z-50   fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-2 lg:px-32  px-3 gap-x-8">
      <Link to="/">
      <img
         className={"h-8 w-8 md:h-auto md:w-auto  ml-auto md:ml-0"}

@@ -39,9 +39,7 @@ export async function redirectWithToast(
 }
 
 export async function createToastHeaders(toastInput: ToastInput) {
-	console.log("createToastHeaders ",process.env.NODE_ENV);
 	const session = await toastSessionStorage.getSession()
-	console.log("createToastHeaders ",session);
 
 	const toast = ToastSchema.parse(toastInput)
 	session.flash(toastKey, toast)

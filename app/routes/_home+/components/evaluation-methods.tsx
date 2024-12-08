@@ -10,17 +10,18 @@ const EvaluationMethods = () => {
     { name: "education_situation", icon: "graduate" },
   ];
   return (
-    <section id="evaluation-methods" className="flex flex-col">
-      <div className="mx-6 md:mx-16  self-start">
+    <section id="evaluation-methods" className="mb-12 flex flex-col md:pr-6">
+      <div className="mx-6 sm:mx-16  self-start">
         <TitleBlock text={glossary.evaluation_methods.title} />
-        <p className="py-4">{glossary.evaluation_methods.description}</p>
+        <p className="py-4 text-2xl">{glossary.evaluation_methods.description}</p>
       </div>
 
-      <div className="relative mx-6  md:mx-24   2xl:w-2/3  xl:w-4/6 w-5/6  h-[180px] md:h-[266px]   ">
+      <div className="relative mx-6  w-5/6  sm:mx-24   xl:w-3/4   h-[180px] md:h-[266px]   ">
       <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 1217 266"
   fill="none"
+  width={"100%"}
 >
   <path
     d="M1178.02 0H33.7321C15.1023 0 0 15.0562 0 33.6182V38.8604C14.3527 147.309 108.902 225.601 234.736 225.59L1178.02 266C1199.55 266 1217 248.603 1217 227.14V38.8604C1217 17.397 1199.55 0 1178.02 0Z"
@@ -28,7 +29,7 @@ const EvaluationMethods = () => {
   />
 </svg>
         <svg
-          className="md:block hidden absolute top-4 right-1"
+          className="lg:block hidden absolute top-4 right-1"
           xmlns="http://www.w3.org/2000/svg"
           width="104"
           height="208"
@@ -72,14 +73,14 @@ const EvaluationMethods = () => {
             strokeMiterlimit="10"
           />
         </svg>
-        <div className="absolute right-2 md:right-36 top-2 md:top-8   flex  flex-wrap 2xl:gap-x-36 lg:gap-x-32 gap-x-8 justify-center items-center">
+        <div className="absolute right-2 md:right-10 lg:right-36 top-2 lg:top-12  flex  flex-wrap 2xl:gap-x-36 lg:gap-x-32 sm:gap-x-16 gap-x-8 justify-center items-center">
           {methods.map((method: any) => (
             <div
               key={method.name}
               className="flex z-20 flex-col md:gap-y-4 w-min"
             >
               <Icon size="xl7" name={method.icon} />
-              <h5 className="text-white  md:text-wrap">
+              <h5 className="text-white  lg:text-wrap">
                 {
                   glossary.evaluation_methods[
                     method.name as keyof typeof glossary.evaluation_methods

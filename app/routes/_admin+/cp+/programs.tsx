@@ -25,7 +25,6 @@ export async function loader({ context }: LoaderFunctionArgs) {
     );
     return Response.json({ success: true, programs });
   } catch (error) {
-    console.error("Loader error:", error);
     return Response.json({ success: false, error });
   }
 }

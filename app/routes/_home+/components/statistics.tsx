@@ -7,9 +7,10 @@ const Statistics = () => {
   const { stats } = useLoaderData<{ stats: { registeredUsers: number; curriculums: number; trainingHours: number } }>();
 
   return (
-    <section id="statistics" className="relative   min-h-[40vh]">
+    <section id="statistics" className="   min-h-[40vh]">
+
       <TitleBlock className="md:m-24 m-6" text="إحصائيات" />
-      <div className="flex gap-36 w-full h-full m-10 mt-24 justify-center flex-wrap">
+      <div className="flex gap-36 w-full h-full md:m-10 mt-24 justify-center flex-wrap">
         <div className="bg-secondary py-10  min-w-44 rounded-3xl h-[30vh] max-h-full w-1/6">
           <div className="relative">
             <img
@@ -21,7 +22,7 @@ const Statistics = () => {
 
           <div className=" h-full w-full flex flex-col flex-wrap items-center justify-between">
             <h1 className="text-primary">{stats.registeredUsers}</h1>
-            <p className="text-primary">المسجلين</p>
+            <h4 className="text-primary">المسجلين</h4>
             <svg
               width="69"
               height="51"
@@ -66,7 +67,7 @@ const Statistics = () => {
           </div>
           <div className=" h-full w-full flex flex-col flex-wrap items-center justify-between">
             <h1 className="text-white">{stats.curriculums}</h1>
-            <p className="text-white">المناهج</p>
+            <h4 className="text-white">المناهج</h4>
             <svg
               width="36.75"
               height="35"
@@ -101,7 +102,7 @@ const Statistics = () => {
           </div>
           <div className=" h-full w-full flex flex-col flex-wrap items-center justify-between">
             <h1 className="text-black">{stats.trainingHours}</h1>
-            <p className="text-black">ساعة تدريبية</p>
+            <h4 className="text-black">ساعة تدريبية</h4>
             <svg width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M31.5833 61.1667C47.9218 61.1667 61.1667 47.9218 61.1667 31.5833C61.1667 15.2449 47.9218 2 31.5833 2C15.2449 2 2 15.2449 2 31.5833C2 47.9218 15.2449 61.1667 31.5833 61.1667Z" stroke="black" strokeWidth="2.5"/>
 <path d="M31.5834 19.75V31.5833L37.5 37.5" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
