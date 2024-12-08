@@ -19,7 +19,7 @@ export default function Articles() {
   const articles = useLoaderData<Article[]>();
 
   return (
-    <div className="px-8 py-6">
+    <div className="lg:px-8 py-6">
       <h4 className="text-primary font-bold mb-8">المقالات</h4>
       <div className="flex flex-wrap bg-gray-50 rounded-lg p-4 gap-6">
         {articles?.map((article) => (

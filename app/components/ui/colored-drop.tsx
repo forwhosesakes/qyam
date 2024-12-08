@@ -1,7 +1,7 @@
 interface IProps {
   color:string, 
   className:string,
-  size?:"sm"|"md"|"lg"|"xl"
+  size?:"sm"|"md"|"lg"|"xl"|"mx"
 }
 
 const ColoredDrop = ({color,className,size="lg"}:IProps)=>{
@@ -11,6 +11,9 @@ const ColoredDrop = ({color,className,size="lg"}:IProps)=>{
       return 1/4
         case "md":
           return 1/2
+
+          case "mx":
+            return 3/4
           case "lg":
             return 1
       case "xl":

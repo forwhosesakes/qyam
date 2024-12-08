@@ -97,7 +97,7 @@ const Profile = () => {
   // }
 
   return (
-    <section className="pt-24 px-48  bg-section ">
+    <section className="pt-24 px-6 lg:px-48  bg-section ">
       <div className="my-6 flex w-full justify-between">
         <div className="">
         <h3>بياناتي</h3>
@@ -137,12 +137,12 @@ const Profile = () => {
       
 
           <div className="flex flex-wrap  gap-x-6 gap-y-4 [&>p]:text-sm mb-12 ">
-            <p className="text-[#475467] font-bold border border-[#D0D5DD] rounded-lg p-2 min-w-72 text-right">
+            <p className="text-[#475467] font-bold border border-[#D0D5DD] rounded-lg p-2 lg:min-w-72 text-right">
               <Icon name="person-gray" size="md" />
               <span className="mr-2">الاسم :</span>
               {user.name}
             </p>
-            <p className="text-[#475467] font-bold  border border-[#D0D5DD] rounded-lg p-2  min-w-72 text-right">
+            <p className="text-[#475467] font-bold  border border-[#D0D5DD] rounded-lg p-2  lg:min-w-72 text-right">
               <Icon name="email" size="md" />
 
               <span className="mr-2"> الإيميل :</span>
@@ -157,13 +157,13 @@ const Profile = () => {
               {user.id}
             </p> */}
 
-            <p className="text-[#475467] font-bold border border-[#D0D5DD] rounded-lg p-2 min-w-72 text-right">
+            <p className="text-[#475467] font-bold border border-[#D0D5DD] rounded-lg p-2 lg:min-w-72 text-right">
               <Icon name="mobile" size="md" />
               <span className="mr-2"> الجوال :</span>
               {user.phone}
             </p>
 
-            <p className="text-[#475467] border border-[#D0D5DD] rounded-lg p-2 min-w-72 text-right">
+            <p className="text-[#475467] border border-[#D0D5DD] rounded-lg p-2 lg:min-w-72 text-right">
               <span className="mr-2 font-bold"> المستوى :</span>
               {LEVELS[user.level as keyof typeof LEVELS]}
             </p>
@@ -172,7 +172,7 @@ const Profile = () => {
 
         <div className="bg-gray-50 rounded-xl p-8 my-6">
           <h4 className="mb-8 text-primary font-bold">إحصائيات المدرب</h4>
-          <ul className="flex justify-around w-full">
+          <ul className="flex flex-col lg:flex-row lg:justify-around items-center w-full">
             <li className="flex flex-col">
               <Icon name="clock" size="xl4" />
               <p className="text-[#475467]  rounded-lg p-2 w-72 text-center">
@@ -198,7 +198,7 @@ const Profile = () => {
         <div className="bg-gray-50 rounded-xl p-8 my-6">
           <>
             <h4 className="font-bold text-primary my-4">شهاداتي</h4>
-            <div className="bg-gray-50 rounded-xl p-8 my-6">
+            <div className="bg-gray-50 rounded-xl lg:p-8 my-6">
               <div className="border border-gray-100 rounded-lg p-4">
                 {user.UserCertificate.length ? (
                   <ul>

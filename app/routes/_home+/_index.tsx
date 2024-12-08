@@ -11,12 +11,6 @@ import statisticsDB from "~/lib/statistics.server";
 export async function loader({ request , context}: LoaderFunctionArgs) {
   const stats = await statisticsDB.getStatistics(context.cloudflare.env.DATABASE_URL)
   
-	//check if the user is logged in 
-//   const session = await getAuth(context).api.getSession({
-//     headers:  request.headers// you need to pass the headers object.
-// })
-//   if (session?.user && session.user.emailVerified) return null
-//   else return  redirect("login")
 return {stats}
 }
 
@@ -28,8 +22,9 @@ export default function Index() {
       <EvaluationMethods/>
       <TeachingMethods/>
       <TargetedUsers/>
-      <Partners/>
       <Statistics/>
+
+      <Partners/>
       <Outro/>
     </div>
   );

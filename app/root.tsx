@@ -55,7 +55,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
       getToast(request),
     ]);
 
-    const user = sessionResponse?.user && sessionResponse.user.emailVerified 
+    const user = sessionResponse?.user 
       ? (sessionResponse.user as User) 
       : null;
 
