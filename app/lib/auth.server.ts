@@ -62,7 +62,6 @@ export const getAuth = (context: AppLoadContext): Auth | any => {
             const user = (await dbClient.user.findUnique({
               where: { id: sessionInstance.userId },
             })) as QUser;
-            console.log("user: ", user);
 
             if (
               user &&
