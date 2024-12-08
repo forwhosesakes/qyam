@@ -20,7 +20,7 @@ import { QUser } from "~/types/types";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
   const user= await getAuthenticated({request, context});
-  if(!user) null
+  if(!user) return null
     else if((user as QUser).acceptenceState==="accepted")
       return redirect("/")
     else 
