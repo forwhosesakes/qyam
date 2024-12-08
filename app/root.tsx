@@ -132,7 +132,7 @@ export default function App() {
     <>
       {showNavbar && <Navbar/>}
       <Outlet />
-      {showNavbar && <Footer generatedQRCode={generatedQRCode} />}
+      {showNavbar && <Footer/>}
     </>
   );
 }
