@@ -22,11 +22,8 @@ export const toastSessionStorage = createCookieSessionStorage({
 		sameSite: 'lax',
 		path: '/',
 		httpOnly: true,
-		domain: process.env.NODE_ENV === 'production' 
-		? '.qyam.org'  // Note the leading dot to include subdomains
-		: undefined,
 		// secrets: process.env.SESSION_SECRET!.split(','),
-		secure: process.env.NODE_ENV === 'production',
+		secure: !(process.env.NODE_ENV === 'development'),
 	},
 })
 
@@ -42,15 +39,9 @@ export async function redirectWithToast(
 }
 
 export async function createToastHeaders(toastInput: ToastInput) {
-
 	console.log("createToastHeaders ",process.env.NODE_ENV);
-	
-
-
 	const session = await toastSessionStorage.getSession()
 	console.log("createToastHeaders ",session);
-
-	
 
 	const toast = ToastSchema.parse(toastInput)
 	session.flash(toastKey, toast)
