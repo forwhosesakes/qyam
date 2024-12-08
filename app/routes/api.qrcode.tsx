@@ -13,3 +13,12 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     return Response.json({ generatedQRCode: null });
   }
 }
+
+
+export default function QrCode(){
+    return(
+        <div>
+            here should be qr
+        </div>
+    )
+} 
