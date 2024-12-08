@@ -1,5 +1,6 @@
 import { redirect, json } from "@remix-run/react";
 import { getAuthenticated } from "~/lib/get-authenticated.server";
+import { QUser } from "~/types/types";
 
 interface LoaderContext {
   request: Request;
@@ -11,19 +12,14 @@ export async function loader({ request, context }: LoaderContext) {
   const user = await getAuthenticated({ request, context });
   
   if (!user) {
-    return json(
+    return Response.json(
       { message: "Unauthorized - Please login to access this resource" },
       { status: 401 }
     );
   }
+  else if (["denied", "idle"].includes((user as QUser).acceptenceState)) 
+  return redirect("/404");
 
-  // Additional before hook conditions
-  if (!user.isEmailVerified) {
-    return json(
-      { message: "Please verify your email before accessing this resource" },
-      { status: 401 }
-    );
-  }
 
   // Main loader logic
   return redirect("courses");
