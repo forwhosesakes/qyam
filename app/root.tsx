@@ -47,24 +47,49 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  const session = await getAuth(context).api.getSession({
-    headers: request.headers, // you need to pass the headers object.
-  });
-  const text = "Test"
-  const user =
-    session?.user ? (session.user as User) : null;
-    const contactNumber = context.cloudflare.env.CONTACT_NUMBER
-    const whatsappURL = `https://wa.me/${contactNumber}?text=${text}`
+  const text = "Test";
+  const contactNumber = context.cloudflare.env.CONTACT_NUMBER;
+  const whatsappURL = `https://wa.me/${contactNumber}?text=${text}`;
+
   try {
-    const { toast, headers } = await getToast(request);
-    const generatedQRCode = await QrCode.toDataURL(whatsappURL)
-    // console.log("qrcode:::",generatedQRCode);
+    const [sessionResponse, toastResponse, qrCodeResponse] = await Promise.all([
+      getAuth(context).api.getSession({
+        headers: request.headers,
+      }),
+      
+      getToast(request),
+      
+      QrCode.toDataURL(whatsappURL)
+    ]);
+
+    const user = sessionResponse?.user ? (sessionResponse.user as User) : null;
     
-    return Response.json({ toast, user, generatedQRCode }, { headers: headers || undefined });
+    return Response.json(
+      { 
+        toast: toastResponse.toast, 
+        user, 
+        generatedQRCode:qrCodeResponse
+      }, 
+      { 
+        headers: toastResponse.headers || undefined 
+      }
+    );
+
   } catch (error) {
+    // If there's an error, return minimal response
+    const user = (await getAuth(context).api.getSession({
+      headers: request.headers,
+    }))?.user as User || null;
 
-    return Response.json({ toast:null, user }, { headers:  undefined });
-
+    return Response.json(
+      { 
+        toast: null, 
+        user 
+      }, 
+      { 
+        headers: undefined 
+      }
+    );
   }
 }
 export function Layout({ children }: { children: React.ReactNode }) {
