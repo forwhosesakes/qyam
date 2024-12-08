@@ -13,23 +13,25 @@ export type Environment = {
   };
 };
 
-
 export const getAuth = (context: AppLoadContext): Auth | any => {
   // Create a new auth instance for each request
-  const dbClient = client(context.cloudflare.env.DATABASE_URL)
-  
+  const dbClient = client(context.cloudflare.env.DATABASE_URL);
 
   return betterAuth({
     emailAndPassword: {
       enabled: true,
-      autoSignIn: false ,
+      autoSignIn: false,
       // requireEmailVerification: true,
       sendResetPassword: async ({ user, url, token }, request) => {
         await sendEmail(
           {
             to: user.email,
             subject: "إعادة تعيين كلمة المرور",
-            text: `قم بتعيين كلمة مرورك بالضغط على هذا : <a href="${url}">الرابط</a>`,
+            template: "password-reset",
+            props: {
+              resetUrl: url,
+            },
+            text: `قم بتعيين كلمة مرورك بالضغط على هذا الرابط: ${url}`,
           },
           context.cloudflare.env.RESEND_API,
           context.cloudflare.env.MAIN_EMAIL
@@ -43,45 +45,42 @@ export const getAuth = (context: AppLoadContext): Auth | any => {
         bio: { type: "string" },
         phone: { type: "number" },
         acceptenceState: { type: "string" },
-        trainingHours:{type:"number"},
-        noStudents:{type:"number"},
-        region:{type:"string"},
-      level:{type:"string"},
-
-
+        trainingHours: { type: "number" },
+        noStudents: { type: "number" },
+        region: { type: "string" },
+        level: { type: "string" },
       },
     },
-    database:  prismaAdapter(dbClient, {
+    database: prismaAdapter(dbClient, {
       provider: "postgresql",
-    }) ,
-
-
+    }),
 
     databaseHooks: {
       session: {
         create: {
-            before: async (sessionInstance:any) => {
-              const user=await dbClient.user.findUnique({where:{id:sessionInstance.userId}}) as QUser
-              console.log("user: ", user);
-              
-              if(user && user.acceptenceState!=="accepted"&&user.role==="user")
-              {
-                return false
-              }
-              
-               return {
-                   data: {
-                      ...sessionInstance,
-                     
-                   }
-                }
-            },
-        },
+          before: async (sessionInstance: any) => {
+            const user = (await dbClient.user.findUnique({
+              where: { id: sessionInstance.userId },
+            })) as QUser;
+            console.log("user: ", user);
 
-     
+            if (
+              user &&
+              user.acceptenceState !== "accepted" &&
+              user.role === "user"
+            ) {
+              return false;
+            }
+
+            return {
+              data: {
+                ...sessionInstance,
+              },
+            };
+          },
+        },
+      },
     },
- },
     plugins: [admin()],
   });
 };
-
