@@ -43,11 +43,11 @@ export default defineConfig({
       "@radix-ui/react-tooltip",
       "@react-email/components",
     ],
-    exclude: ["@remix-run/dev", "@remix-run/server-runtime"],
+    // exclude: ["@remix-run/dev"],
   },
   build: {
     rollupOptions: {
-      external: [/node:.*/, '@remix-run/dev', '@remix-run/server-runtime'],
+      // external: [/node:.*/, '@remix-run/dev', '@remix-run/server-runtime'],
       output: {
         manualChunks: {
           'radix': [

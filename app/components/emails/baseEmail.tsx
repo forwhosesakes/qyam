@@ -1,13 +1,33 @@
-import {
-  Body,
-  Container,
-  Head,
-  Html,
-  Preview,
-  Section,
-  Tailwind,
-} from "@react-email/components";
 
+import { lazy } from 'react'
+
+
+const Body = lazy(async () => {
+  return { default: (await import("@react-email/components")).Body };
+});
+
+const Section = lazy(async () => {
+  return { default: (await import("@react-email/components")).Section };
+});
+
+const Container = lazy(async () => {
+  return { default: (await import("@react-email/components")).Container };
+});
+
+const Preview = lazy(async () => {
+  return { default: (await import("@react-email/components")).Preview };
+});
+
+const Tailwind = lazy(async () => {
+  return { default: (await import("@react-email/components")).Tailwind };
+});
+
+const Html = lazy(async () => {
+  return { default: (await import("@react-email/components")).Html };
+});
+const Head = lazy(async () => {
+  return { default: (await import("@react-email/components")).Head };
+});
 interface BaseEmailProps {
   preview?: string;
   children: React.ReactNode;

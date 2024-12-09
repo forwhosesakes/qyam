@@ -2,7 +2,7 @@ import  { useEffect } from "react";
 import TitleBlock from "~/components/ui/title-block";
 import glossary from "../../../lib/glossary";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
-import AllPartners from "~/assets/images/logos.svg";
+import AllPartners from "~/assets/images/logos.webp";
 
 import { infiniteScroller } from "~/lib/animation";
 
@@ -23,7 +23,7 @@ const Partners = () => {
 
       <div className="flex flex-wrap gap-16 w-full justify-center sm:gap-4">
   
-        <img src={AllPartners} alt="logos"/>
+        <img className="lg:w-4/5" src={AllPartners} alt="logos"/>
 
         </div>
 

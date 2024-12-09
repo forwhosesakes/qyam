@@ -1,5 +1,16 @@
-import { Text, Button, Hr } from "@react-email/components";
+import { lazy } from "react";
 import BaseEmail from "./baseEmail";
+const Text = lazy(async () => {
+  return { default: (await import("@react-email/components")).Text };
+});
+
+const Button = lazy(async () => {
+  return { default: (await import("@react-email/components")).Button };
+});
+
+const Hr = lazy(async () => {
+  return { default: (await import("@react-email/components")).Hr };
+});
 
 interface WelcomeEmailProps {
   name: string;

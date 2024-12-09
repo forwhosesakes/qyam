@@ -1,5 +1,19 @@
-import { Text, Button, Img } from "@react-email/components";
 import BaseEmail from "./baseEmail";
+import { lazy } from "react";
+
+const Text = lazy(async () => {
+  return { default: (await import("@react-email/components")).Text };
+});
+
+const Button = lazy(async () => {
+  return { default: (await import("@react-email/components")).Button };
+});
+
+const Img = lazy(async () => {
+  return { default: (await import("@react-email/components")).Img };
+});
+
+
 
 
 interface PasswordResetEmailProps {
