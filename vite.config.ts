@@ -58,7 +58,7 @@ export default defineConfig({
             '@radix-ui/react-slot',
             '@radix-ui/react-tooltip'
           ],
-          'email': ['@react-email/components'],
+          'email': ['@react-email/components','@react-email/render'],
         },
       },
     },
@@ -78,6 +78,7 @@ export default defineConfig({
       'lucide-react',
       'class-variance-authority',
       'clsx',
+      '@react-email/render',
       'react-dropzone',
       'tailwind-merge'
     ],
