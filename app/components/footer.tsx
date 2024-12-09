@@ -38,9 +38,9 @@ useEffect(()=>{
             <p className="text-white">تواصل معنا على</p>
             <p>٠٥١٢٣٤٦٧٨٩</p>
             {/* <img className=" w-32 h-32" src={} alt="" /> */}
-            <canvas id="qrcode"></canvas>
+            <canvas className="ml-2" id="qrcode"></canvas>
           </div>
-          <img src={FooterLogo}  alt="logo" className="md:block hidden h-[200px] w-[200px] object-contain flex-shrink-0" />
+          <img src={FooterLogo}  alt="logo" className="md:block hidden h-[200px] w-[200px] object-contain flex-shrink-0 mr-2" />
         </div>
         <hr className="my-12" />
         <div className="flex items-center gap-x-4">
