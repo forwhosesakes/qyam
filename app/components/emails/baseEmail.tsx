@@ -25,6 +25,9 @@ const Tailwind = lazy(async () => {
 const Html = lazy(async () => {
   return { default: (await import("@react-email/components")).Html };
 });
+const Head = lazy(async () => {
+  return { default: (await import("@react-email/components")).Head };
+});
 interface BaseEmailProps {
   preview?: string;
   children: React.ReactNode;
