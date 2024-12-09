@@ -2,6 +2,10 @@
 import { lazy } from 'react'
 
 
+const Img = lazy(async () => {
+  return { default: (await import("@react-email/components")).Img };
+});
+
 const Body = lazy(async () => {
   return { default: (await import("@react-email/components")).Body };
 });
@@ -38,6 +42,8 @@ export default function BaseEmail({ preview, children }: BaseEmailProps) {
     <Html dir="rtl">
       <Head />
       {preview && <Preview>{String(preview)}</Preview>}
+      <Img src="https://admin.qyam.org/images/pngLogo.png"/>
+
       <Tailwind>
         <Body className="bg-gray-100 font-sans">
           <Container className="mx-auto py-8 px-4">
