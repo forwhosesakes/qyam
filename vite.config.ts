@@ -6,7 +6,6 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import svgr from "vite-plugin-svgr";
 import { flatRoutes } from "remix-flat-routes";
-import { remixDevTools } from "remix-development-tools";
 
 declare module "@remix-run/cloudflare" {
   interface Future {
@@ -17,17 +16,6 @@ declare module "@remix-run/cloudflare" {
 export default defineConfig({
   plugins: [
     remixCloudflareDevProxy(),
-    // remixDevTools(),
-    svgr({
-      // SVGR options
-      svgrOptions: {
-        // icon: true, // Optional: if you're using icons
-        exportType: 'default', // Use default export
-        ref: true, // Optional: if you need ref support
-        // typescript:true,
-      },
-      include: "**/*.svg?react" // This ensures ?react query works
-    }),
     remix({
       future: {
         v3_fetcherPersist: true,
@@ -45,7 +33,54 @@ export default defineConfig({
     
     tsconfigPaths(),
   ],
+  optimizeDeps: {
+    include: [
+      "@radix-ui/react-alert-dialog",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-label",
+      "@radix-ui/react-slot",
+      "@radix-ui/react-tooltip",
+      "@react-email/components",
+    ],
+    exclude: ["@remix-run/dev", "@remix-run/server-runtime"],
+  },
+  build: {
+    rollupOptions: {
+      external: [/node:.*/, '@remix-run/dev', '@remix-run/server-runtime'],
+      output: {
+        manualChunks: {
+          'radix': [
+            '@radix-ui/react-alert-dialog',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-label',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-tooltip'
+          ],
+          'email': ['@react-email/components'],
+        },
+      },
+    },
+    sourcemap: true,
+    target: 'esnext',
+    minify: 'esbuild',
+  },
+  server: {
+    fs: {
+      allow: ['..'],
+    },
+  },
   ssr: {
-    noExternal: ['lucide-react', 'react-dropzone'],
+    noExternal: [
+      '@radix-ui/*',
+      '@react-email/components',
+      'lucide-react',
+      'class-variance-authority',
+      'clsx',
+      'react-dropzone',
+      'tailwind-merge'
+    ],
+  
 },
 });
