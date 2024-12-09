@@ -14,7 +14,7 @@ export default function PasswordResetEmail({ resetUrl }: PasswordResetEmailProps
       <BaseEmail preview="إعادة تعيين كلمة المرور">
       <div>
         
-
+<Img src="https://admin.qyam.org/images/pngLogo.png"/>
       <Text className="text-2xl font-bold text-primary mb-4">
         إعادة تعيين كلمة المرور
       </Text>
