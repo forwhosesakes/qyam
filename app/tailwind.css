@@ -11,20 +11,20 @@
     @apply text-2xl font-semibold  md:text-5xl text-primary;
   }
   h3 {
-    @apply text-xl  md:text-4xl font-bold text-primary;
+    @apply text-xl  md:text-[40px] font-bold text-primary;
   }
   h4 {
     @apply text-lg md:text-3xl font-medium;
   }
   h5 {
-    @apply text-[10px] md:text-2xl font-medium;
+    @apply text-[10px]  md:text-sm lg:text-2xl font-medium;
   }
   h6 {
     @apply text-[8px] md:text-xl font-medium;
   }
 
   p {
-    @apply leading-relaxed font-medium md:text-xl text-sm;
+    @apply leading-loose  font-medium md:text-xl text-sm;
   }
 
   @font-face {

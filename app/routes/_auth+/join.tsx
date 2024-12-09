@@ -1,27 +1,32 @@
 import { Form, useActionData, useSubmit } from "@remix-run/react";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import glossary from "./glossary";
 import TitleBlock from "~/components/ui/title-block";
 import { createId } from "@paralleldrive/cuid2";
 import { toast as showToast } from "sonner";
-import { requireNoAuth } from "~/lib/get-authenticated.server";
+import { getAuthenticated } from "~/lib/get-authenticated.server";
 import LoadingOverlay from "~/components/loading-overlay";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Button } from "~/components/ui/button";
 import { REGIONS } from "~/lib/constants";
-import { Icon } from "~/components/icon";
+import { QUser } from "~/types/types";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  return await requireNoAuth(request, context);
+  const user= await getAuthenticated({request, context});
+  if(!user) return null
+    else if((user as QUser).acceptenceState==="accepted")
+      return redirect("/")
+    else 
+    return redirect(`/404?status=${(user as QUser).acceptenceState}`)
+
+  
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -179,8 +184,6 @@ export default function Signup() {
   }
   useEffect(() => {
     const handleSigneup = async () => {
-      console.log("action data : ", actionData);
-
       if (actionData?.success && actionData?.key) {
         try {
           await authClient.signUp.email(
@@ -339,8 +342,6 @@ export default function Signup() {
                 value={phone}
                 onChange={(e) => {
                   const phoneNubmer: string = e.target.value;
-                  console.log("phone number : ", phoneNubmer);
-
                   setPhone(phoneNubmer);
                 }}
                 onBlur={() => handleBlur("phone")}
@@ -467,8 +468,6 @@ export default function Signup() {
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
-                    console.log(file);
-
                     setCv(file);
                   }
                 }}

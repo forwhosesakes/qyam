@@ -10,6 +10,7 @@ import {
   useLoaderData,
   useLocation,
 } from "@remix-run/react";
+import  QrCode from "qrcode"
 
 import "./tailwind.css";
 import { getAuth } from "./lib/auth.server";
@@ -46,19 +47,38 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  const session = await getAuth(context).api.getSession({
-    headers: request.headers, // you need to pass the headers object.
-  });
-  const user =
-    session?.user && session.user.emailVerified ? (session.user as User) : null;
   try {
-    const { toast, headers } = await getToast(request);
-    
-    return Response.json({ toast, user }, { headers: headers || undefined });
+    const [sessionResponse, toastResponse] = await Promise.all([
+      getAuth(context).api.getSession({
+        headers: request.headers,
+      }),
+      getToast(request),
+    ]);
+
+    const user = sessionResponse?.user 
+      ? (sessionResponse.user as User) 
+      : null;
+
+    return Response.json(
+      { 
+        toast: toastResponse.toast, 
+        user,
+        phoneNumber:context.cloudflare.env.CONTACT_NUMBER,
+      }, 
+      { 
+        headers: toastResponse.headers || undefined 
+      }
+    );
   } catch (error) {
-
-    return Response.json({ toast:null, user }, { headers:  undefined });
-
+    return Response.json(
+      { 
+        toast: null, 
+        user: null 
+      }, 
+      { 
+        headers: undefined 
+      }
+    );
   }
 }
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -100,8 +120,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const location = useLocation();
-  const { toast } = useLoaderData<any>();
+  const { toast, phoneNumber } = useLoaderData<any>();
+  
   useToast(toast);
+  // console.log("qrcode:::",generatedQRCode);
+
 
   const noNavbarRoutes = ["/login"];
 
@@ -111,7 +134,7 @@ export default function App() {
     <>
       {showNavbar && <Navbar/>}
       <Outlet />
-      {showNavbar && <Footer />}
+      {showNavbar && <Footer phoneNumber={phoneNumber} text={""} />}
     </>
   );
 }

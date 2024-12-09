@@ -22,11 +22,11 @@ const Navbar = () => {
   const AuthActions = () =>
     user ? (
       <div className="h-full flex flex-auto  justify-end   ">
-        {/* <button
+        <button
         onClick={handleLogout}
          className="button  font-bold text-center text-xs md:text-sm  md:p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all">
           تسجيل الخروج
-        </button> */}
+        </button>
       </div>
     ) : (
       <div className="visitors flex flex-auto  justify-end  gap-x-4">
@@ -37,19 +37,19 @@ const Navbar = () => {
           {" "}
           انضمام
         </button>
-        {/* <button
+        <button
           onClick={() => navigate("/login")}
           className="button font-bold text-xs  md:text-sm text-center p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all"
         >
           دخول
-        </button> */}
+        </button>
       </div>
     );
   const DisplayedNavList = () => (
     <ul className="flex flex-col-reverse md:flex-row  items-end gap-x-8 gap-y-8 ">
       {
         NavbarElements
-        .filter(element => canViewElement(element,(user as any)?.role ?? null))
+        .filter(element => canViewElement(element,(user as any)))
         .map(element=>(
           <li key={element.id} className="flex cursor-pointer font-bold text-gray-700">
             <NavLink prefetch="intent" to={element.link}>
@@ -65,7 +65,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="z-50  fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-2 md:px-32  px-3 gap-x-8">
+    <nav className="z-50   fixed w-full h-12 md:h-16  bg-white/95 mx-auto md:justify-center justify-normal flex items-center py-2 lg:px-32  px-3 gap-x-8">
      <Link to="/">
      <img
         className={"h-8 w-8 md:h-auto md:w-auto  ml-auto md:ml-0"}

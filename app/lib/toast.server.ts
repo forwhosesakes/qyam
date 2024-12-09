@@ -23,7 +23,7 @@ export const toastSessionStorage = createCookieSessionStorage({
 		path: '/',
 		httpOnly: true,
 		// secrets: process.env.SESSION_SECRET!.split(','),
-		secure: process.env.NODE_ENV === 'production',
+		secure: !(process.env.NODE_ENV === 'development'),
 	},
 })
 
@@ -40,6 +40,7 @@ export async function redirectWithToast(
 
 export async function createToastHeaders(toastInput: ToastInput) {
 	const session = await toastSessionStorage.getSession()
+
 	const toast = ToastSchema.parse(toastInput)
 	session.flash(toastKey, toast)
 	const cookie = await toastSessionStorage.commitSession(session)

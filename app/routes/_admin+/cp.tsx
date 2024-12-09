@@ -45,7 +45,7 @@ const ControlPanel = () => {
   });
 
   return (
-    <section className="pt-12 md:pt-24 px-24 md:px-48 bg-section min-h-screen">
+    <section className="pt-12 md:pt-24 px-8  pb-36 lg:px-48 bg-section min-h-screen">
       <div className="my-6 flex w-full justify-between">
         <div className="">
           <h3>{glossary.cp.control_panel}</h3>
@@ -83,7 +83,7 @@ const ControlPanel = () => {
             <li key={tab.link}>
               <NavLink
                 prefetch="viewport"
-                className="p-3 hover:bg-gray-200/50  aria-[current=page]:hover:opacity-90 transition-all  border border-[#D0D5DD] aria-[current=page]:text-white rounded-lg aria-[current=page]:bg-primary"
+                className="py-2 px-5 text-center hover:bg-gray-200/50  aria-[current=page]:hover:opacity-90 transition-all  border border-[#D0D5DD] aria-[current=page]:text-white rounded-lg aria-[current=page]:bg-primary"
                 to={tab.link}
               >
                 {tab.name}

@@ -14,28 +14,28 @@ const About = () => {
           <Icon size="sm"  name="below-arrow" className="absolute top-12 left-[45%]" />
         </CurvedTriangle>
       </div>
-      <div className="w-1/4  md:flex  hidden justify-center items-center h-full">
+      <div className="w-2/5  md:flex  hidden justify-center items-center h-full">
         <div className="relative  w-1/2 h-1/2">
           <ColoredDrop
-            size="md"
-            className={"absolute left-20   z-10"}
+            size="mx"
+            className={"absolute left-32   z-10"}
             color={"#0D3151"}
           />
           <ColoredDrop
-            size="md"
+            size="mx"
             className={"absolute z-20"}
             color={"#8BC53F"}
           />
         </div>
       </div>
 
-      <div className="text-right md:w-2/3 w-full md:px-12">
+      <div className="text-right md:w-3/5 w-full md:px-12">
         <h3 className="font-bold mb-5">
           <span className="text-secondary">{glossary.about.title.part1} </span>
           <span className="text-primary">{glossary.about.title.part2}</span>
         </h3>
 
-        <p className="text-[#344054] ">
+        <p className="text-[#344054] l ">
         {glossary.about.description}
         </p>
 

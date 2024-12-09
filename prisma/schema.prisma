@@ -1,17 +1,15 @@
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      =  env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id              String    @id
+  id              String            @id
   name            String
   email           String
   emailVerified   Boolean
@@ -25,17 +23,17 @@ model User {
   cvKey           String?
   bio             String?
   phone           Int?
-  acceptenceState String? @default("idle")
-  trainingHours Int @default(0)
-  noStudents Int @default(0)
-  region String  @default("none")
-  level String @default("LEVEL_1")
+  acceptenceState String?           @default("idle")
+  trainingHours   Int               @default(0)
+  noStudents      Int               @default(0)
+  region          String            @default("none")
+  level           String            @default("LEVEL_1")
+  Session         Session[]
+  Account         Account[]
+  UserCertificate UserCertificate[]
 
   @@unique([email])
   @@map("user")
-  Session Session[]
-  Account Account[]
-  UserCertificate UserCertificate[]
 }
 
 model Session {
@@ -84,69 +82,73 @@ model Verification {
   @@map("verification")
 }
 
-
 model Material {
-  id          String      @id @default(cuid())
-  storageKey  String
-  title       String
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  published   Boolean @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  storageKey String
+  title      String
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  published  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@map("material")
 }
 
-
 model Program {
-  id          String      @id @default(cuid())
+  id          String   @id @default(cuid())
   link        String
   title       String
   description String
+  image       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
   @@map("program")
 }
 
-
 model Category {
-  id          String      @id @default(cuid())
-  title       String
-  icon        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String     @id @default(cuid())
+  title     String
+  icon      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Material  Material[]
 
   @@unique([title])
   @@map("category")
-  Material Material[]
 }
 
 model Article {
-  id          String   @id @default(cuid()) 
-  title       String   
-  description String  
-  image       String?   @db.Text
-  content     String  
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  image       String?  @db.Text
+  content     String
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt    
+  updatedAt   DateTime @updatedAt
 
   @@map("article")
 }
 
+model Statistics {
+  id              String   @id @default("stats")
+  registeredUsers Int      @default(0)
+  curriculums      Int      @default(0)
+  trainingHours   Int      @default(0)
+  updatedAt       DateTime @updatedAt
 
+  @@map("statistics")
+}
 
 model UserCertificate {
-  id   String  @id @default(cuid())
-  userId String 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  contentType String
-  size      Int
+  id             String @id @default(cuid())
+  userId         String
+  user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentType    String
+  size           Int
   certificateKey String
-  name String
+  name           String
+
   @@map("userCertificate")
-
-
-
-
 }
