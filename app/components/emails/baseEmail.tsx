@@ -110,7 +110,7 @@ export default function BaseEmail({ preview, children }: BaseEmailProps) {
                 </table>
               </Container>
               <Container className=" w-full  bg-[#0D3151] rounded-lg">
-                <Text  className="text-[#8BC53F] text-center font-bold text-xl">
+                <Text className="text-[#8BC53F] text-center font-bold text-xl">
                   {preview}
                 </Text>
               </Container>
@@ -118,54 +118,82 @@ export default function BaseEmail({ preview, children }: BaseEmailProps) {
                 {children}
               </Section>
 
-              <table style={{ width: '100%'}}>
+              <table style={{ width: "100%" }}>
+                <tr>
+                  <td style={{ textAlign: "center", padding: "16px" }}>
+                    <img
+                      style={{
+                        width: "112px",
+                        height: "73px",
+                      }}
+                      src="https://admin.qyam.org/images/coloreddrop.png"
+                      alt=""
+                    />
+                  </td>
+                </tr>
+              </table>
+              <table style={{ width: "100%" }}>
+                <tr>
+                  <td style={{ textAlign: "center", padding: "16px" }}>
+                    <img
+                      style={{
+                        width: "100%",
+                        height: "100px",
+                      }}
+                      src="https://admin.qyam.org/images/clipPath.png"
+                      alt=""
+                    />
+                  </td>
+                </tr>
+              </table>
+              <div className="bg-white">
+                <table style={{ width: "100%" }}>
                   <tr>
-                    <td style={{ textAlign: 'center', padding: '16px' }}>
-                      <img 
+                    <td style={{ textAlign: "center", padding: "16px" }}>
+                      <img
                         style={{
-                          width: '112px',
-                          height: '73px'
-                        }} 
-                        src="https://admin.qyam.org/images/coloreddrop.png" 
-                        alt="" 
+                          width: "100%",
+                          height: "70px",
+                        }}
+                        src="https://admin.qyam.org/images/allPartners.png"
+                        alt=""
                       />
                     </td>
                   </tr>
                 </table>
-                <table style={{ width: '100%'}}>
+                <div className="h-[1px] w-full bg-[#0D3151]"></div>
+                <table style={{ width: '100%' }}>
                   <tr>
-                    <td style={{ textAlign: 'center', padding: '16px' }}>
-                      <img 
-                        style={{
-                          width: '100%',
-                          height: '100px'
-                        }} 
-                        src="https://admin.qyam.org/images/clipPath.png" 
-                        alt="" 
-                      />
+                    <td style={{ 
+                      color: '#0D3151', 
+                      fontSize: '0.75rem',  
+                      textAlign: 'left'
+                    }}>
+                      .جميع الحقوق محفوظة لجمعية أفاق الخفجي©
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      <table style={{ display: 'inline-block' }}>
+                        <tr>
+                          <td style={{ padding: '4px' }}>
+                            <img
+                              src="https://admin.qyam.org/images/youtube.png"
+                              alt=""
+                              style={{ display: 'inline-block' }}
+                            />
+                          </td>
+                          <td style={{ padding: '4px' }}>
+                            <img
+                              src="https://admin.qyam.org/images/x.png"
+                              alt=""
+                              style={{ display: 'inline-block' }}
+                            />
+                          </td>
+                        </tr>
+                      </table>
                     </td>
                   </tr>
                 </table>
-                <div className="bg-white">
-
-                <table style={{ width: '100%'}}>
-                  <tr>
-                    <td style={{ textAlign: 'center', padding: '16px' }}>
-                      <img 
-                        style={{
-                          width: '100%',
-                          height: '70px'
-                        }} 
-                        src="https://admin.qyam.org/images/allPartners.png" 
-                        alt="" 
-                      />
-                    </td>
-                  </tr>
-                </table>
-<div className="h-[2px] w-full flex justify-between  bg-[#0D3151]"></div>
-<span  className="text-[#0D3151] text-xs">© جميع الحقوق محفوظة لجمعية أفاق الخفجي.</span>
-
-                </div>
+              </div>
             </Container>
           </Body>
         </Tailwind>
