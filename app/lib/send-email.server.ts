@@ -84,7 +84,8 @@ export const sendBatchEmail= async ( {
         throw new Error(`Unknown email template: ${template}`);
     }
   
-    const html =await render(emailComponent);
+    const html =await render(emailComponent,{  pretty: true,
+  });
   
     getResendObject(apiKey).batch.send(
       to.map((target:string)=>({
