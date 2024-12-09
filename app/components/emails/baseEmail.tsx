@@ -1,12 +1,11 @@
-import {
-  Body,
-  Container,
-  Head,
-  Html,
-  Preview,
-  Section,
-  Tailwind,
-} from "@react-email/components";
+
+import { Section } from '@react-email/section'
+import { Body } from '@react-email/body'
+import { Container } from '@react-email/container'
+import { Head } from '@react-email/head'
+import { Preview } from '@react-email/preview'
+import { Tailwind } from '@react-email/tailwind'
+import { Html } from '@react-email/html'
 
 interface BaseEmailProps {
   preview?: string;
