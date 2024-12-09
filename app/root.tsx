@@ -121,6 +121,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const location = useLocation();
   const { toast, phoneNumber } = useLoaderData<any>();
+  
   useToast(toast);
   // console.log("qrcode:::",generatedQRCode);
 

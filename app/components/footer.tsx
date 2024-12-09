@@ -26,21 +26,21 @@ useEffect(()=>{
   return (
     <footer className="relative mt-32 text-white bg-transparent">
       <img className={"absolute -top-6 md:-top-28  z-10 w-full"} src={FooterPaths} alt="footer" />
-      <div className="bg-primary relative z-50 py-12 md:px-24 px-8">
-        <div className="flex justify-between">
+      <div className="bg-primary relative z-50 py-12 md:px-24 px-8 ">
+        <div className="flex justify-between ">
           <div>
             <img src={LogoBW} alt="logo-bw" />
-            <p className="font-normal  md:w-3/5 mt-4 md:mt-12">
+            <p className="font-normal lg:text-xl text-base  md:w-4/5 mt-4 md:mt-12">
               {glossary.footer.description}
             </p>
           </div>
-          <div className="flex flex-col gap-3 justify-center items-center ">
+          <div className="flex flex-col gap-3 justify-center items-center  md:w-1/3 lg:w-auto">
             <p className="text-white">تواصل معنا على</p>
             <p>٠٥١٢٣٤٦٧٨٩</p>
             {/* <img className=" w-32 h-32" src={} alt="" /> */}
             <canvas id="qrcode"></canvas>
           </div>
-          <img src={FooterLogo} alt="logo" className="md:block hidden" />
+          <img src={FooterLogo}  alt="logo" className="md:block hidden h-[200px] w-[200px] object-contain flex-shrink-0" />
         </div>
         <hr className="my-12" />
         <div className="flex items-center gap-x-4">
