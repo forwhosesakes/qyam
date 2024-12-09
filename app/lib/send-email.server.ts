@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { render } from "@react-email/render";
 import WelcomeEmail from "~/components/emails/welcomeEmail";
+import ProgramStatus from "~/components/emails/programStatus";
 import PasswordResetEmail from "~/components/emails/passwordResetEmail";
 
 let resend: Resend | null = null;
@@ -10,7 +11,7 @@ const getResendObject = (key: string) => {
   return resend;
 };
 
-type EmailTemplate = "welcome" | "password-reset" | "contact";
+type EmailTemplate = "program-status" | "password-reset" | "contact";
 
 interface SendEmailProps {
   to: string | string[];
@@ -31,8 +32,8 @@ export const sendEmail = async ({
 
   let emailComponent;
   switch (template) {
-    case "welcome":
-      emailComponent = WelcomeEmail(props);
+    case "program-status":
+      emailComponent = ProgramStatus(props);
       break;
     case "password-reset":
       emailComponent = PasswordResetEmail(props);
