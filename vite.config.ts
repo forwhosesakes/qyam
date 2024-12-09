@@ -58,7 +58,7 @@ export default defineConfig({
             '@radix-ui/react-slot',
             '@radix-ui/react-tooltip'
           ],
-          'email': ['@react-email/components','@react-email/render'],
+          // 'email': ['@react-email/components','@react-email/render'],
         },
       },
     },
@@ -74,11 +74,11 @@ export default defineConfig({
   ssr: {
     noExternal: [
       '@radix-ui/*',
-      '@react-email/components',
+      // '@react-email/components',
       'lucide-react',
       'class-variance-authority',
       'clsx',
-      '@react-email/render',
+      // '@react-email/render',
       'react-dropzone',
       'tailwind-merge'
     ],
