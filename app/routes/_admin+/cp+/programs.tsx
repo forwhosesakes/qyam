@@ -30,16 +30,16 @@ export async function loader({ context }: LoaderFunctionArgs) {
 }
 type EditMode = "CREATE" | "UPDATE" | "DELETE";
 export async function action({ request, context }: ActionFunctionArgs) {
-  let successMsg = "";
-  let failureMsg = "";
+  let successMsg = "تمت إضافة البرنامج بنجاح";
+  let failureMsg = "حدث خطأ أثناء إضافة البرنامج";
   try {
     const formData = await request.formData();
-    console.log({
-      title: formData.get("title") as string,
-      link: formData.get("link") as string,
-      description: formData.get("description") as string,
-      image: formData.get("image") as string,
-    });
+    // console.log({
+    //   title: formData.get("title") as string,
+    //   link: formData.get("link") as string,
+    //   description: formData.get("description") as string,
+    //   image: formData.get("image") as string,
+    // });
 
     switch (request.method) {
       case "POST":
@@ -58,6 +58,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
           })
           .catch(() => {
             failureMsg = "حدث خطأ أثناء إضافة البرنامج";
+            throw new Error(failureMsg);
+            
           });
         break;
       case "UPDATE":
@@ -77,11 +79,13 @@ export async function action({ request, context }: ActionFunctionArgs) {
           })
           .catch(() => {
             failureMsg = "حدث خطأ أثناء تحديث البرنامج";
+
+            throw new Error(failureMsg);
+
           });
 
         break;
       case "DELETE":
-        console.log("im here delettetetetetetet");
         
         await programDB
           .deleteProgram(
@@ -93,7 +97,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
           })
           .catch(() => {
             failureMsg = "حدث خطأ أثناء حذف البرنامج";
+            throw new Error(failureMsg);
+            
           });
+          break;
     }
 
     return Response.json(
@@ -133,11 +140,9 @@ async function getBase64(file: File) {
 const Programs = () => {
   const fetcher = useFetcher();
   const { programs } = useLoaderData<any>();
-  const [selectedProgram, setSelectedProgram] = useState<Program|null>(null)
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
   const [selecteImage, setSelectedImage] = useState("");
-  const [editMode, setEditMode] = useState<EditMode>("CREATE");
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -161,8 +166,6 @@ const Programs = () => {
    }
 
    const removeProgram = (program:Program)=>{
-    console.log("programmm: ", program);
-    
     fetcher.submit(
       {
         id:program.id!,
