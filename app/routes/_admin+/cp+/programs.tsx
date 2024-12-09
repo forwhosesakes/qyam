@@ -43,7 +43,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
     switch (request.method) {
       case "POST":
-        programDB
+       await  programDB
           .createProgram(
             {
               title: formData.get("title") as string,
@@ -54,6 +54,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
             context.cloudflare.env.DATABASE_URL
           )
           .then(() => {
+            console.log("createProgram", );
+            
             successMsg = "تمت إضافة البرنامج بنجاح";
           })
           .catch(() => {
