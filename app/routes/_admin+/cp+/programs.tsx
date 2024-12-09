@@ -54,7 +54,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
             context.cloudflare.env.DATABASE_URL
           )
           .then(() => {
-            console.log("createProgram", );
             
             successMsg = "تمت إضافة البرنامج بنجاح";
           })
@@ -199,7 +198,7 @@ const Programs = () => {
                 أضف برنامجًا جديدًا إلى مركز المعرفة
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="name" className="text-right">
                   عنوان البرنامج
