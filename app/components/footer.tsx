@@ -1,4 +1,4 @@
-import FooterPaths from "~/assets/images/footer-paths.svg";
+import FooterPaths from "~/assets/images/drops-group.png";
 import LogoBW from "~/assets/images/logo-bw.png";
 import FooterLogo from "~/assets/images/footer-logo.png";
 import glossary from "~/lib/glossary";
@@ -24,8 +24,8 @@ useEffect(()=>{
 })
   
   return (
-    <footer className="relative mt-12 text-white bg-transparent">
-      <img className={"absolute -top-6 md:-top-28 bg-gray-50 z-10 w-full"} src={FooterPaths} alt="footer" />
+    <footer className="relative mt-32 text-white bg-transparent">
+      <img className={"absolute -top-6 md:-top-28  z-10 w-full"} src={FooterPaths} alt="footer" />
       <div className="bg-primary relative z-50 py-12 md:px-24 px-8">
         <div className="flex justify-between">
           <div>

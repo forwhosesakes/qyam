@@ -3,7 +3,6 @@ import TitleBlock from "~/components/ui/title-block";
 import glossary from "../../../lib/glossary";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
 import AllPartners from "~/assets/images/logos.svg";
-import ColoredDrop from "~/assets/images/coloreddrop.png";
 
 import { infiniteScroller } from "~/lib/animation";
 
@@ -24,7 +23,7 @@ const Partners = () => {
 
       <div className="flex flex-wrap gap-16 w-full justify-center sm:gap-4">
   
-        {/* <img src={AllPartners} alt="logos"/> */}
+        <img src={AllPartners} alt="logos"/>
 
         </div>
 
