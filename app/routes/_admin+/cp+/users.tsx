@@ -104,7 +104,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
           {
             to: formData.get("email") as string,
             subject: glossary.email.program_status_subject,
-            template:"contact",
+            template:"program-status",
+            props:{
+              status: formData.get("status"),
+              name:""
+            },
             text:
               formData.get("status") === "accepted"
                 ? glossary.email.acceptence_message
