@@ -17,7 +17,7 @@ const Container = lazy(async () => {
   return { default: (await import("@react-email/components")).Container };
 });
 
-export default function ProgramStatus({name,status}) {
+export default function ProgramStatus({name,status}:any) {
   return (
     <BaseEmail preview={status === "accepted" ? "قبول في برنامج هندسة القيم" : "حالة الطلب"}>
       <Text className={`text-2xl text-center font-bold text-[#0D3151] mb-4 ${status === "accepted" ? "hidden" : ""}`}>

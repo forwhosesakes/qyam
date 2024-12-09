@@ -157,6 +157,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
           {
             to: emails,
             subject: glossary.email.program_status_subject,
+            props:{
+              status: formData.get("status"),
+           
+            },
             template:"program-status",},
           context.cloudflare.env.RESEND_API,
           context.cloudflare.env.MAIN_EMAIL
