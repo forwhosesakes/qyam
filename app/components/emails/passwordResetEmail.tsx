@@ -1,6 +1,6 @@
 import { Text, Button, Img } from "@react-email/components";
 import BaseEmail from "./baseEmail";
-import Logo from "~/assets/images/footer-logo.png"
+
 
 interface PasswordResetEmailProps {
   resetUrl: string;
@@ -13,10 +13,8 @@ export default function PasswordResetEmail({ resetUrl }: PasswordResetEmailProps
       
       <BaseEmail preview="إعادة تعيين كلمة المرور">
       <div>
-        <Img
-            src="https://admin.qyam.org/assets/footer-logo-DCcu6AuZ.png"
-            className="mb-8"
-        />
+        
+
       <Text className="text-2xl font-bold text-primary mb-4">
         إعادة تعيين كلمة المرور
       </Text>
