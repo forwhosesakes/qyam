@@ -11,7 +11,7 @@ const Statistics = () => {
 
       <TitleBlock className="md:m-24 m-6" text="إحصائيات" />
       <div className="flex gap-36 w-full h-full md:m-10 mt-24 justify-center flex-wrap">
-        <div className="bg-secondary py-10  min-w-44 rounded-3xl h-[30vh] max-h-full w-1/6">
+        <div className="bg-secondary py-10  min-w-44 rounded-3xl h-[30vh] max-h-full min-h-56 w-1/6">
           <div className="relative">
             <img
               src={ColoredDrop}
@@ -20,7 +20,7 @@ const Statistics = () => {
             />
           </div>
 
-          <div className=" h-full w-full flex flex-col flex-wrap items-center justify-between">
+          <div className=" h-full w-full flex flex-col  items-center justify-between">
             <h1 className="text-primary">{stats.registeredUsers}</h1>
             <h4 className="text-primary">المسجلين</h4>
             <svg
@@ -57,7 +57,7 @@ const Statistics = () => {
             </svg>
           </div>
         </div>
-        <div className="bg-primary  rounded-3xl min-w-44  py-10  w-1/6 h-[30vh] max-h-full">
+        <div className="bg-primary  rounded-3xl min-w-44  py-10  w-1/6 h-[30vh] max-h-full min-h-56">
           <div className="relative">
             <img
               src={ColoredDrop}
@@ -65,7 +65,7 @@ const Statistics = () => {
               alt=""
             />
           </div>
-          <div className=" h-full w-full flex flex-col flex-wrap items-center justify-between">
+          <div className=" h-full w-full flex flex-col items-center justify-between">
             <h1 className="text-white">{stats.curriculums}</h1>
             <h4 className="text-white">المناهج</h4>
             <svg
@@ -92,7 +92,7 @@ const Statistics = () => {
             </svg>
           </div>
         </div>
-        <div className="bg-[#D0D5DD]   rounded-3xl min-w-44 py-10  h-[30vh] max-h-full w-1/6">
+        <div className="bg-[#D0D5DD]   rounded-3xl min-w-44 py-10  h-[30vh] max-h-full min-h-56 w-1/6">
           <div className="relative">
             <img
               src={ColoredDrop}
@@ -100,7 +100,7 @@ const Statistics = () => {
               alt=""
             />
           </div>
-          <div className=" h-full w-full flex flex-col flex-wrap items-center justify-between">
+          <div className=" h-full w-full flex flex-col items-center justify-between">
             <h1 className="text-black">{stats.trainingHours}</h1>
             <h4 className="text-black">ساعة تدريبية</h4>
             <svg width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
