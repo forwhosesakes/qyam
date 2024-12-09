@@ -24,7 +24,7 @@ const Partners = () => {
 
       <div className="flex flex-wrap gap-16 w-full justify-center sm:gap-4">
   
-        <img src={AllPartners} alt="logos"/>
+        {/* <img src={AllPartners} alt="logos"/> */}
 
         </div>
 
