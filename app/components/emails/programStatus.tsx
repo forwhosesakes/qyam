@@ -59,10 +59,10 @@ export default function ProgramStatus({name,status}) {
     <Text className="text-base text-center font-bold text-black ">
     ونحن على ثقة بأنك ستكون إضافة قيمة لبرنامجنا.
     </Text>
-
+{/* 
     <Text className="text-base text-center font-bold text-black ">
     [أضف هنا فقرة مختصرة تشرح مزايا البرنامج والفوائد التي سيحصل عليها المتقدم]
-    </Text>
+    </Text> */}
 
 
     <Text className="text-base text-center font-bold text-black ">
@@ -78,7 +78,7 @@ export default function ProgramStatus({name,status}) {
     </Text>
 
     <Text className="text-base text-center font-bold text-[#8BC53F] mb-4">
-     [اسم القائم على البرنامج] [مسمى الوظيفة] [اسم المؤسسة]
+      برنامج قيم
     </Text>
 
 

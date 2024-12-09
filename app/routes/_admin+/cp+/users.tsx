@@ -157,11 +157,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
           {
             to: emails,
             subject: glossary.email.program_status_subject,
-            text:
-              formData.get("status") === "accepted"
-                ? glossary.email.acceptence_message
-                : glossary.email.rejection_message,
-          },
+            template:"program-status",},
           context.cloudflare.env.RESEND_API,
           context.cloudflare.env.MAIN_EMAIL
         );
