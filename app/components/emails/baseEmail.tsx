@@ -33,6 +33,38 @@ const Html = lazy(async () => {
 const Head = lazy(async () => {
   return { default: (await import("@react-email/components")).Head };
 });
+
+
+const Font = ({ 
+  webFont,
+  fontStyle = 'normal',
+  fontFamily,
+  fontWeight = 400,
+  fallbackFontFamily,
+}:any) => {
+  const src = webFont ? `src: url(${webFont.url}) format(${webFont.format});` : "";
+
+  return (
+      <style>
+      {
+          `
+          @font-face {
+              font-style: ${fontStyle};
+              font-family: ${fontFamily};
+              font-weight: ${fontWeight};
+              'font-src': "data:";
+              mso-font-alt: ${Array.isArray(fallbackFontFamily) ? fallbackFontFamily[0] : fallbackFontFamily};
+              ${src}
+          }
+
+          * {
+              font-family: ${fontFamily}, ${Array.isArray(fallbackFontFamily) ? fallbackFontFamily.join(", ") : fallbackFontFamily};
+          }
+          `
+      }
+      </style>
+  )
+}
 interface BaseEmailProps {
   preview?: string;
   children: React.ReactNode;
@@ -41,7 +73,19 @@ interface BaseEmailProps {
 export default function BaseEmail({ preview, children }: BaseEmailProps) {
   return (
     <Html dir="rtl">
-      <Head />
+      <Head >
+
+      <Font
+          fontFamily="notosansarabic"
+          fallbackFontFamily="Verdana"
+          webFont={{
+            url: "https://fonts.gstatic.com/s/notosansarabic/v28/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj4wv4rqxzLI.woff2",
+            format: "woff2",
+          }}
+          fontWeight={400}
+          fontStyle="normal"
+        />
+      </Head>
 
       <Container>
         <Tailwind>
