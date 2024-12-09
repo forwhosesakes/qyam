@@ -35,7 +35,7 @@ const ResetPassword = () => {
         onError: (error) => {
           // You might want to show a toast with:
           // glossary.resetPassword.toast.error
-          console.log("msg error in reset password", error);
+          // console.log("msg error in reset password", error);
         },
       }
     );

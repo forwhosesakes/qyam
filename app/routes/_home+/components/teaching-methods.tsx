@@ -25,7 +25,7 @@ const TeachingMethods = () => {
     {src:SelfEducation, text:glossary.teaching_methods.self_education}
   ]
   return (
-    <section id="teaching-methods" className="relative min-h-screen flex flex-col px-12">
+    <section id="teaching-methods" className="relative min-h-screen flex flex-col pr-6 md:pr-20">
       <div className="blur-[150px] inset-0 absolute">
         <GradientEllipse
           bgColor={"bg-[rgb(139,197,63)]/60"}

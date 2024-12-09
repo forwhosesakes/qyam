@@ -23,9 +23,9 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const method = request.method;
   
     try {
-      const file = formData.get("image");
-      console.log("yahoooooo its file");
-  console.log(formData);
+  //     const file = formData.get("image");
+  //     console.log("yahoooooo its file");
+  // console.log(formData);
   
     //   if (file && (file instanceof File)) {
             

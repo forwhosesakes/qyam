@@ -1,21 +1,17 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import TitleBlock from "~/components/ui/title-block";
 import glossary from "../../../lib/glossary";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
-import Partner1 from "~/assets/images/partners/partner1.png"
-import Partner2 from "~/assets/images/partners/partner2.png"
-import Partner3 from "~/assets/images/partners/partner3.png"
-import Partner4 from "~/assets/images/partners/partner4.png"
-import Partner5 from "~/assets/images/partners/partner5.png"
-import Partner6 from "~/assets/images/partners/partner6.png"
-import {infiniteScroller} from "~/lib/animation"
+import AllPartners from "~/assets/images/logos.webp";
+
+import { infiniteScroller } from "~/lib/animation";
 
 const Partners = () => {
-  useEffect(()=>{
-    infiniteScroller()
-  })
+  useEffect(() => {
+    infiniteScroller();
+  });
   return (
-    <section id="parterns" className="relative min-h-[40vh]">
+    <section id="parterns" className="relative md:mt-52 lg:mt-0 min-h-[40vh]">
       <div className=" blur-[180px] inset-0 absolute">
         <GradientEllipse
           bgColor={"bg-[#B8ECFF]/70"}
@@ -25,9 +21,13 @@ const Partners = () => {
 
       <TitleBlock className="md:m-24 m-6" text={glossary.partners.title} />
 
-<div className="flex w-full justify-center">
+      <div className="flex flex-wrap gap-16 w-full justify-center sm:gap-4">
+  
+        <img className="lg:w-4/5" src={AllPartners} alt="logos"/>
 
-      <div className="scroller">
+        </div>
+
+      {/* <div className="scroller">
         <div className="scroller__inner">
 
               <img src={Partner1} alt="" />
@@ -40,9 +40,8 @@ const Partners = () => {
               
 
         </div>
-      </div>
-</div>
-
+      </div> */}
+      {/* <img src={AllPartners} alt="" /> */}
     </section>
   );
 };

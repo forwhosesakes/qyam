@@ -22,9 +22,15 @@ export type Program = {
   link: string;
   title: string;
   description: string;
+  image?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
+export type Statistics = {
+  registeredUsers:number;
+  curriculums:number;
+  trainingHours:number;
+}
 
 export type Article = {
   id?: string;
@@ -45,6 +51,8 @@ export type QUser = User & {
   trainingHours: number;
   noStudents: number;
   role: "user" | "admin";
+  region:string,
+  level:string
 };
 
 export type StatusResponse<T> = {
