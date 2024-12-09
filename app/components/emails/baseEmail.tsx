@@ -41,8 +41,13 @@ export default function BaseEmail({ preview, children }: BaseEmailProps) {
   return (
     <Html dir="rtl">
       <Head />
-      {preview && <Preview>{String(preview)}</Preview>}
+
+    <Container>
+      <Container className='flex w-full justify-center border-2 border-black items-center'>
       <Img src="https://admin.qyam.org/images/pngLogo.png"/>
+
+      </Container>
+      {preview && <Preview>{String(preview)}</Preview>}
 
       <Tailwind>
         <Body className="bg-gray-100 font-sans">
@@ -54,6 +59,8 @@ export default function BaseEmail({ preview, children }: BaseEmailProps) {
           </Container>
         </Body>
       </Tailwind>
+    </Container>
+
     </Html>
   );
 }
