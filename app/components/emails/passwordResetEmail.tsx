@@ -1,6 +1,7 @@
 import BaseEmail from "./baseEmail";
 
-import { Text, Button } from "@react-email/components";
+import { Text } from "@react-email/text";
+
 
 
 
@@ -33,7 +34,7 @@ export default function PasswordResetEmail({
     أدناه لإعادة تعيينها.
   </Text>
 
-  <Button 
+  <a 
     style={{
       backgroundColor: '#0D3151',
       color: 'white',
@@ -47,7 +48,7 @@ export default function PasswordResetEmail({
     href={resetUrl}
   >
     إعادة تعيين كلمة المرور
-  </Button>
+  </a>
 </div>
     </BaseEmail>
   );

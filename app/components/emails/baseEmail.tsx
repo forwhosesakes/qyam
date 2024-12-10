@@ -1,13 +1,13 @@
 // import { lazy } from "react";
 
-import { Container, Head, Html ,Body,Text,Section} from "@react-email/components";
+// import { Container, Head, Html ,Body,Text,Section} from "@react-email/components";
 
-// import { Container } from "@react-email/container";
-// import { Head } from "@react-email/head";
+import { Container } from "@react-email/container";
+import { Head } from "@react-email/head";
 // import { Tailwind } from "@react-email/tailwind";
-// import { Body } from "@react-email/body";
-// import { Text } from "@react-email/text";
-// import { Section } from "@react-email/section";
+import { Body } from "@react-email/body";
+import { Text } from "@react-email/text";
+import { Section } from "@react-email/section";
 
 // const Body = lazy(async () => {
 //   return { default: (await import("@react-email/components")).Body };
