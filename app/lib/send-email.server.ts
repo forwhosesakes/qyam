@@ -1,7 +1,8 @@
 import { Resend } from "resend";
-import ProgramStatus from "~/components/emails/programStatus";
-import PasswordResetEmail from "~/components/emails/passwordResetEmail";
-import { render } from "@react-email/render";
+import { resetTemplate, statusTemplate } from "~/components/emails/constants";
+// import ProgramStatus from "~/components/emails/programStatus";
+// import PasswordResetEmail from "~/components/emails/passwordResetEmail";
+// import { render } from "@react-email/render";
 
 
 let resend: Resend | null = null;
@@ -29,26 +30,25 @@ export const sendEmail = async ({
   text,
 }: SendEmailProps, apiKey: string, sourceEmail: string) => {
   const resend = getResendObject(apiKey);
-  let emailComponent;
+  let emailComponent="";
   switch (template) {
     case "program-status":
-      emailComponent = ProgramStatus(props);
+      emailComponent =statusTemplate
       break;
     case "password-reset":
-      emailComponent = PasswordResetEmail(props);
+      emailComponent =  resetTemplate(props.resetUrl) 
       break;
     default:
       throw new Error(`Unknown email template: ${template}`);
   }
 
-  const html =await render(emailComponent,{  pretty: true,
-});
+
 
   return resend.emails.send({
     from: sourceEmail,
     to,
     subject,
-    html,
+    html:emailComponent,
     text: text || '',
   });
 };
@@ -72,27 +72,24 @@ export const sendBatchEmail= async ( {
 }: SendEmailProps,
   apiKey: string,
   sourceEmail: string)=>{
-    let emailComponent;
+    let emailComponent="";
     switch (template) {
       case "program-status":
-        emailComponent = ProgramStatus(props);
+        emailComponent =statusTemplate
         break;
       case "password-reset":
-        emailComponent = PasswordResetEmail(props);
+        emailComponent =  resetTemplate(props.resetUrl) 
         break;
       default:
         throw new Error(`Unknown email template: ${template}`);
     }
-  
-    const html =await render(emailComponent,{  pretty: true,
-  });
   
     getResendObject(apiKey).batch.send(
       to.map((target:string)=>({
         from: sourceEmail,
         to: target,
         subject,
-        html,
+        html:emailComponent,
         
         
       }))
