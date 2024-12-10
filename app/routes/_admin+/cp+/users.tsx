@@ -32,6 +32,8 @@ import {
 } from "react";
 import { sendBatchEmail, sendEmail } from "~/lib/send-email.server";
 import EditConfirmationDialog from "../components/editConfirmationDialog";
+import DeleteUserDialog from "../components/deleteUserDialog";
+
 import { Input } from "~/components/ui/input";
 import { createToastHeaders } from "~/lib/toast.server";
 import { Button } from "~/components/ui/button";
@@ -92,6 +94,38 @@ export async function action({ request, context }: ActionFunctionArgs) {
     }
   }
 
+  if (formData.get("type") === "deleteUser") {
+    return userDB
+      .deleteUser(
+        formData.get("id") as string,
+        context.cloudflare.env.DATABASE_URL
+      )
+      .then(async () => {
+        return Response.json(
+          { success: true },
+          {
+            headers: await createToastHeaders({
+              description: "",
+              title: glossary.cp.user.delete_success,
+              type: "success",
+            }),
+          }
+        );
+      })
+      .catch(async () => {
+        return Response.json(
+          { success: false },
+          {
+            headers: await createToastHeaders({
+              description: "",
+              title: glossary.cp.user.delete_failure,
+              type: "error",
+            }),
+          }
+        );
+      });
+  }
+
   if (formData.get("id")) {
     return userDB
       .editUserRegisteration(
@@ -104,10 +138,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
           {
             to: formData.get("email") as string,
             subject: glossary.email.program_status_subject,
-            template:"program-status",
-            props:{
+            template: "program-status",
+            props: {
               status: formData.get("status"),
-              name:""
+              name: "",
             },
             text:
               formData.get("status") === "accepted"
@@ -157,11 +191,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
           {
             to: emails,
             subject: glossary.email.program_status_subject,
-            props:{
+            props: {
               status: formData.get("status"),
-           
             },
-            template:"program-status",},
+            template: "program-status",
+          },
           context.cloudflare.env.RESEND_API,
           context.cloudflare.env.MAIN_EMAIL
         );
@@ -222,7 +256,9 @@ const Users = () => {
     }
 
     return (
-      <div className={`border w-fit mr-4 px-5 text-nowrap rounded-full p-2 ${styles}`}>
+      <div
+        className={`border w-fit mr-4 px-5 text-nowrap rounded-full p-2 ${styles}`}
+      >
         {glossary.cp.user[status]}
       </div>
     );
@@ -252,6 +288,7 @@ const Users = () => {
     status: "",
     triggered: false,
   });
+  const [userToDelete, setUserToDelete] = useState<QUser | null>(null);
 
   const acceptedCount = data.filter(
     (user: any) => user.acceptenceState === "accepted"
@@ -284,6 +321,16 @@ const Users = () => {
     e.preventDefault();
     e.stopPropagation();
     setSelectedUser({ ...user, acceptenceState: status });
+  };
+
+  const handleDeleteUserClick = (user: QUser, e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setUserToDelete(user);
+  };
+
+  const deleteUser = (id: string) => {
+    fetcher.submit({ type: "deleteUser", id }, { method: "POST" });
   };
 
   const columns = useMemo(
@@ -357,50 +404,64 @@ const Users = () => {
         id: "actions",
         header: () => "الإجراء",
         cell: ({ row }: any) => {
-          return (
-            row.original.acceptenceState !== "idle" ? (
-              <div className="flex gap-x-4">
-                <button
-                  onClick={(e) =>
-                    handleEditUserClick("accepted", row.original, e)
-                  }
-                  disabled={row.original.acceptenceState === "accepted"}
-                  className={`button p-2 text-[#1A7F37] border border-[#1A7F37] rounded-lg disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
-                >
-                  قبول
-                </button>
+          return row.original.acceptenceState !== "idle" ? (
+            <div className="flex gap-x-4">
+              <button
+                onClick={(e) =>
+                  handleEditUserClick("accepted", row.original, e)
+                }
+                disabled={row.original.acceptenceState === "accepted"}
+                className={`button p-2 text-[#1A7F37] border border-[#1A7F37] rounded-lg disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+              >
+                قبول
+              </button>
 
-                <button
-                  onClick={(e) =>
-                    handleEditUserClick("denied", row.original, e)
-                  }
-                  disabled={row.original.acceptenceState === "denied"}
-                  className={`button p-2 rounded-lg text-[#D1242F] border border-[#D1242F] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
-                >
-                  رفض
-                </button>
+              <button
+                onClick={(e) => handleEditUserClick("denied", row.original, e)}
+                disabled={row.original.acceptenceState === "denied"}
+                className={`button p-2 rounded-lg text-[#D1242F] border border-[#D1242F] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+              >
+                رفض
+              </button>
 
-
-
-                <button
-                  onClick={(e) =>
-                    handleEditUserClick("idle", row.original, e)
-                  }
-                  disabled={row.original.acceptenceState === "idle"}
-                  className={`button  p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
-                >
+              <button
+                onClick={(e) => handleEditUserClick("idle", row.original, e)}
+                disabled={row.original.acceptenceState === "idle"}
+                className={`button  p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+              >
                 تعطيل
-                </button>
-              </div>
-            ):    <button
-            onClick={(e) =>
-              handleEditUserClick("accepted", row.original, e)
-            }
-            disabled={row.original.acceptenceState === "accepted"}
-            className={`button p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
-          >
-          إعادة تنشيط
-          </button>
+              </button>
+
+              <button
+                onClick={(e) => handleDeleteUserClick(row.original, e)}
+                className="button p-2 rounded-lg text-red-600 border border-red-600 flex gap-1"
+              >
+                حذف
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="21"
+                  viewBox="0 0 20 21"
+                  fill="none"
+                >
+                  <path
+                    d="M2.5 5.5H4.16667M4.16667 5.5H17.5M4.16667 5.5V17.1667C4.16667 17.6087 4.34226 18.0326 4.65482 18.3452C4.96738 18.6577 5.39131 18.8333 5.83333 18.8333H14.1667C14.6087 18.8333 15.0326 18.6577 15.3452 18.3452C15.6577 18.0326 15.8333 17.6087 15.8333 17.1667V5.5H4.16667ZM6.66667 5.5V3.83333C6.66667 3.3913 6.84226 2.96738 7.15482 2.65482C7.46738 2.34226 7.89131 2.16666 8.33333 2.16666H11.6667C12.1087 2.16666 12.5326 2.34226 12.8452 2.65482C13.1577 2.96738 13.3333 3.3913 13.3333 3.83333V5.5M8.33333 9.66666V14.6667M11.6667 9.66666V14.6667"
+                    stroke="#B42318"
+                    stroke-width="1.3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={(e) => handleEditUserClick("accepted", row.original, e)}
+              disabled={row.original.acceptenceState === "accepted"}
+              className={`button p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+            >
+              إعادة تنشيط
+            </button>
           );
         },
       },
@@ -425,7 +486,7 @@ const Users = () => {
   });
 
   return (
-    <div >
+    <div>
       <div className="flex w-full px-12 gap-x-8">
         <div className="analytics-box-filled flex-1 flex">
           <p className="text-lg font-bold">
@@ -454,36 +515,57 @@ const Users = () => {
           </Button>
         </div>
         <div>
-          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">المسجلين</h6>
+          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">
+            المسجلين
+          </h6>
           <Input
             type="number"
             className="admin-stats-box text-center"
             value={localStats.registeredUsers}
-            onChange={(e)=>setLocalStats(prev=>({...prev,registeredUsers:Number(e.target.value)}))}
+            onChange={(e) =>
+              setLocalStats((prev) => ({
+                ...prev,
+                registeredUsers: Number(e.target.value),
+              }))
+            }
           />
         </div>
 
         <div>
-          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">المناهج</h6>
+          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">
+            المناهج
+          </h6>
           <Input
             type="number"
             className="admin-stats-box text-center"
             value={localStats.curriculums}
-            onChange={(e)=>setLocalStats(prev=>({...prev, curriculums:Number(e.target.value)}))}
+            onChange={(e) =>
+              setLocalStats((prev) => ({
+                ...prev,
+                curriculums: Number(e.target.value),
+              }))
+            }
           />
         </div>
 
         <div>
-          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">الساعات التدريبية</h6>
+          <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">
+            الساعات التدريبية
+          </h6>
           <Input
             type="number"
             className="admin-stats-box text-center"
             value={localStats.trainingHours}
-            onChange={(e)=>setLocalStats(prev=>({...prev,trainingHours:Number(e.target.value)}))}
+            onChange={(e) =>
+              setLocalStats((prev) => ({
+                ...prev,
+                trainingHours: Number(e.target.value),
+              }))
+            }
           />
         </div>
         <div className="flex lg:hidden  justify-center items-center">
-        <Button onClick={updateStats} className="">
+          <Button onClick={updateStats} className="">
             حفظ الإحصائيات
           </Button>
         </div>
@@ -635,6 +717,18 @@ const Users = () => {
           // user={selectedUser}
         ></EditConfirmationDialog>
       )}
+
+      {userToDelete && (
+        <DeleteUserDialog
+          isOpen={userToDelete !== null}
+          onClose={() => setUserToDelete(null)}
+          onConfirm={() => {
+            deleteUser(userToDelete.id);
+            setUserToDelete(null);
+          }}
+          user={userToDelete}
+        />
+      )}
     </div>
   );
 };
@@ -659,7 +753,7 @@ function IndeterminateCheckbox({
       onClick={(e: any) => {
         e.stopPropagation();
       }}
-      className={className + " cursor-pointer"}
+      className={className + "cursor-pointer"}
       {...rest}
     />
   );

@@ -189,7 +189,14 @@ const updateUserLevel = (id:string,level:keyof typeof LEVELS,dbUrl:string)=>{
 }
 
 
-
+const deleteUser = async (id: string, databaseUrl: string) => {
+    const db = client(databaseUrl);
+    return db.user.delete({
+      where: {
+        id,
+      },
+    });
+  };
 
 
 export default ({
@@ -202,6 +209,6 @@ export default ({
     getUserCertificates,
     bulkEditUserRegisteration,
     updateTrainingInfo,
-    updateUserLevel
-
+    updateUserLevel,
+    deleteUser
 })

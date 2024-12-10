@@ -115,7 +115,9 @@ const cp = {
     edit_status_success:"تم تحديث حالة انضمام المستخدم",
     edit_status_failure:"فشلت عملية تحديث حالة انضمام المستخدم",
         bulk_edit_status_success:"تم تحديث حالة انضمام المستخدمين",
-   bulk_edit_status_failure:"فشلت عملية تحديث حالة انضمام المستخدمين"
+   bulk_edit_status_failure:"فشلت عملية تحديث حالة انضمام المستخدمين",
+    delete_success: "تم حذف المستخدم بنجاح",
+    delete_failure: "فشلت عملية حذف المستخدم"
 
   }
 
