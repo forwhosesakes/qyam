@@ -33,7 +33,7 @@ export const sendEmail = async ({
   let emailComponent="";
   switch (template) {
     case "program-status":
-      emailComponent =statusTemplate
+      emailComponent =statusTemplate(props)
       break;
     case "password-reset":
       emailComponent =  resetTemplate(props.resetUrl) 

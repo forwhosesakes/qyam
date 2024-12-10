@@ -10,17 +10,45 @@ export const resetTemplate =(resetUrl:string)=> `<!DOCTYPE html>
             font-weight: 400;
             font-style: normal;
         }
+
+        /* Add responsive styles */
+        @media screen and (max-width: 600px) {
+            .outer-container {
+                width: 95% !important;
+            }
+            .inner-table {
+                width: 100% !important;
+            }
+            .logo-image {
+                width: 120px !important;
+                height: 120px !important;
+            }
+            .content-padding {
+                padding: 1rem !important;
+            }
+            .main-content {
+                padding: 1rem !important;
+            }
+            .partners-image {
+                height: auto !important;
+            }
+            .colored-drop {
+                width: 42px !important;
+                height: 27px !important;
+            }
+        }
     </style>
 </head>
-<body style="background-color: #f3f4f6; font-family: sans-serif; margin: 0; padding: 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+<body style="font-family: sans-serif; margin: 0; padding: 0;">
+<div class="outer-container" style="width:70%; margin-left:auto; margin-right:auto; background: #D0D7DE1C;">
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" class="inner-table" style="width:70%; margin-left:auto; margin-right:auto;">
         <tr>
-            <td align="center" style="padding: 2rem 1rem;">
+            <td align="center" class="content-padding" style="padding: 2rem 1rem;">
                 <!-- Logo -->
                 <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                     <tr>
                         <td style="text-align: center; padding: 16px;">
-                            <img src="https://admin.qyam.org/images/pngLogo.png" alt="" width="176" height="176" style="display: block; margin: 0 auto;">
+                            <img src="https://admin.qyam.org/images/pngLogo.png" alt="" class="logo-image" width="176" height="176" style="display: block; margin: 0 auto;">
                         </td>
                     </tr>
                 </table>
@@ -28,25 +56,26 @@ export const resetTemplate =(resetUrl:string)=> `<!DOCTYPE html>
                 <!-- Blue Container -->
                 <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color: #0D3151; border-radius: 0.5rem;">
                     <tr>
-                        <td>&nbsp;</td>
+                        <td style="padding:0.5rem;">
+                            <h1 style="color:#8BC53F; text-align: center; margin: 0.5rem 0;">
+                                إعادة تعيين كلمة المرور
+                            </h1>
+                        </td>
                     </tr>
                 </table>
 
                 <!-- Main Content Section -->
                 <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color: white; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 1rem;">
                     <tr>
-                        <td style="padding: 2rem;">
-                            <h1 style="font-size: 1.5rem; text-align: center; font-weight: bold; color: #0D3151; margin-bottom: 1rem;">
-                                إعادة تعيين كلمة المرور
-                            </h1>
-                            <p style="color: #4B5563; text-align: center; margin-bottom: 1.5rem;">
+                        <td class="main-content" style="padding: 2rem;">
+                            <p style="color: #4B5563; text-align: center; margin-bottom: 1.5rem; font-size: 1.125rem;">
                                 لقد تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بك. اضغط على الزر
                                 أدناه لإعادة تعيينها.
                             </p>
                             <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                                 <tr>
                                     <td align="center">
-                                        <a href="${resetUrl}" style="background-color: #0D3151; color: white; padding: 0.75rem 1.5rem; border-radius: 0.375rem; text-decoration: none; display: inline-block; margin-bottom: 3rem;">
+                                        <a href="${resetUrl}" style="font-size: 1.125rem; background-color: #0D3151; color: white; padding: 0.75rem 1.5rem; border-radius: 0.375rem; text-decoration: none; display: inline-block; margin-bottom: 3rem;">
                                             إعادة تعيين كلمة المرور
                                         </a>
                                     </td>
@@ -60,7 +89,7 @@ export const resetTemplate =(resetUrl:string)=> `<!DOCTYPE html>
                 <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                     <tr>
                         <td style="text-align: center; padding: 16px;">
-                            <img src="https://admin.qyam.org/images/coloreddrop.png" alt="" width="112" height="73" style="display: block; margin: 0 auto;">
+                            <img src="https://admin.qyam.org/images/coloreddrop.png" alt="" class="colored-drop" width="56" height="36.5" style="display: block; margin: 0 auto;">
                         </td>
                     </tr>
                 </table>
@@ -69,7 +98,7 @@ export const resetTemplate =(resetUrl:string)=> `<!DOCTYPE html>
                 <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                     <tr>
                         <td style="text-align: center; padding: 16px;">
-                            <img src="https://admin.qyam.org/images/clipPath.png" alt="" width="100%" height="100" style="display: block; margin: 0 auto;">
+                            <img src="https://admin.qyam.org/images/clipPath.png" alt="" width="100%" style="display: block; margin: 0 auto; height: auto;">
                         </td>
                     </tr>
                 </table>
@@ -78,7 +107,7 @@ export const resetTemplate =(resetUrl:string)=> `<!DOCTYPE html>
                 <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color: white;">
                     <tr>
                         <td style="text-align: center; padding: 16px;">
-                            <img src="https://admin.qyam.org/images/allPartners.png" alt="" width="100%" height="70" style="display: block; margin: 0 auto;">
+                            <img src="https://admin.qyam.org/images/allPartners.png" alt="" class="partners-image" width="600" height="105" style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
                         </td>
                     </tr>
                     <tr>
@@ -95,11 +124,12 @@ export const resetTemplate =(resetUrl:string)=> `<!DOCTYPE html>
             </td>
         </tr>
     </table>
+</div>
 </body>
 </html>`
 
 
-export const statusTemplate =`<!DOCTYPE html>
+export const statusTemplate =(props)=>`<!DOCTYPE html>
 <html dir="rtl">
 <head>
     <meta name="x-apple-disable-message-reformatting">
