@@ -1,21 +1,8 @@
 import BaseEmail from "./baseEmail";
-import { lazy } from "react";
 
-const Text = lazy(async () => {
-  return { default: (await import("@react-email/components")).Text };
-});
+import { Text, Button } from "@react-email/components";
 
-const Button = lazy(async () => {
-  return { default: (await import("@react-email/components")).Button };
-});
 
-const Img = lazy(async () => {
-  return { default: (await import("@react-email/components")).Img };
-});
-
-const Container = lazy(async () => {
-  return { default: (await import("@react-email/components")).Container };
-});
 
 interface PasswordResetEmailProps {
   resetUrl: string;
@@ -26,23 +13,42 @@ export default function PasswordResetEmail({
 }: PasswordResetEmailProps) {
   return (
     <BaseEmail preview="إعادة تعيين كلمة المرور">
-      <div>
-        <Text className="text-2xl text-center font-bold text-[#0D3151] mb-4">
-          إعادة تعيين كلمة المرور
-        </Text>
-        <Text className="text-gray-600 text-center mb-6">
-          لقد تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بك. اضغط على الزر
-          أدناه لإعادة تعيينها.
-        </Text>
+    <div>
+  <Text style={{
+    fontSize: '1.5rem',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#0D3151',
+    marginBottom: '1rem'
+  }}>
+    إعادة تعيين كلمة المرور
+  </Text>
+  
+  <Text style={{
+    color: '#4B5563',
+    textAlign: 'center',
+    marginBottom: '1.5rem'
+  }}>
+    لقد تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بك. اضغط على الزر
+    أدناه لإعادة تعيينها.
+  </Text>
 
-
-        <Button
-          className="bg-[#0D3151] text-white px-6 mb-12 py-3 rounded-md"
-          href={resetUrl}
-        >
-          إعادة تعيين كلمة المرور
-        </Button>
-      </div>
+  <Button 
+    style={{
+      backgroundColor: '#0D3151',
+      color: 'white',
+      paddingLeft: '1.5rem',
+      paddingRight: '1.5rem',
+      paddingTop: '0.75rem',
+      paddingBottom: '0.75rem',
+      marginBottom: '3rem',
+      borderRadius: '0.375rem'
+    }}
+    href={resetUrl}
+  >
+    إعادة تعيين كلمة المرور
+  </Button>
+</div>
     </BaseEmail>
   );
 }

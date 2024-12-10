@@ -1,8 +1,8 @@
 import { Resend } from "resend";
-import { render } from "@react-email/render";
-import WelcomeEmail from "~/components/emails/welcomeEmail";
 import ProgramStatus from "~/components/emails/programStatus";
 import PasswordResetEmail from "~/components/emails/passwordResetEmail";
+import { render } from "@react-email/render";
+
 
 let resend: Resend | null = null;
 
@@ -29,7 +29,6 @@ export const sendEmail = async ({
   text,
 }: SendEmailProps, apiKey: string, sourceEmail: string) => {
   const resend = getResendObject(apiKey);
-
   let emailComponent;
   switch (template) {
     case "program-status":
@@ -42,7 +41,8 @@ export const sendEmail = async ({
       throw new Error(`Unknown email template: ${template}`);
   }
 
-  const html =await render(emailComponent);
+  const html =await render(emailComponent,{  pretty: true,
+});
 
   return resend.emails.send({
     from: sourceEmail,
