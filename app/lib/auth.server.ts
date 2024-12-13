@@ -17,6 +17,8 @@ export const getAuth = (context: AppLoadContext): Auth | any => {
   // Create a new auth instance for each request
   const dbClient = client(context.cloudflare.env.DATABASE_URL);
   console.log("db client is null?:   ", !!dbClient);
+  console.log("db connection::::",context.cloudflare.env.DATABASE_URL);
+  
   
 
   return betterAuth({
