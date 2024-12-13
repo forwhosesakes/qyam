@@ -9,7 +9,8 @@ let globalDb = null;
 
 export const client = (db: string) => {
   if (!globalDb) {
-    const pool = new Pool({ connectionString: db });
+    const pool = new Pool({ connectionString: db , idleTimeoutMillis: 0,
+      connectionTimeoutMillis: 0});
     const adapter = new PrismaNeon(pool);
     const prisma = new PrismaClient({ adapter });
     return prisma;
