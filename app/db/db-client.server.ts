@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 
 import ws from "ws";
 neonConfig.webSocketConstructor = ws;
-let globalDb = null;
+let globalDb:any = null;
 
 export const client = (db: string) => {
 
@@ -16,6 +16,7 @@ export const client = (db: string) => {
       const adapter = new PrismaNeon(pool);
       const prisma = new PrismaClient({ adapter });
       console.log("new db was created");
+      globalDb=prisma
       
       return prisma;
     }
