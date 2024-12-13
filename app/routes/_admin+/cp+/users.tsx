@@ -378,13 +378,13 @@ const Users = () => {
           info.getValue() === "none" ? "غير محدد" : info.getValue(),
       }),
       columnHelper.accessor("acceptenceState", {
-        header: "حالة التسجيل في البرنامج",
+        header: "حالة التسجيل ",
         cell: (info) => <AcceptectStatus status={info.getValue()} />,
       }),
       columnHelper.accessor("cvKey", {
-        header: "السيرة الذاتية",
+        header: ()=><span className="text-nowrap">السيرة الذاتية</span>,
         cell: (info) => (
-          <button className="button p-3">
+          <button className="button text-nowrap p-3">
             {" "}
             <Link
               onClick={(e) => {
@@ -487,7 +487,7 @@ const Users = () => {
 
   return (
     <div>
-      <div className="flex w-full px-12 gap-x-8">
+      <div className="flex w-full  gap-x-8">
         <div className="analytics-box-filled flex-1 flex">
           <p className="text-lg font-bold">
             {glossary.cp.registered + ":  "}
@@ -610,7 +610,7 @@ const Users = () => {
                   : table.setGlobalFilter("accepted")
               }
               className={cn(
-                "rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
+                "rounded-lg hover:bg-gray-50 text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
                 table.getState().globalFilter === "accepted"
                   ? "bg-gray-200"
                   : ""
@@ -625,7 +625,7 @@ const Users = () => {
                   : table.setGlobalFilter("denied")
               }
               className={cn(
-                "rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
+                "rounded-lg hover:bg-gray-50  text-sm text-[#475467] p-1 px-2 border border-[#E5E7EA] ",
                 table.getState().globalFilter === "denied" ? "bg-gray-200" : ""
               )}
             >
@@ -638,7 +638,7 @@ const Users = () => {
                   : table.setGlobalFilter("idle")
               }
               className={cn(
-                "rounded-lg hover:bg-gray-50  font-bold text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
+                "rounded-lg hover:bg-gray-50 text-sm text-[#475467] p-1 border border-[#E5E7EA] ",
                 table.getState().globalFilter === "idle" ? "bg-gray-200" : ""
               )}
             >

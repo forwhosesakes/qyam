@@ -92,7 +92,7 @@ const ControlPanel = () => {
           ))}
         </ul>
 
-        <hr className="mx-auto w-4/5 my-12" />
+        <hr className="mx-auto w-full my-12" />
 
         <Outlet />
       </div>
