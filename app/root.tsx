@@ -1,5 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { User } from "better-auth/types";
+import { client } from "~/db/db-client.server";
 
 import {
   Links,
@@ -48,35 +49,42 @@ export const links: LinksFunction = () => [
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
   try {
-    const [sessionResponse, toastResponse] = await Promise.all([
-      getAuth(context).api.getSession({
-        headers: request.headers,
-      }),
+    const sessionCookie = request.headers.get('Cookie')?.match(/session=([^;]+)/)?.[1];
+    
+    let user = null;
+    if (sessionCookie) {
+      const dbClient = client(context.cloudflare.env.DATABASE_URL);
+      const session = await dbClient.session.findUnique({
+        where: { id: sessionCookie },
+        include: { user: true }
+      });
+      
+      if (session?.user) {
+        user = session.user;
+      }
+    }
+
+    const [toastResponse] = await Promise.all([
       getToast(request),
     ]);
-
-    const user = sessionResponse?.user 
-      ? (sessionResponse.user as User) 
-      : null;
 
     return Response.json(
       { 
         toast: toastResponse.toast, 
         user,
-        phoneNumber:context.cloudflare.env.CONTACT_NUMBER,
+        phoneNumber: context.cloudflare.env.CONTACT_NUMBER,
       }, 
       { 
         headers: toastResponse.headers || undefined 
       }
     );
   } catch (error) {
+    console.error('Root loader error:', error);
     return Response.json(
       { 
         toast: null, 
-        user: null 
-      }, 
-      { 
-        headers: undefined 
+        user: null,
+        phoneNumber: context.cloudflare.env.CONTACT_NUMBER
       }
     );
   }
