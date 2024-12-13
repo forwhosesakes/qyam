@@ -15,9 +15,9 @@ export type Environment = {
 
 export const getAuth = (context: AppLoadContext): Auth | any => {
   // Create a new auth instance for each request
-  const dbClient = client(context.cloudflare.env.DATABASE_URL);
-  console.log("db client is null?:   ", !!dbClient);
-  console.log("db connection::::",context.cloudflare.env.DATABASE_URL);
+  // const dbClient = client(context.cloudflare.env.DATABASE_URL);
+  // console.log("db client is null?:   ", !!dbClient);
+  // console.log("db connection::::",context.cloudflare.env.DATABASE_URL);
   
   
 
@@ -55,35 +55,38 @@ export const getAuth = (context: AppLoadContext): Auth | any => {
         level: { type: "string" },
       },
     },
-    database: prismaAdapter(dbClient, {
-      provider: "postgresql",
-    }),
+    database: prismaAdapter(
+      client(context.cloudflare.env.DATABASE_URL) as any,
+      {
+        provider: "postgresql"
+      }
+    ),
 
-    databaseHooks: {
-      session: {
-        create: {
-          before: async (sessionInstance: any) => {
-            const user = (await dbClient.user.findUnique({
-              where: { id: sessionInstance.userId },
-            })) as QUser;
+    // databaseHooks: {
+    //   session: {
+    //     create: {
+    //       before: async (sessionInstance: any) => {
+    //         const user = (await dbClient.user.findUnique({
+    //           where: { id: sessionInstance.userId },
+    //         })) as QUser;
 
-            if (
-              user &&
-              user.acceptenceState !== "accepted" &&
-              user.role === "user"
-            ) {
-              return false;
-            }
+    //         if (
+    //           user &&
+    //           user.acceptenceState !== "accepted" &&
+    //           user.role === "user"
+    //         ) {
+    //           return false;
+    //         }
 
-            return {
-              data: {
-                ...sessionInstance,
-              },
-            };
-          },
-        },
-      },
-    },
+    //         return {
+    //           data: {
+    //             ...sessionInstance,
+    //           },
+    //         };
+    //       },
+    //     },
+    //   },
+    // },
     plugins: [admin()],
   });
 };
