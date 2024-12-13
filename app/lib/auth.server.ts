@@ -16,6 +16,8 @@ export type Environment = {
 export const getAuth = (context: AppLoadContext): Auth | any => {
   // Create a new auth instance for each request
   const dbClient = client(context.cloudflare.env.DATABASE_URL);
+  console.log("db client:   ", dbClient);
+  
 
   return betterAuth({
     emailAndPassword: {
