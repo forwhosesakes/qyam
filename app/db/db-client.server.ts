@@ -9,18 +9,13 @@ neonConfig.webSocketConstructor = ws;
 
 export const client = (db: string) => {
 
-    console.log("there is no global db, creating one")
+
     try {
       const pool = new Pool({ connectionString: db,
-        min: 0,
-        max: 10,
-        connectionTimeoutMillis:5000,
-        idleTimeoutMillis: 8000,
-
       });
       const adapter = new PrismaNeon(pool);
       const prisma = new PrismaClient({ adapter });
-      console.log("new db was created");
+      
       
       return prisma;
     }
