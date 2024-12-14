@@ -14,6 +14,7 @@ export const client = (db: string) => {
       const pool = new Pool({ connectionString: db,
         min: 0,
         max: 10,
+        connectionTimeoutMillis:5000,
         idleTimeoutMillis: 8000,
 
       });
