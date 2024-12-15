@@ -5,14 +5,27 @@ import { PrismaClient } from "@prisma/client";
 
 import ws from "ws";
 neonConfig.webSocketConstructor = ws;
-let globalDb = null;
+// let globalDb:any = null;
 
 export const client = (db: string) => {
-  if (!globalDb) {
-    const pool = new Pool({ connectionString: db });
-    const adapter = new PrismaNeon(pool);
-    const prisma = new PrismaClient({ adapter });
-    return prisma;
-  }
-  return globalDb;
+
+
+    try {
+      const pool = new Pool({ connectionString: db,
+      });
+      const adapter = new PrismaNeon(pool);
+      const prisma = new PrismaClient({ adapter });
+      
+      
+      return prisma;
+    }
+    catch(e){
+      console.log("error connecting to db",e);
+      return null
+      
+    }
+
+  
+
+
 };
