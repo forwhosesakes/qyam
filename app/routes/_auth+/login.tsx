@@ -4,12 +4,13 @@ import {
   useNavigate,
   useActionData,
   useNavigation,
+  NavLink,
 } from "@remix-run/react";
 import { useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import { getErrorMessage } from "../../lib/get-error-messege";
-import LoginShapeImg from "~/assets/images/login-drop-group.png";
 import Logo from "~/assets/images/logo.svg";
+import LoginImg from "~/assets/images/login.png";
 import GradientEllipse from "~/components/ui/gradient-ellipse";
 import LoadingOverlay from "~/components/loading-overlay";
 import { toast as showToast } from "sonner";
@@ -17,6 +18,7 @@ import glossary from "./glossary";
 
 import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { requireSpecialCase } from "~/lib/get-authenticated.server";
+import { Icon } from "~/components/icon";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
   const user = await requireSpecialCase(
@@ -132,11 +134,20 @@ export default function Login() {
         </div>
       </div>
       <div className="h-full w-full flex flex-col  justify-center items-center z-10 overflow-y-hidden">
-        <img
+      <div className="relative ">
+
+      <img
           className="lg:my-16 my-8 z-10 lg:w-[186px] lg:h-[155px]  w-[144px] h-[120px] brd"
           src={Logo}
           alt=""
         />
+      <NavLink 
+      to={"/"}
+      className="absolute rounded-lg px-1 border-2  hover:opacity-80 transition-opacity  border-[#4D5761] top-12 -left-[120%] ">
+          <Icon name="back-arrow" size="sm"/>
+        </NavLink>
+      </div>
+  
         <h2 className="my-5 z-10">{glossary.login.title}</h2>
 
         <Form
@@ -207,8 +218,8 @@ export default function Login() {
       </div>
 
       <div className="hidden lg:flex justify-center items-end h-full bg-primary w-2/3 z-10">
-        <div className="mb-16 mx-2">
-          <img src={LoginShapeImg} alt="" />
+        <div className=" mx-2">
+          <img src={LoginImg} alt="" />
         </div>
       </div>
     </div>

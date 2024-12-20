@@ -243,10 +243,10 @@ const Users = () => {
     let styles = `text-[#D1242F] border-[#D1242F]`;
     switch (status) {
       case "accepted":
-        styles = `text-[#1A7F37] border-[#1A7F37]`;
+        styles = `text-[#1A7F37] border-[#1A7F37] `;
         break;
       case "denied":
-        styles = "text-[#D1242F] border-[#D1242F]";
+        styles = "text-[#D1242F] border-[#D1242F] ";
         break;
       case "pending":
         styles = "text-[#9A6700] border-[#9A6700]";
@@ -384,7 +384,7 @@ const Users = () => {
       columnHelper.accessor("cvKey", {
         header: ()=><span className="text-nowrap">السيرة الذاتية</span>,
         cell: (info) => (
-          <button className="button text-nowrap p-3">
+          <button className="button hover:bg-gray-100 rounded-lg transition-all text-nowrap p-2">
             {" "}
             <Link
               onClick={(e) => {
@@ -411,7 +411,7 @@ const Users = () => {
                   handleEditUserClick("accepted", row.original, e)
                 }
                 disabled={row.original.acceptenceState === "accepted"}
-                className={`button p-2 text-[#1A7F37] border border-[#1A7F37] rounded-lg disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+                className={`button p-2 text-[#1A7F37] border border-[#1A7F37] rounded-lg disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed hover:bg-[#1A7F37]/10 transition-all`}
               >
                 قبول
               </button>
@@ -419,7 +419,7 @@ const Users = () => {
               <button
                 onClick={(e) => handleEditUserClick("denied", row.original, e)}
                 disabled={row.original.acceptenceState === "denied"}
-                className={`button p-2 rounded-lg text-[#D1242F] border border-[#D1242F] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+                className={`button p-2 rounded-lg text-[#D1242F] border border-[#D1242F] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed hover:opacity-80 hover:bg-[#D1242F]/10 transition-all`}
               >
                 رفض
               </button>
@@ -427,14 +427,14 @@ const Users = () => {
               <button
                 onClick={(e) => handleEditUserClick("idle", row.original, e)}
                 disabled={row.original.acceptenceState === "idle"}
-                className={`button  p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+                className={`button  p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed hover:opacity-80 hover:bg-[#e16f4cf7]/10 transition-all`}
               >
                 تعطيل
               </button>
 
               <button
                 onClick={(e) => handleDeleteUserClick(row.original, e)}
-                className="button p-2 rounded-lg text-red-600 border border-red-600 flex gap-1"
+                className="button p-2 rounded-lg text-red-600 border border-red-600 flex gap-1 hover:opacity-80 hover:bg-red-600/10 transition-all"
               >
                 حذف
                 <svg
@@ -458,7 +458,7 @@ const Users = () => {
             <button
               onClick={(e) => handleEditUserClick("accepted", row.original, e)}
               disabled={row.original.acceptenceState === "accepted"}
-              className={`button p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed`}
+              className={`button p-2 rounded-lg text-[#e16f4cf7] border border-[#e16f4cf7] disabled:border-gray-300  disabled:text-gray-300 disabled:cursor-not-allowed hover:opacity-80 hover:bg-[#e16f4cf7]/10 transition-all`}
             >
               إعادة تنشيط
             </button>
@@ -507,20 +507,21 @@ const Users = () => {
         </div>
       </div>
 
-      <div className="flex lg:flex-row flex-col  w-full px-24 lg:gap-x-8 gap-y-5 my-5 p-3 bg-gray-100/50 rounded-md justify-between">
+      <div className="flex lg:flex-row flex-col  w-full px-24 lg:gap-x-8 gap-y-5 my-8 p-3 bg-gray-100/50 rounded-md justify-between">
         <div className="flex flex-col justify-center items-center gap-4">
           <h5 className="font-bold ">الإحصائيات</h5>
           <Button onClick={updateStats} className="hidden lg:flex">
             حفظ الإحصائيات
           </Button>
         </div>
-        <div>
+        <div >
           <h6 className="text-[#344054] text-center my-2 xl:text-lg text-base">
             المسجلين
           </h6>
           <Input
             type="number"
-            className="admin-stats-box text-center"
+            min={0}
+            className="admin-stats-box text-center !text-xl font-bold text-[#667085] "
             value={localStats.registeredUsers}
             onChange={(e) =>
               setLocalStats((prev) => ({
@@ -537,7 +538,8 @@ const Users = () => {
           </h6>
           <Input
             type="number"
-            className="admin-stats-box text-center"
+            min={0}
+            className="admin-stats-box text-center !text-xl font-bold text-[#667085]"
             value={localStats.curriculums}
             onChange={(e) =>
               setLocalStats((prev) => ({
@@ -554,7 +556,8 @@ const Users = () => {
           </h6>
           <Input
             type="number"
-            className="admin-stats-box text-center"
+            min={0}
+            className="admin-stats-box text-center !text-xl font-bold text-[#667085]"
             value={localStats.trainingHours}
             onChange={(e) =>
               setLocalStats((prev) => ({
@@ -573,7 +576,7 @@ const Users = () => {
 
       <div className="flex justify-between mb-5  items-center w-full">
         <div className="flex items-center gap-x-2">
-          <p>عدد المختارين :{Object.keys(rowSelection).length}</p>
+          <p className="text-sm font-bold text-[#344054] ml-8">عدد المختارين :{Object.keys(rowSelection).length}</p>
 
           {Object.keys(rowSelection).length > 0 && (
             <div className="flex gap-x-4">
@@ -600,7 +603,7 @@ const Users = () => {
           )}
         </div>
 
-        <div className="relative w-1/2 lg:w-1/3">
+        <div className="relative w-1/2 ">
           <Icon className="absolute right-2 top-3" name="search" size="sm" />
           <div className="absolute gap-x-2 flex left-2 top-1">
             <button
@@ -655,6 +658,9 @@ const Users = () => {
         </div>
       </div>
 
+
+      <hr className="my-8"/>
+
       <Table className="mx-auto  text-[#027163]">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -674,7 +680,7 @@ const Users = () => {
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <TableRow onClick={() => navigate(row.original.id)} key={row.id}>
+            <TableRow className="cursor-pointer" onClick={() => navigate(row.original.id)} key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
