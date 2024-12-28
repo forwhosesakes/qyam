@@ -229,7 +229,7 @@ body {
 
 .q1-editor{
   direction: rtl;
-  text-align: left;
+  /* text-align: left; */
 }
 
 /* .q1-editor p{
@@ -239,6 +239,7 @@ body {
 .q1-container{
   direction: rtl;
 }
+
 
 
 

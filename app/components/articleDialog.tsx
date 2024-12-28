@@ -93,7 +93,7 @@ export default function ArticleDialog({ open, onOpenChange, article }: ArticleDi
       [{color:[]}],
       ['bold', 'italic', 'underline'],
       // [{script:'sub'},{script:'super'}],
-    [{ align: ['', 'center', 'right', 'justify'] }],
+    // [{ align: ['', 'center', 'right', 'justify'] }],
       ["link"],
       ["clean"],
     ],
