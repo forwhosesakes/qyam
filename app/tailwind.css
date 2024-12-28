@@ -225,3 +225,29 @@ body {
 .toast-icon-warning svg {
   color: #eab308 !important; 
 }
+
+
+.q1-editor{
+  direction: rtl;
+  /* text-align: left; */
+}
+
+/* .q1-editor p{
+  text-align: right;
+} */
+
+.q1-container{
+  direction: rtl;
+}
+
+
+
+
+.q1-snow .q1-toolbar{
+  direction: rtl;
+}
+
+.q1-snow .q1-formats{
+  margin-right: 0px;
+  margin-left: 15px;
+}

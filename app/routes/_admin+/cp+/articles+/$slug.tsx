@@ -38,8 +38,9 @@ export default function Article() {
         
         <div
           dangerouslySetInnerHTML={{
-            __html: article.content.replace(/\n/g, '<br />'),
+            __html: article.content
           }}
+          className="q1-editor"
         />
       </article>
     </div>

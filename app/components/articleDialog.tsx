@@ -4,8 +4,10 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Article } from "~/types/types";
 import { Form, useFetcher } from "@remix-run/react";
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { Label } from "./ui/label";
+import type { QuillOptions } from 'quill';
+import "react-quill/dist/quill.snow.css"
 
 interface ArticleDialogProps {
   open: boolean;
@@ -18,8 +20,22 @@ interface ArticleDialogProps {
 export default function ArticleDialog({ open, onOpenChange, article }: ArticleDialogProps) {
   const fetcher = useFetcher();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [ReactQuill,setReactQuill]=useState<any>(null)
+  const [content, setContent] = useState(article?.content || '');
   const isEditing = !!article;
-  const title = isEditing ? "تعديل المقال" : "إضافة مقال جديد";
+  const title = isEditing ? "تعديل المقال" : "إضافة مقال جديد";   
+
+
+  useEffect(()=>{
+    import("react-quill").then((module)=>{
+      setReactQuill(()=>module.default)
+    })
+  },[])
+
+  useEffect(()=>{
+    setContent(article?.content??"")
+  },[article])
+  
 
     const onChange =async (file:File) => {
         if(!file)return
@@ -68,6 +84,21 @@ export default function ArticleDialog({ open, onOpenChange, article }: ArticleDi
     onOpenChange(false);
   };
 
+
+
+
+  const modules:QuillOptions["modules"] = {
+    toolbar:[
+      // [{size:[false,'small','large','huge']}],
+      [{color:[]}],
+      ['bold', 'italic', 'underline'],
+      // [{script:'sub'},{script:'super'}],
+    // [{ align: ['', 'center', 'right', 'justify'] }],
+      ["link"],
+      ["clean"],
+    ],
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -99,15 +130,22 @@ export default function ArticleDialog({ open, onOpenChange, article }: ArticleDi
 
           <div className="space-y-2">
             <Label htmlFor="content">المحتوى</Label>
-            <Textarea
-              id="content"
+            {ReactQuill&&(
+              <ReactQuill
+                theme="snow"
+                value={content}
+                onChange={setContent}
+                modules={modules}
+                className=" mb-12 q1-editor"
+                dir="rtl"
+              />
+            )
+            }
+            <input
+              type="hidden"
               name="content"
-              rows={10}
-              defaultValue={article?.content}
-              required
+              value={content}
             />
-
-            
           </div>
 
           <div className="space-y-2">

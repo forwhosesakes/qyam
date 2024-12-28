@@ -138,12 +138,15 @@ export default function Signup() {
     if (touchedFields.phone) {
       if (!phone || phone == "") {
         newErrors.phone = g.phone.required;
-      } else if (phone.length === 12 && !phone.startsWith("966")) {
-        newErrors.phone = g.phone.saudi;
-      } else if (phone.length === 10 && !phone.startsWith("05")) {
-        newErrors.phone = g.phone.notValid;
-      } else if (!(phone.length === 10 || phone.length === 12)) {
-        newErrors.phone = g.phone.length;
+      } 
+      // else if (phone.length === 12 && !phone.startsWith("966")) {
+      //   newErrors.phone = g.phone.saudi;
+      // } else if (phone.length === 10 && !phone.startsWith("05")) {
+      //   newErrors.phone = g.phone.notValid;
+      // } 
+      
+      else if (!(phone.length === 10 )) {
+        newErrors.phone = g.phone.length_10;
       }
     }
 
