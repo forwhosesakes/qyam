@@ -229,12 +229,16 @@ body {
 
 .q1-editor{
   direction: rtl;
-  /* text-align: left; */
+  text-align: left;
 }
 
-/* .q1-editor p{
+.q1-editor .ql-align-center{
+  text-align: center;
+}
+.q1-editor .ql-align-right{
   text-align: right;
-} */
+}
+
 
 .q1-container{
   direction: rtl;
