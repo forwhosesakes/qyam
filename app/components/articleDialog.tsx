@@ -101,7 +101,7 @@ export default function ArticleDialog({ open, onOpenChange, article }: ArticleDi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[100px] md:max-w-[600px] sm:max-h-[800px] overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

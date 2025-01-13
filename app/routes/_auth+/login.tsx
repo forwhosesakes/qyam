@@ -76,7 +76,7 @@ export default function Login() {
             navigate("/");
           },
           onError: (ctx) => {
-            console.log("error in sign in:  ", ctx);
+            // console.log("error in sign in:  ", ctx);
             
             setLoading(false);
 

@@ -38,6 +38,7 @@ import { Input } from "~/components/ui/input";
 import { createToastHeaders } from "~/lib/toast.server";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/tw-merge";
+import { getAuth } from "~/lib/auth.server";
 
 const columnHelper = createColumnHelper<QUser>();
 
@@ -153,6 +154,9 @@ export async function action({ request, context }: ActionFunctionArgs) {
         );
       })
       .then(async () => {
+        getAuth(context).api.forgetPassword({body:{email:formData.get("email") as string, redirectTo:"/reset-password"}})
+
+
         return Response.json(
           { success: true },
           {

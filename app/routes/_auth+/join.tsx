@@ -215,8 +215,9 @@ export default function Signup() {
               },
               onError: (ctx) => {
                 setLoading(false);
+                
 
-                if (ctx.error.code === "USER_WITH_THIS_EMAIL_ALREADY_EXISTS") {
+                if (ctx.error.code === "USER_WITH_THIS_EMAIL_ALREADY_EXISTS" || ctx.error.code==="USER_ALREADY_EXISTS") {
                   showToast.error(glossary.signup.toasts.signupError.title, {
                     description: glossary.signup.toasts.signupError.emailExist,
                   });
@@ -443,7 +444,7 @@ export default function Signup() {
                     
             
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 border-6">
+                <DropdownMenuContent className="w-56 max-h-64 overflow-scroll border-6">
                   <DropdownMenuRadioGroup
                     value={region}
                     onValueChange={setRegion}
