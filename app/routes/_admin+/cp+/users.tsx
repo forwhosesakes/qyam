@@ -154,9 +154,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
         );
       })
       .then(async () => {
-        getAuth(context).api.forgetPassword({body:{email:formData.get("email") as string, redirectTo:"/reset-password"}})
-
-
         return Response.json(
           { success: true },
           {
