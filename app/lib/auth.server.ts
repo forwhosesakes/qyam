@@ -4,7 +4,6 @@ import { admin } from "better-auth/plugins";
 import { sendEmail } from "./send-email.server";
 import { AppLoadContext } from "@remix-run/cloudflare";
 import { client } from "~/db/db-client.server";
-import { QUser } from "~/types/types";
 
 export type Environment = {
   Variables: {
@@ -13,7 +12,7 @@ export type Environment = {
   };
 };
 
-export const getAuth = (context: AppLoadContext): Auth | any => {
+export const getAuth = (context: AppLoadContext) => {
   // Create a new auth instance for each request
   // const dbClient = client(context.cloudflare.env.DATABASE_URL);
   // console.log("db client is null?:   ", !!dbClient);

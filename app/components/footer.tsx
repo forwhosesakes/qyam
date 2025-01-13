@@ -19,7 +19,7 @@ useEffect(()=>{
     else console.log("success");
   })
 
-  console.log("happened qrcode");
+  // console.log("happened qrcode");
   
 })
   

@@ -230,7 +230,11 @@ export const statusTemplate = (props: { status: string; name: string }) => `<!DO
                                     ونحن على ثقة بأنك ستكون إضافة قيمة لبرنامجنا.
                                 </p>
                                 <p style="font-size: 1rem; text-align: center; font-weight: bold; color: black;">
-                                    يرجى الاطلاع على التفاصيل الإدارية المتعلقة بالتسجيل والدفع في المرفقات.
+                              ملاحظة: لتتمكن من الدخول الى حسابك في قيم فإنه يتوجب عليك إعادة تعيين كلمة مرورك بخطوات بسيطة عبر الرابط التالي
+                               <a href="https://qyam.org/forgot-password" style="font-size: 0.75rem; background-color: #0D3151; color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; text-decoration: none; display: inline-block; margin-bottom: 3rem;">
+                                            إعادة تعيين كلمة المرور
+                                        </a>
+                              
                                 </p>
                                 <p style="font-size: 1rem; text-align: center; font-weight: bold; color: black;">
                                     نتطلع لرؤيتك بيننا.

@@ -65,7 +65,7 @@ const ProgramContainer = ({
                   size="sm"
                   className="text-primary"
                   onClick={()=>{
-                    console.log("set selected program:  ", program);
+                    // console.log("set selected program:  ", program);
                     
                     toggleDeleteDialog()
                     setSelectedProgram(program)

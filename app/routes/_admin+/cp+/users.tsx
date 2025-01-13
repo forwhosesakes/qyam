@@ -38,6 +38,7 @@ import { Input } from "~/components/ui/input";
 import { createToastHeaders } from "~/lib/toast.server";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/tw-merge";
+import { getAuth } from "~/lib/auth.server";
 
 const columnHelper = createColumnHelper<QUser>();
 

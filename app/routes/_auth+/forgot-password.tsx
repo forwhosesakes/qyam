@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import { getErrorMessage } from "../../lib/get-error-messege";
 import glossary from "./glossary";
+import { toast as showToast } from "sonner";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -19,10 +20,17 @@ const ForgotPassword = () => {
           // show loading state
         },
         onSuccess: (ctx: any) => {
+          showToast.success("اعادة تعيين كلمة المرور", {
+            description: "تم ارسال رابط تعيين كلمة المرور عبر بريدك الالكتروني",
+          });
+
           navigate("/");
         },
         onError: (ctx: any) => {
           const msg = getErrorMessage(ctx);
+          showToast.error("اعادة تعيين كلمة المرور", {
+            description: "حدث خطأ اثناء عملية  تعيين كلمة المرور   ",
+          });
           console.log("msg error in login", ctx);
         },
       }
