@@ -37,12 +37,12 @@ const Navbar = () => {
           {" "}
           انضمام
         </button>
-        <button
+        {/* <button
           onClick={() => navigate("/login")}
           className="button font-bold text-xs  md:text-sm text-center p-3 rounded-lg text-gray-700 hover:bg-black/5 transition-all"
         >
           دخول
-        </button>
+        </button> */}
       </div>
     );
   const DisplayedNavList = () => (
