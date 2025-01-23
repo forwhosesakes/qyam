@@ -297,7 +297,7 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen  bg-section w-full pt-[96px] pb-8">
-      {loading && <LoadingOverlay />}
+      {loading && <LoadingOverlay message="جاري الإرسال..." />}
 
       <div className="flex sm:flex-row flex-col items-start min-h-fit h-full w-full">
         <div className=" w-[80%] sm:w-5/12  h-full flex flex-col justify-start items-center sm:items-end   ml-5 sm:ml-0">
@@ -535,16 +535,6 @@ export default function Signup() {
               <p className="text-xs lg:text-base md:text-sm">
                 2. {glossary.signup.registrationTerms.second}
               </p>
-              <p className="text-xs lg:text-base md:text-sm">
-                3. {glossary.signup.registrationTerms.third}
-              </p>
-              <p className="mb-3 text-xs lg:text-base md:text-sm">
-                4. {glossary.signup.registrationTerms.forth}
-              </p>
-
-              <p className="text-xs text-[#BC4C00] lg:text-base md:text-sm">
-                {glossary.signup.registrationTerms.noticeText}
-              </p>
             </div>
           </div>
 
@@ -571,6 +561,9 @@ export default function Signup() {
               </p>
               <p className="text-xs lg:text-base md:text-sm">
                 5. {glossary.signup.admissionCriteria.fifth}
+              </p>
+              <p className="text-xs lg:text-base md:text-sm">
+                6. {glossary.signup.admissionCriteria.sixth}
               </p>
             </div>
           </div>
