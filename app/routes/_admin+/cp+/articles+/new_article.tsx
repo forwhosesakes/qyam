@@ -18,7 +18,7 @@ import {
   import "react-quill/dist/quill.snow.css";
   import type { QuillOptions } from "quill";
   import { getAuthenticated } from "~/lib/get-authenticated.server";
-import { createArticle } from "~/db/articles/articles.server"
+import articleDB from "~/db/articles/articles.server"
   
   export async function loader({ context, request }: LoaderFunctionArgs) {
     await getAuthenticated({ request, context });
@@ -54,13 +54,12 @@ import { createArticle } from "~/db/articles/articles.server"
         console.log("uploadResult :: ", uploadResult);
         
       }
-  
-      const article = await createArticle({
+      const article = await articleDB.createArticle({
         title: title.toString(),
         description: description.toString(),
         content: content.toString(),
         image: imageKey,
-      })
+      },context.cloudflare.env.DATABASE_URL)
       console.log("article is :: ", article);
       
     //   const article = await prisma(context).article.create({
