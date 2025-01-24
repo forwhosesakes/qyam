@@ -40,6 +40,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
       return { error: "Please select a valid file", status: 400 };
     }
     const key = `${Date.now()}-${createId()}.${file.name.split(".")[1]}`;
+    console.log("key::",key,context.cloudflare.env);
+    
     const buffer = await file.arrayBuffer();
 
     const uploadResult = await context.cloudflare.env.QYAM_BUCKET.put(
@@ -51,7 +53,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
         },
       }
     );
+    console.log("upload result::",uploadResult);
+    
     const checkUpload = await context.cloudflare.env.QYAM_BUCKET.head(key);
+    console.log("checkUpload :: ",checkUpload);
+    
     return {
       success: true,
       key,

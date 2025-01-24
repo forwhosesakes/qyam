@@ -20,7 +20,11 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
     const formData = await request.formData();
+    console.log("formdata:: ",formData);
+    
     const method = request.method;
+    console.log("method:: ",method);
+    
   
     try {
   //     const file = formData.get("image");
