@@ -1,5 +1,9 @@
 import { Form, useActionData, useSubmit } from "@remix-run/react";
-import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/cloudflare";
 import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
 import glossary from "./glossary";
@@ -19,23 +23,18 @@ import { REGIONS } from "~/lib/constants";
 import { QUser } from "~/types/types";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  const user= await getAuthenticated({request, context});
-  if(!user) return null
-    else if((user as QUser).acceptenceState==="accepted")
-      return redirect("/")
-    else 
-    return redirect(`/404?status=${(user as QUser).acceptenceState}`)
-
-  
+  const user = await getAuthenticated({ request, context });
+  if (!user) return null;
+  else if ((user as QUser).acceptenceState === "accepted") return redirect("/");
+  else return redirect(`/404?status=${(user as QUser).acceptenceState}`);
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const filenameHeader = request.headers.get("X-filename-Header")
-  if(filenameHeader){
-    const decodedHeader = decodeURIComponent(filenameHeader)
-    console.log("Header filename: ",decodedHeader);
-    
+  const filenameHeader = request.headers.get("X-filename-Header");
+  if (filenameHeader) {
+    const decodedHeader = decodeURIComponent(filenameHeader);
+    console.log("Header filename: ", decodedHeader);
   }
   try {
     const intent = formData.get("intent");
@@ -45,12 +44,16 @@ export async function action({ request, context }: ActionFunctionArgs) {
       return { error: "Please select a valid file", status: 400 };
     }
 
-    const originalName = decodeURIComponent(file.name).normalize("NFC");
-    const sanitizedName = originalName.replace(/[^a-zA-Z0-9\-_.\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/g, '_');
+    // const originalName = decodeURIComponent(file.name).normalize("NFC");
+    const originalName = decodeURIComponent(atob(file.name));
+    const sanitizedName = originalName.replace(
+      /[^a-zA-Z0-9\-_.\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/g,
+      "_"
+    );
 
     console.log("Received filename:", file.name);
-console.log("Normalized filename:", originalName);
-console.log("Sanitized filename:", sanitizedName);
+    console.log("Normalized filename:", originalName);
+    console.log("Sanitized filename:", sanitizedName);
 
     const key = `${Date.now()}-${createId()}-${sanitizedName}`;
     const buffer = await file.arrayBuffer();
@@ -135,15 +138,10 @@ export default function Signup() {
       }
     }
 
-
-
     if (touchedFields.phone) {
       if (!phone || phone == "") {
         newErrors.phone = g.phone.required;
-      } 
- 
-      
-      else if (!(phone.length === 10 )) {
+      } else if (!(phone.length === 10)) {
         newErrors.phone = g.phone.length_10;
       }
     }
@@ -213,15 +211,15 @@ export default function Signup() {
               },
               onError: (ctx) => {
                 setLoading(false);
-                
 
-                if (ctx.error.code === "USER_WITH_THIS_EMAIL_ALREADY_EXISTS" || ctx.error.code==="USER_ALREADY_EXISTS") {
+                if (
+                  ctx.error.code === "USER_WITH_THIS_EMAIL_ALREADY_EXISTS" ||
+                  ctx.error.code === "USER_ALREADY_EXISTS"
+                ) {
                   showToast.error(glossary.signup.toasts.signupError.title, {
                     description: glossary.signup.toasts.signupError.emailExist,
                   });
-                }
-       
-                else {
+                } else {
                   showToast.error(glossary.signup.toasts.signupError.title, {
                     description:
                       glossary.signup.toasts.signupError.generalDescription,
@@ -271,8 +269,6 @@ export default function Signup() {
 
   // Update the signUp function to double-check
   const signUp = async () => {
-    
-
     // Mark all fields as touched before submission
     const allTouched = {
       email: true,
@@ -293,22 +289,22 @@ export default function Signup() {
     //   formData.set("file", cv);
     //   submit(formData, { method: "post" });
     // }
-    if(cv){
+    if (cv) {
       const formData = new FormData();
-      formData.set("intent","upload")
-  
-      formData.set("X-filename-Header", encodeURIComponent(cv.name))
+      formData.set("intent", "upload");
 
-      const blob = new Blob([cv],{type:cv.type})
+      formData.set("X-filename-Header", encodeURIComponent(cv.name));
+
+      const blob = new Blob([cv], { type: cv.type });
 
       const normalizedFile = new File([blob], cv.name, {
         type: cv.type,
-        lastModified: cv.lastModified
+        lastModified: cv.lastModified,
       });
-      normalizedFile.name = cv.name; 
+      normalizedFile.name = cv.name;
 
       formData.set("file", normalizedFile);
-    submit(formData, { method: "post" });
+      submit(formData, { method: "post" });
     }
   };
 
@@ -451,15 +447,10 @@ export default function Signup() {
                 {glossary.signup.newSignup.region}
               </p>
 
-              <DropdownMenu >
+              <DropdownMenu>
                 <DropdownMenuTrigger className="w-full bg-white justify-between">
-               <span>
-               {region}
-
-               </span>
-                    {/* <Icon name={"below-arrow"} size="md"/> */}
-                    
-            
+                  <span>{region}</span>
+                  {/* <Icon name={"below-arrow"} size="md"/> */}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56 max-h-64 overflow-scroll border-6">
                   <DropdownMenuRadioGroup
@@ -467,7 +458,10 @@ export default function Signup() {
                     onValueChange={setRegion}
                   >
                     {REGIONS.map((reg) => (
-                      <DropdownMenuRadioItem className={`${region===reg?"bg-gray-50":""}`} value={reg}>
+                      <DropdownMenuRadioItem
+                        className={`${region === reg ? "bg-gray-50" : ""}`}
+                        value={reg}
+                      >
                         {reg}
                       </DropdownMenuRadioItem>
                     ))}
@@ -489,11 +483,13 @@ export default function Signup() {
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
-                    const processedFile = new File([file], encodeURIComponent(file.name.normalize("NFC")),
-                    {
-                      type:file.type,
-                      lastModified:file.lastModified
-                    })
+                    const base64Name = btoa(
+                      unescape(encodeURIComponent(file.name))
+                    );
+                    const processedFile = new File([file], base64Name, {
+                      type: file.type,
+                      lastModified: file.lastModified,
+                    });
                     setCv(processedFile);
                   }
                 }}
