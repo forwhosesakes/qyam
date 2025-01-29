@@ -36,9 +36,9 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const intent = formData.get("intent");
     const file = formData.get("file");
 
-    if (!file || !(file instanceof File)) {
-      return { error: "Please select a valid file", status: 400 };
-    }
+    // if (!file || !(file instanceof File)) {
+    //   return { error: "Please select a valid file", status: 400 };
+    // }
     const key = `${Date.now()}-${createId()}.${file.name.split(".")[1]}`;
     const buffer = await file.arrayBuffer();
 
@@ -151,9 +151,10 @@ export default function Signup() {
     }
 
     if (touchedFields.cv) {
-      if (!cv) {
-        newErrors.cv = g.cv.required;
-      } else {
+      // if (!cv) {
+      //   newErrors.cv = g.cv.required;
+      // }
+       if(cv) {
         const allowedTypes = [
           "application/pdf",
           "application/msword",
@@ -164,6 +165,8 @@ export default function Signup() {
         } else if (cv.size > 5 * 1024 * 1024) {
           newErrors.cv = g.cv.size;
         }
+      }else{
+        newErrors.cv=""
       }
     }
 
@@ -255,7 +258,7 @@ export default function Signup() {
       // passwordConfirmation !== '' &&
       phone !== undefined &&
       phone !== "" &&
-      cv !== null &&
+      // cv !== null &&
       bio.trim() !== ""
     );
   };
