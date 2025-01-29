@@ -480,8 +480,8 @@ export default function Signup() {
                   const file = e.target.files?.[0];
                   
                   if (file) {
-                    const sanitizedName = sanitizeFileName(file.name);
-                    const newFile = new File([file], sanitizedName, {
+                    // const sanitizedName = sanitizeFileName(file.name);
+                    const newFile = new File([file], "new_file", {
                       type: file.type,
                       lastModified: file.lastModified,
                     });
