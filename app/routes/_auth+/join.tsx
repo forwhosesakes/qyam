@@ -39,7 +39,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
     if (!file || !(file instanceof File)) {
       return { error: "Please select a valid file", status: 400 };
     }
-    const key = `${Date.now()}-${createId()}.${file.name.split(".")[1]}`;
+
+    const originalName = decodeURIComponent(file.name).normalize("NFC");
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9\-_.\u0600-\u06FF]/g, '_');
+
+    const key = `${Date.now()}-${createId()}-${sanitizedName}`;
     const buffer = await file.arrayBuffer();
 
     const uploadResult = await context.cloudflare.env.QYAM_BUCKET.put(
@@ -74,8 +78,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [passwordConfirmation, setPasswordConfirmation] = useState("");
+
   const [region, setRegion] = useState("الرياض");
   const [cv, setCv] = useState<File | null>(null);
   const [bio, setBio] = useState("");
@@ -123,27 +126,13 @@ export default function Signup() {
       }
     }
 
-    // if (touchedFields.password) {
-    //   if (!password) {
-    //     newErrors.password = g.password.required;
-    //   } else if (password.length < 8) {
-    //     newErrors.password = g.password.length;
-    //   }
-    // }
 
-    // if (touchedFields.passwordConfirmation && password !== passwordConfirmation) {
-    //   newErrors.passwordConfirmation = g.passwordConfirmation;
-    // }
 
     if (touchedFields.phone) {
       if (!phone || phone == "") {
         newErrors.phone = g.phone.required;
       } 
-      // else if (phone.length === 12 && !phone.startsWith("966")) {
-      //   newErrors.phone = g.phone.saudi;
-      // } else if (phone.length === 10 && !phone.startsWith("05")) {
-      //   newErrors.phone = g.phone.notValid;
-      // } 
+ 
       
       else if (!(phone.length === 10 )) {
         newErrors.phone = g.phone.length_10;
@@ -273,6 +262,8 @@ export default function Signup() {
 
   // Update the signUp function to double-check
   const signUp = async () => {
+    
+
     // Mark all fields as touched before submission
     const allTouched = {
       email: true,
@@ -287,11 +278,25 @@ export default function Signup() {
 
     if (!validateForm(allTouched) || !areAllFieldsFilled()) return;
 
-    if (cv) {
+    // if (cv) {
+    //   const formData = new FormData();
+    //   formData.set("intent", "upload");
+    //   formData.set("file", cv);
+    //   submit(formData, { method: "post" });
+    // }
+    if(cv){
       const formData = new FormData();
-      formData.set("intent", "upload");
-      formData.set("file", cv);
-      submit(formData, { method: "post" });
+      formData.set("intent","upload")
+  
+      const blob = new Blob([cv],{type:cv.type})
+
+      const normalizedFile = new File([blob], cv.name, {
+        type: cv.type,
+        lastModified: cv.lastModified
+      });
+
+      formData.set("file", normalizedFile);
+    submit(formData, { method: "post" });
     }
   };
 
@@ -472,6 +477,11 @@ export default function Signup() {
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
+                    const processedFile = new File([file], encodeURIComponent(file.name.normalize("NFC")),
+                    {
+                      type:file.type,
+                      lastModified:file.lastModified
+                    })
                     setCv(file);
                   }
                 }}
