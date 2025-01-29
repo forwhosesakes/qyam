@@ -40,6 +40,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
   try {
     const intent = formData.get("intent");
     const file = formData.get("file");
+    console.log("fiiiiile::::", file)
 
     if (!file || !(file instanceof File)) {
       console.log("file:::", file);
