@@ -482,7 +482,7 @@ export default function Signup() {
                       type:file.type,
                       lastModified:file.lastModified
                     })
-                    setCv(file);
+                    setCv(processedFile);
                   }
                 }}
                 onBlur={() => handleBlur("cv")}
