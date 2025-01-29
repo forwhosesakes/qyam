@@ -300,7 +300,7 @@ export default function Signup() {
       formData.set("intent", "upload");
       console.log("before form set, file::", cv);
       
-      formData.set("file", cv);
+      formData.append("file", cv, cv.name);
       submit(formData, { method: "post" });
     }
   };
@@ -506,7 +506,7 @@ const newFile = new File([fileBuffer], "new_file", {
                   }
                 }}
                 onBlur={() => handleBlur("cv")}
-                accept=".pdf,.doc,.docx"
+                // accept=".pdf,.doc,.docx"
               />
               {errors.cv && (
                 <span className="text-red-600 text-xs">{errors.cv}</span>
