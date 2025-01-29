@@ -36,9 +36,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const intent = formData.get("intent");
     const file = formData.get("file");
 
-    // if (!file || !(file instanceof File)) {
-    //   return { error: "Please select a valid file", status: 400 };
-    // }
+    if (!file || !(file instanceof File)) {
+      return{ success:true,key:"no file uploaded"}
+      // return { error: "Please select a valid file", status: 400 };
+    }
     const key = `${Date.now()}-${createId()}.${file.name.split(".")[1]}`;
     const buffer = await file.arrayBuffer();
 
