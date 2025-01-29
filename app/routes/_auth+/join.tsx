@@ -17,6 +17,11 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { REGIONS } from "~/lib/constants";
 import { QUser } from "~/types/types";
+const sanitizeFileName = (name: string) => {
+  // Create a blob with the file to generate a safe filename
+  return name.replace(/[^\u0600-\u06FF\u0750-\u077F\w.-]/g, '_');
+};
+
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
   const user= await getAuthenticated({request, context});
@@ -37,6 +42,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const file = formData.get("file");
 
     if (!file || !(file instanceof File)) {
+      console.log("file:::", file);
+      
       return { error: "Please select a valid file", status: 400 };
     }
     const key = `${Date.now()}-${createId()}.${file.name.split(".")[1]}`;
@@ -471,8 +478,14 @@ export default function Signup() {
                 name="file"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
+                  
                   if (file) {
-                    setCv(file);
+                    const sanitizedName = sanitizeFileName(file.name);
+                    const newFile = new File([file], sanitizedName, {
+                      type: file.type,
+                      lastModified: file.lastModified,
+                    });
+                    setCv(newFile);
                   }
                 }}
                 onBlur={() => handleBlur("cv")}
