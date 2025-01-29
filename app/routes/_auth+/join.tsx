@@ -295,15 +295,27 @@ export default function Signup() {
 
     if (!validateForm(allTouched) || !areAllFieldsFilled()) return;
 
-    if (cv) {
+    if (cv instanceof File) {
       const formData = new FormData();
-      formData.set("intent", "upload");
-      console.log("before form set, file::", cv);
       
-      formData.append("file", cv, cv.name);
-      submit(formData, { method: "post" });
+      // Important: Use append() instead of set() for files
+      formData.append("file", cv, cv.name); // Preserve original filename
+      formData.append("intent", "upload");
+    
+      // Verify the file before submission
+      console.log("Submitting file:", {
+        name: cv.name,
+        size: cv.size,
+        type: cv.type,
+        lastModified: cv.lastModified
+      });
+    
+      submit(formData, {
+        method: "post",
+        encType: "multipart/form-data",
+      });
     }
-  };
+  }
 
   return (
     <div className="min-h-screen  bg-section w-full pt-[96px] pb-8">
