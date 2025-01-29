@@ -479,23 +479,28 @@ export default function Signup() {
                 } lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full`}
                 type="file"
                 name="file"
-                onChange={(e) => {
+                onChange={async (e) => {
                   const file = e.target.files?.[0];
                   
                   if (file) {
                     console.log("file::", file);
                     
                     // const sanitizedName = sanitizeFileName(file.name);
-                    const newFile = new File([file], "new_file", {
-                      type: file.type,
-                      lastModified: file.lastModified,
-                    });
+                  // Read the original file's content
+const fileBuffer = await file.arrayBuffer();
+
+// Create a new File with the correct data
+const newFile = new File([fileBuffer], "new_file", {
+  type: file.type,
+  lastModified: file.lastModified,
+});
                     console.log("new file::", newFile);
                     if (!file || !(file instanceof File)) {
                       console.log("not valid vile:::", file);
                       
                      
                     }
+                    
                     
                     setCv(newFile);
                   }
