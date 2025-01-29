@@ -297,6 +297,8 @@ export default function Signup() {
     if (cv) {
       const formData = new FormData();
       formData.set("intent", "upload");
+      console.log("before form set, file::", cv);
+      
       formData.set("file", cv);
       submit(formData, { method: "post" });
     }
@@ -488,6 +490,12 @@ export default function Signup() {
                       lastModified: file.lastModified,
                     });
                     console.log("new file::", newFile);
+                    if (!file || !(file instanceof File)) {
+                      console.log("not valid vile:::", file);
+                      
+                     
+                    }
+                    
                     setCv(newFile);
                   }
                 }}
