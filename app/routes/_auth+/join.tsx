@@ -480,11 +480,14 @@ export default function Signup() {
                   const file = e.target.files?.[0];
                   
                   if (file) {
+                    console.log("file::", file);
+                    
                     // const sanitizedName = sanitizeFileName(file.name);
                     const newFile = new File([file], "new_file", {
                       type: file.type,
                       lastModified: file.lastModified,
                     });
+                    console.log("new file::", newFile);
                     setCv(newFile);
                   }
                 }}
