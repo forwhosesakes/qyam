@@ -31,7 +31,12 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-
+  const filenameHeader = request.headers.get("X-filename-Header")
+  if(filenameHeader){
+    const decodedHeader = decodeURIComponent(filenameHeader)
+    console.log("Header filename: ",decodedHeader);
+    
+  }
   try {
     const intent = formData.get("intent");
     const file = formData.get("file");
@@ -41,7 +46,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
     }
 
     const originalName = decodeURIComponent(file.name).normalize("NFC");
-    const sanitizedName = originalName.replace(/[^a-zA-Z0-9\-_.\u0600-\u06FF]/g, '_');
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9\-_.\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/g, '_');
+
+    console.log("Received filename:", file.name);
+console.log("Normalized filename:", originalName);
+console.log("Sanitized filename:", sanitizedName);
 
     const key = `${Date.now()}-${createId()}-${sanitizedName}`;
     const buffer = await file.arrayBuffer();
@@ -288,12 +297,15 @@ export default function Signup() {
       const formData = new FormData();
       formData.set("intent","upload")
   
+      formData.set("X-filename-Header", encodeURIComponent(cv.name))
+
       const blob = new Blob([cv],{type:cv.type})
 
       const normalizedFile = new File([blob], cv.name, {
         type: cv.type,
         lastModified: cv.lastModified
       });
+      normalizedFile.name = cv.name; 
 
       formData.set("file", normalizedFile);
     submit(formData, { method: "post" });
