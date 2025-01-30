@@ -8,6 +8,7 @@ import { Button } from "~/components/ui/button";
 import { createToastHeaders } from "~/lib/toast.server";
 import { createId } from "@paralleldrive/cuid2";
 import { useDropzone } from "react-dropzone";
+import { sanitizeArabicFilenames } from "~/utils/santize-arabic.filenames";
 export async function loader({ request, context, params }: LoaderFunctionArgs) {
   return materialDB
     .getAllMaterials(context.cloudflare.env.DATABASE_URL)
@@ -212,7 +213,7 @@ const Materials = () => {
                     className="ml-2 p-2 hover:bg-gray-100 rounded-md transition-all"
                     to={`/download/${m.storageKey}`}
                     reloadDocument
-                    download={m.storageKey}
+                    download={sanitizeArabicFilenames(m.title)}
                   >
                     <Icon name="download" size={"lg"} />
                   </Link>
