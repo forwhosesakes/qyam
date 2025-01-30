@@ -1,4 +1,4 @@
-import { Form, useActionData, useSubmit } from "@remix-run/react";
+import { Form, useActionData, useFetcher, useSubmit } from "@remix-run/react";
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
 import { useEffect, useState } from "react";
 import { authClient } from "../../lib/auth.client";
@@ -17,10 +17,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { REGIONS } from "~/lib/constants";
 import { QUser } from "~/types/types";
-const sanitizeFileName = (name: string) => {
-  // Create a blob with the file to generate a safe filename
-  return name.replace(/[^\u0600-\u06FF\u0750-\u077F\w.-]/g, '_');
-};
 
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
@@ -36,27 +32,22 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-
   try {
-    const intent = formData.get("intent");
     const file = formData.get("file");
-    console.log("fiiiiile::::", file)
 
-    if (!file || !(file instanceof File)) {
-      console.log("file:::", file);
-      
+    if (!file || !(file instanceof File)) {      
       return { error: "Please select a valid file", status: 400 };
     }
     const key = `${Date.now()}-${createId()}.${file.name.split(".")[1]}`;
     const buffer = await file.arrayBuffer();
-
+    
     const uploadResult = await context.cloudflare.env.QYAM_BUCKET.put(
       key,
       buffer,
       {
-        httpMetadata: {
+          httpMetadata: {
           contentType: file.type,
-        },
+          },
       }
     );
     const checkUpload = await context.cloudflare.env.QYAM_BUCKET.head(key);
@@ -68,7 +59,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
         verification: checkUpload,
       },
     };
-  } catch (error) {
+      } catch (error) {
     console.error(error);
 
     return {
@@ -279,44 +270,45 @@ export default function Signup() {
     }
   }, [email, name, phone, cv, bio]);
 
-  // Update the signUp function to double-check
-  const signUp = async () => {
+  const signUp = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default form submission
+    
     // Mark all fields as touched before submission
     const allTouched = {
       email: true,
-      // password: true,
-      // passwordConfirmation: true,
       name: true,
       phone: true,
       cv: true,
       bio: true,
     };
     setTouched(allTouched);
-
+  
     if (!validateForm(allTouched) || !areAllFieldsFilled()) return;
-
+  
     if (cv instanceof File) {
-      const formData = new FormData();
-      
-      // Important: Use append() instead of set() for files
-      formData.append("file", cv, cv.name); // Preserve original filename
-      formData.append("intent", "upload");
-    
-      // Verify the file before submission
-      console.log("Submitting file:", {
-        name: cv.name,
-        size: cv.size,
-        type: cv.type,
-        lastModified: cv.lastModified
-      });
-    
-      submit(formData, {
-        method: "post",
-        encType: "multipart/form-data",
-      });
+      try {
+        const formData = new FormData();
+        const fileExt = cv.name.split('.').pop() || '';
+        const newFile = new File([cv], `upload.${fileExt}`, {
+          type: cv.type,
+          lastModified: cv.lastModified,
+        });
+        
+        formData.append("file", newFile);
+  
+        submit(formData, {
+          method: "post",
+          encType: "multipart/form-data",
+          replace: true
+        });
+      } catch (error) {
+        console.error('Error preparing file upload:', error);
+        showToast.error('Upload Error', {
+          description: 'Failed to prepare file for upload'
+        });
+      }
     }
-  }
-
+  };
   return (
     <div className="min-h-screen  bg-section w-full pt-[96px] pb-8">
       {loading && <LoadingOverlay message="جاري الإرسال..." />}
@@ -486,40 +478,31 @@ export default function Signup() {
                 {glossary.signup.newSignup.cv}
               </p>
               <input
-                className={`text-xs ${
-                  errors.cv && touched.cv ? "border-red-600" : ""
-                } lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full`}
-                type="file"
-                name="file"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  
-                  if (file) {
-                    console.log("file::", file);
-                    
-                    // const sanitizedName = sanitizeFileName(file.name);
-                  // Read the original file's content
-const fileBuffer = await file.arrayBuffer();
+  className={`text-xs ${
+    errors.cv && touched.cv ? "border-red-600" : ""
+  } lg:text-base md:text-sm p-1 bg-white text-black border rounded w-full`}
+  type="file"
+  name="file"
+  onChange={async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const fileBuffer = await file.arrayBuffer();
+        const newFile = new File([fileBuffer], "uploaded-file", {
+          type: file.type,
+          lastModified: Date.now(),
+        });
 
-// Create a new File with the correct data
-const newFile = new File([fileBuffer], "new_file", {
-  type: file.type,
-  lastModified: file.lastModified,
-});
-                    console.log("new file::", newFile);
-                    if (!file || !(file instanceof File)) {
-                      console.log("not valid vile:::", file);
-                      
-                     
-                    }
-                    
-                    
-                    setCv(newFile);
-                  }
-                }}
-                onBlur={() => handleBlur("cv")}
-                // accept=".pdf,.doc,.docx"
-              />
+  
+
+        setCv(newFile);
+      } catch (error) {
+        console.error("File processing error:", error);
+      }
+    }
+  }}
+  onBlur={() => handleBlur("cv")}
+/>
               {errors.cv && (
                 <span className="text-red-600 text-xs">{errors.cv}</span>
               )}
