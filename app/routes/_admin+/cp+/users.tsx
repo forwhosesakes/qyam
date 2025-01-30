@@ -3,6 +3,7 @@ import userDB from "~/db/user/user.server";
 import glossary from "~/lib/glossary";
 import { Icon } from "~/components/icon";
 import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
+import { mkConfig, generateCsv, download } from "export-to-csv";
 import {
   createColumnHelper,
   flexRender,
@@ -11,6 +12,7 @@ import {
   RowSelectionState,
   useReactTable,
 } from "@tanstack/react-table";
+
 import {
   Table,
   TableBody,
@@ -26,7 +28,6 @@ import {
   HTMLProps,
   useEffect,
   useMemo,
-  useReducer,
   useRef,
   useState,
 } from "react";
@@ -38,7 +39,46 @@ import { Input } from "~/components/ui/input";
 import { createToastHeaders } from "~/lib/toast.server";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/tw-merge";
-import { getAuth } from "~/lib/auth.server";
+import { LEVELS } from "~/lib/constants";
+const csvConfig = mkConfig({ columnHeaders:[{
+  key: "name", displayLabel:"الاسم"
+  
+},
+{
+  key: "email", displayLabel:"البريد الالكنروني"
+  
+},
+
+{
+  key: "region", displayLabel:"المنطقة "
+  
+},
+
+{
+  key: "phone", displayLabel:"رقم الجوال "
+  
+},
+
+{
+  key: "acceptenceState", displayLabel:"حالة القبول"
+  
+},{
+  key: "bio", displayLabel:"التعريف"
+  
+},{
+  key: "level", displayLabel:"المستوى"
+  
+},
+{
+  key: "trainingHours", displayLabel:"ساعات التدريب"
+  
+},{
+  key: "joinDate", displayLabel:"تاريخ الانضمام"
+  
+},
+
+
+], filename:"بيانات مستخدمي قيم" ,title:"بيانات مستخدمي قيم" ,showTitle:true});
 
 const columnHelper = createColumnHelper<QUser>();
 
@@ -264,7 +304,7 @@ const Users = () => {
       </div>
     );
   };
-  const { users, stats } = useLoaderData<{ users: any[]; stats: any }>();
+  const { users, stats } = useLoaderData<{ users: any; stats: any }>();
   const data = users.data;
 
   const fetcher = useFetcher();
@@ -314,6 +354,28 @@ const Users = () => {
     fetcher.submit({ status, ids, emails }, { method: "POST" });
   };
 
+
+  const exportUserData = ()=>{
+const transformedData = data.map((el:any)=>({
+  id: el.id,
+  name:el.name,
+  email:el.email,
+  region:el.region,
+  phone:el.phone,
+  
+  acceptenceState: glossary.cp.user[el.acceptenceState as AcceptenceState] ?? el.acceptenceState , 
+  bio: el.bio, 
+  level: LEVELS[el.level as keyof typeof LEVELS]?? el.level  ,
+  trainingHours:el.trainingHours, 
+  joinDate: el.createdAt.toString()
+
+
+
+}))
+    const csv = generateCsv(csvConfig)(transformedData);
+    download(csvConfig)(csv)
+
+  }
   const handleEditUserClick = (
     status: AcceptenceState,
     user: QUser,
@@ -580,6 +642,7 @@ const Users = () => {
       <div className="flex justify-between mb-5  items-center w-full">
         <div className="flex items-center gap-x-2">
           <p className="text-sm font-bold text-[#344054] ml-8">عدد المختارين :{Object.keys(rowSelection).length}</p>
+          <Button onClick={exportUserData}>تصدير البيانات</Button>
 
           {Object.keys(rowSelection).length > 0 && (
             <div className="flex gap-x-4">
