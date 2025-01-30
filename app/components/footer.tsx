@@ -36,7 +36,6 @@ useEffect(()=>{
           </div>
           <div className="flex flex-col gap-3 justify-center items-center  md:w-1/3 lg:w-auto">
             <p className="text-white">تواصل معنا على</p>
-            <p>٠٥١٢٣٤٦٧٨٩</p>
             {/* <img className=" w-32 h-32" src={} alt="" /> */}
             <canvas className="ml-2" id="qrcode"></canvas>
           </div>
