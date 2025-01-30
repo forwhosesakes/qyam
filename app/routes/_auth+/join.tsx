@@ -152,9 +152,10 @@ export default function Signup() {
     }
 
     if (touchedFields.cv) {
-      if (!cv) {
-        newErrors.cv = g.cv.required;
-      } else {
+      // if (!cv) {
+      //   newErrors.cv = g.cv.required;
+      // }
+       if(cv) {
         const allowedTypes = [
           "application/pdf",
           "application/msword",
@@ -165,6 +166,8 @@ export default function Signup() {
         } else if (cv.size > 5 * 1024 * 1024) {
           newErrors.cv = g.cv.size;
         }
+      }else{
+        newErrors.cv=""
       }
     }
 
@@ -256,7 +259,7 @@ export default function Signup() {
       // passwordConfirmation !== '' &&
       phone !== undefined &&
       phone !== "" &&
-      cv !== null &&
+      // cv !== null &&
       bio.trim() !== ""
     );
   };
