@@ -38,6 +38,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
     if (!file || !(file instanceof File)) {      
       return { error: "Please select a valid file", status: 400 };
     }
+    console.log("file", file);
+    
     const key = `${Date.now()}-${createId()}.${file.name.split(".")[1]}`;
     const buffer = await file.arrayBuffer();
     
@@ -488,7 +490,7 @@ export default function Signup() {
     if (file) {
       try {
         const fileBuffer = await file.arrayBuffer();
-        const newFile = new File([fileBuffer], "uploaded-file", {
+        const newFile = new File([fileBuffer], `uploaded-file.${file.name.split(".")[1]}`, {
           type: file.type,
           lastModified: Date.now(),
         });
