@@ -23,7 +23,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     return new Response(content, {
       headers: {
         "Content-Type": object.httpMetadata?.contentType || "application/octet-stream",
-        "Content-Disposition": `attachment; filename="${filename}"`,
+        "Content-Disposition": `attachment`,
         // Prevent caching of sensitive files
         "Cache-Control": "private, no-cache, no-store, must-revalidate",
         "Pragma": "no-cache",

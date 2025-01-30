@@ -384,21 +384,23 @@ const Users = () => {
       }),
       columnHelper.accessor("cvKey", {
         header: ()=><span className="text-nowrap">السيرة الذاتية</span>,
-        cell: (info) => (
-          <button className="button hover:bg-gray-100 rounded-lg transition-all text-nowrap p-2">
+        cell: (info) => {
+          const extention = info.getValue().split(".")[1]
+         return  <button className="button hover:bg-gray-100 rounded-lg transition-all text-nowrap p-2">
             {" "}
             <Link
               onClick={(e) => {
                 e.stopPropagation();
               }}
+            
               to={`/download/${info.getValue()}`}
               reloadDocument
-              download={info.getValue()}
+              download={`سيرة ذاتية-${info.row.original.name}.${extention}`}
             >
               <Icon name="download" size={"lg"} />
             </Link>
           </button>
-        ),
+      },
       }),
 
       {
