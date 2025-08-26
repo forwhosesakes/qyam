@@ -107,6 +107,13 @@ export default function Contact() {
             >
               {glossary.contact.form.submit}
             </button>
+
+
+
+            <p className="text-center">يمكنكم التواصل معنا مباشرة عبر رقم الجوال: 
+
+              <span className="font-bold  text-lg"> 0539486006</span>
+            </p>
           </div>
         </Form>
       </div>
