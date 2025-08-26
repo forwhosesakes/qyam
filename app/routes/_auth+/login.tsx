@@ -16,12 +16,13 @@ import LoadingOverlay from "~/components/loading-overlay";
 import { toast as showToast } from "sonner";
 import glossary from "./glossary";
 
-import { LoaderFunctionArgs, redirect } from "@remix-run/cloudflare";
+import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { requireSpecialCase } from "~/lib/get-authenticated.server";
 import { Icon } from "~/components/icon";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  return redirect("/");
+  //todo: uncomment when disabling login
+  // return redirect("/");
   const user = await requireSpecialCase(
     request,
     context,

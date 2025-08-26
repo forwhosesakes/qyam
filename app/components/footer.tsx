@@ -80,7 +80,7 @@ const Footer = ({phoneNumber,text}:{phoneNumber:number,text:string}) => {
             <span>
               <div className="flex gap-4">
                 
-                
+          
                   <a href="https://www.snapchat.com/add/m.alftayat"  rel='noopener noreferrer' target="_blank" > <Icon  name="snapchat"  size={"lg"} /></a>
                 <a href="https://x.com/m_alftayat" rel='noopener noreferrer' target="_blank">
                         <Icon   name="twitter-x"  size={"lg"} />
